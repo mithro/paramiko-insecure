@@ -1,3 +1,10 @@
+paramiko (2.4.2-0.1) unstable; urgency=medium
+
+  * New upstream version 2.4.2 (Closes: #892859)
+  * Fix autopkgtests (switch to pytest) (Closes: #904635)
+
+ -- Gaudenz Steinlin <gaudenz@debian.org>  Sat, 01 Dec 2018 14:30:29 +0100
+
 paramiko (2.4.0-1) unstable; urgency=medium
 
   * Imported Upstream version 2.4.0

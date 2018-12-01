@@ -1,0 +1,59 @@
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -13,7 +13,6 @@
+ max-line-length = 79
+ 
+ [tool:pytest]
+-addopts = -p no:relaxed
+ looponfailroots = tests paramiko
+ 
+ [egg_info]
+--- a/tests/test_client.py
++++ b/tests/test_client.py
+@@ -33,7 +33,7 @@
+ import weakref
+ from tempfile import mkstemp
+ 
+-from pytest_relaxed import raises
++from pytest import raises
+ 
+ import paramiko
+ from paramiko.pkey import PublicBlob
+@@ -660,12 +660,12 @@
+         # Straightforward / duplicate of earlier basic password test.
+         self._test_connection(password="pygmalion")
+ 
+-    # TODO: more granular exception pending #387; should be signaling "no auth
+-    # methods available" because no key and no password
+-    @raises(SSHException)
+     def test_passphrase_kwarg_not_used_for_password_auth(self):
+         # Using the "right" password in the "wrong" field shouldn't work.
+-        self._test_connection(passphrase="pygmalion")
++        # TODO: more granular exception pending #387; should be signaling "no auth
++        # methods available" because no key and no password
++        with raises(SSHException):
++            self._test_connection(passphrase='pygmalion')
+ 
+     def test_passphrase_kwarg_used_for_key_passphrase(self):
+         # Straightforward again, with new passphrase kwarg.
+@@ -683,14 +683,14 @@
+             password="television",
+         )
+ 
+-    @raises(AuthenticationException)  # TODO: more granular
+     def test_password_kwarg_not_used_for_passphrase_when_passphrase_kwarg_given(
+         self
+     ):  # noqa
+         # Sanity: if we're given both fields, the password field is NOT used as
+         # a passphrase.
+-        self._test_connection(
+-            key_filename=_support("test_rsa_password.key"),
+-            password="television",
+-            passphrase="wat? lol no",
+-        )
++        with raises(AuthenticationException): # TODO: more granular
++            self._test_connection(
++                key_filename=_support("test_rsa_password.key"),
++                password="television",
++                passphrase="wat? lol no",
++            )

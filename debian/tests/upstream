@@ -1,5 +1,5 @@
 #!/bin/sh
 set -e
 
-python ./test.py --verbose
-python3 ./test.py --verbose
+pytest --verbose
+pytest-3 --verbose
