@@ -1,4 +1,4 @@
-paramiko (2.6.0-1) UNRELEASED; urgency=medium
+paramiko (2.6.0-1) unstable; urgency=medium
 
   * New upstream release; Closes: #924178, #851474, #892860
   * Acknowledge NMU: Closes: #892859, #904635
@@ -18,7 +18,7 @@ paramiko (2.6.0-1) UNRELEASED; urgency=medium
   * debian/source/lintian-overrides
     - update for new jquery.js
 
- -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 18:42:43 -0400
+ -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 18:43:04 -0400
 
 paramiko (2.4.2-0.1) unstable; urgency=medium
 
