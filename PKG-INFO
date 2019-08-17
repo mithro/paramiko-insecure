@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: paramiko
-Version: 2.4.0
+Version: 2.4.2
 Summary: SSH2 protocol library
 Home-page: https://github.com/paramiko/paramiko/
 Author: Jeff Forcier

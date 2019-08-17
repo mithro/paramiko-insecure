@@ -41,6 +41,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="module-paramiko.server">
@@ -98,13 +100,13 @@ codes to reject it:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>kind</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the kind of channel the client would like to open (usually
+<li><strong>kind</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the kind of channel the client would like to open (usually
 <code class="docutils literal"><span class="pre">&quot;session&quot;</span></code>).</li>
-<li><strong>chanid</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; ID of the channel</li>
+<li><strong>chanid</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; ID of the channel</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a> success or failure code (listed above)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a> success or failure code (listed above)</p>
 </td>
 </tr>
 </tbody>
@@ -125,9 +127,9 @@ and <code class="docutils literal"><span class="pre">&quot;none&quot;</span></co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the username requesting authentication.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the username requesting authentication.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a comma-separated <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> of authentication types</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a comma-separated <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> of authentication types</td>
 </tr>
 </tbody>
 </table>
@@ -146,12 +148,12 @@ authenticate.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the username of the client.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the username of the client.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">AUTH_FAILED</span></code> if the authentication fails; <code class="docutils literal"><span class="pre">AUTH_SUCCESSFUL</span></code> if
 it succeeds.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)">int</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -175,8 +177,8 @@ options it has for continuing the authentication.)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the username of the authenticating client.</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the password given by the client.</li>
+<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the username of the authenticating client.</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the password given by the client.</li>
 </ul>
 </td>
 </tr>
@@ -185,7 +187,7 @@ it succeeds; <code class="docutils literal"><span class="pre">AUTH_PARTIALLY_SUC
 successful, but authentication must continue.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)">int</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)">int</a></p>
 </td>
 </tr>
 </tbody>
@@ -215,7 +217,7 @@ verifying the client&#8217;s signature.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the username of the authenticating client</li>
+<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the username of the authenticating client</li>
 <li><strong>key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the key object provided by the client</li>
 </ul>
 </td>
@@ -226,7 +228,7 @@ can authenticate with this key but must continue with
 authentication</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)">int</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)">int</a></p>
 </td>
 </tr>
 </tbody>
@@ -250,8 +252,8 @@ to <a class="reference internal" href="#paramiko.server.ServerInterface.check_au
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the username of the authenticating client</li>
-<li><strong>submethods</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; a comma-separated list of methods preferred by the client (usually
+<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the username of the authenticating client</li>
+<li><strong>submethods</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; a comma-separated list of methods preferred by the client (usually
 empty)</li>
 </ul>
 </td>
@@ -289,7 +291,7 @@ cycle can continue indefinitely.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>responses</strong> &#8211; list of <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> responses from the client</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>responses</strong> &#8211; list of <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> responses from the client</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">AUTH_FAILED</span></code> if the authentication fails; <code class="docutils literal"><span class="pre">AUTH_SUCCESSFUL</span></code> if
 it succeeds; <code class="docutils literal"><span class="pre">AUTH_PARTIALLY_SUCCESSFUL</span></code> if the interactive auth
@@ -312,9 +314,9 @@ principal.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The username of the authenticating client</li>
-<li><strong>gss_authenticated</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The result of the krb5 authentication</li>
-<li><strong>cc_filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The krb5 client credentials cache filename</li>
+<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The username of the authenticating client</li>
+<li><strong>gss_authenticated</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; The result of the krb5 authentication</li>
+<li><strong>cc_filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The krb5 client credentials cache filename</li>
 </ul>
 </td>
 </tr>
@@ -322,7 +324,7 @@ principal.</p>
 <code class="docutils literal"><span class="pre">AUTH_SUCCESSFUL</span></code></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)">int</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)">int</a></p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Note:</th><td class="field-body"><p class="first">Kerberos credential delegation is not supported.</p>
@@ -361,9 +363,9 @@ won&#8217;t be available.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The username of the authenticating client</li>
-<li><strong>gss_authenticated</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The result of the krb5 authentication</li>
-<li><strong>cc_filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The krb5 client credentials cache filename</li>
+<li><strong>username</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The username of the authenticating client</li>
+<li><strong>gss_authenticated</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; The result of the krb5 authentication</li>
+<li><strong>cc_filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The krb5 client credentials cache filename</li>
 </ul>
 </td>
 </tr>
@@ -371,7 +373,7 @@ won&#8217;t be available.</p>
 <code class="docutils literal"><span class="pre">AUTH_SUCCESSFUL</span></code></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)">int</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)">int</a></p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Note:</th><td class="field-body"><p class="first">Kerberos credential delegation is not supported.</p>
@@ -433,12 +435,12 @@ the port opened for listening.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the requested address</li>
-<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the requested port</li>
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the requested address</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the requested port</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the port number (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>) that was opened for listening, or <code class="docutils literal"><span class="pre">False</span></code>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the port number (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>) that was opened for listening, or <code class="docutils literal"><span class="pre">False</span></code>
 to reject</p>
 </td>
 </tr>
@@ -457,8 +459,8 @@ connection, the port should be closed.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the forwarded address</li>
-<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the forwarded port</li>
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the forwarded address</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the forwarded port</li>
 </ul>
 </td>
 </tr>
@@ -492,7 +494,7 @@ does not support any global requests.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>kind</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the kind of global request being made.</li>
+<li><strong>kind</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the kind of global request being made.</li>
 <li><strong>msg</strong> (<a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><em>Message</em></a>) &#8211; any extra arguments to the request.</li>
 </ul>
 </td>
@@ -517,11 +519,11 @@ requested for shell access) can be provided on the given channel.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>channel</strong> (<a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><em>Channel</em></a>) &#8211; the <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> the pty request arrived on.</li>
-<li><strong>term</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; type of terminal requested (for example, <code class="docutils literal"><span class="pre">&quot;vt100&quot;</span></code>).</li>
-<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; width of screen in characters.</li>
-<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; height of screen in characters.</li>
-<li><strong>pixelwidth</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; width of screen in pixels, if known (may be <code class="docutils literal"><span class="pre">0</span></code> if unknown).</li>
-<li><strong>pixelheight</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; height of screen in pixels, if known (may be <code class="docutils literal"><span class="pre">0</span></code> if unknown).</li>
+<li><strong>term</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; type of terminal requested (for example, <code class="docutils literal"><span class="pre">&quot;vt100&quot;</span></code>).</li>
+<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; width of screen in characters.</li>
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; height of screen in characters.</li>
+<li><strong>pixelwidth</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; width of screen in pixels, if known (may be <code class="docutils literal"><span class="pre">0</span></code> if unknown).</li>
+<li><strong>pixelheight</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; height of screen in pixels, if known (may be <code class="docutils literal"><span class="pre">0</span></code> if unknown).</li>
 </ul>
 </td>
 </tr>
@@ -567,7 +569,7 @@ stdout, and stderr of the shell command.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>channel</strong> (<a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><em>Channel</em></a>) &#8211; the <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> the request arrived on.</li>
-<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the command to execute.</li>
+<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the command to execute.</li>
 </ul>
 </td>
 </tr>
@@ -606,7 +608,7 @@ method.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>channel</strong> (<a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><em>Channel</em></a>) &#8211; the <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> the pty request arrived on.</li>
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the requested subsystem.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the requested subsystem.</li>
 </ul>
 </td>
 </tr>
@@ -630,10 +632,10 @@ This only makes sense if a pty was previously allocated on it.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>channel</strong> (<a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><em>Channel</em></a>) &#8211; the <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> the pty request arrived on.</li>
-<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; width of screen in characters.</li>
-<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; height of screen in characters.</li>
-<li><strong>pixelwidth</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; width of screen in pixels, if known (may be <code class="docutils literal"><span class="pre">0</span></code> if unknown).</li>
-<li><strong>pixelheight</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; height of screen in pixels, if known (may be <code class="docutils literal"><span class="pre">0</span></code> if unknown).</li>
+<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; width of screen in characters.</li>
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; height of screen in characters.</li>
+<li><strong>pixelwidth</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; width of screen in pixels, if known (may be <code class="docutils literal"><span class="pre">0</span></code> if unknown).</li>
+<li><strong>pixelheight</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; height of screen in pixels, if known (may be <code class="docutils literal"><span class="pre">0</span></code> if unknown).</li>
 </ul>
 </td>
 </tr>
@@ -657,11 +659,11 @@ SSH channels, using <a class="reference internal" href="transport.html#paramiko.
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>channel</strong> (<a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><em>Channel</em></a>) &#8211; the <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> the X11 request arrived on</li>
-<li><strong>single_connection</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if only a single X11 channel should be opened, else
+<li><strong>single_connection</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if only a single X11 channel should be opened, else
 <code class="docutils literal"><span class="pre">False</span></code>.</li>
-<li><strong>auth_protocol</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the protocol used for X11 authentication</li>
-<li><strong>auth_cookie</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the cookie used to authenticate to X11</li>
-<li><strong>screen_number</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the number of the X11 screen to connect to</li>
+<li><strong>auth_protocol</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the protocol used for X11 authentication</li>
+<li><strong>auth_cookie</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the cookie used to authenticate to X11</li>
+<li><strong>screen_number</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the number of the X11 screen to connect to</li>
 </ul>
 </td>
 </tr>
@@ -724,7 +726,7 @@ codes to reject it:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>chanid</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; ID of the channel</li>
+<li><strong>chanid</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; ID of the channel</li>
 <li><strong>origin</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; 2-tuple containing the IP address and port of the originator
 (client side)</li>
 <li><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; 2-tuple containing the IP address and port of the destination
@@ -732,7 +734,7 @@ codes to reject it:</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a> success or failure code (listed above)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a> success or failure code (listed above)</p>
 </td>
 </tr>
 </tbody>
@@ -755,8 +757,8 @@ is almost certainly not a good idea.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>channel</strong> &#8211; the <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a> the env request arrived on</li>
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name</li>
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Channel value</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; Channel value</li>
 </ul>
 </td>
 </tr>
@@ -811,9 +813,9 @@ the <a class="reference internal" href="#paramiko.server.InteractiveQuery.add_pr
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of this query</li>
-<li><strong>instructions</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; user instructions (usually short) about this query</li>
-<li><strong>prompts</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; one or more authentication prompts</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of this query</li>
+<li><strong>instructions</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; user instructions (usually short) about this query</li>
+<li><strong>prompts</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; one or more authentication prompts</li>
 </ul>
 </td>
 </tr>
@@ -831,8 +833,8 @@ string.  Multiple prompts can be added to the same query.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the user prompt</li>
-<li><strong>echo</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> (default) if the user&#8217;s response should be echoed;
+<li><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the user prompt</li>
+<li><strong>echo</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#bool" title="(in Python v2.6)"><em>bool</em></a>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> (default) if the user&#8217;s response should be echoed;
 <code class="docutils literal"><span class="pre">False</span></code> if not (for a password or similar)</li>
 </ul>
 </td>
@@ -877,7 +879,7 @@ don&#8217;t need to override this method, but if you do, be sure to pass the
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>channel</strong> (<a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><em>Channel</em></a>) &#8211; the channel associated with this
 subsystem request.</li>
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the requested subsystem.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the requested subsystem.</li>
 <li><strong>server</strong> (<a class="reference internal" href="#paramiko.server.ServerInterface" title="paramiko.server.ServerInterface"><em>ServerInterface</em></a>) &#8211; the server object for the session that started this subsystem</li>
 </ul>
 </td>
@@ -917,7 +919,7 @@ still be running.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the requested subsystem.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the requested subsystem.</li>
 <li><strong>transport</strong> (<a class="reference internal" href="transport.html#paramiko.transport.Transport" title="paramiko.transport.Transport"><em>Transport</em></a>) &#8211; the server-mode <a class="reference internal" href="transport.html#paramiko.transport.Transport" title="paramiko.transport.Transport"><code class="xref py py-obj docutils literal"><span class="pre">Transport</span></code></a>.</li>
 <li><strong>channel</strong> (<a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><em>Channel</em></a>) &#8211; the channel associated with this subsystem
 request.</li>
@@ -944,6 +946,7 @@ implementation just closes the channel.</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -1029,11 +1032,11 @@ implementation just closes the channel.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017 Jeff Forcier.
+      &copy;2018 Jeff Forcier.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/api/server.txt"

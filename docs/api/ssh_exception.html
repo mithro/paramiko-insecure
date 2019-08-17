@@ -40,6 +40,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="module-paramiko.ssh_exception">
@@ -82,7 +84,7 @@ values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</s
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the hostname of the SSH server</li>
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the hostname of the SSH server</li>
 <li><strong>got_key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the host key presented by the server</li>
 <li><strong>expected_key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the host key expected</li>
 </ul>
@@ -103,7 +105,7 @@ values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</s
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the error code returned by the server</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the error code returned by the server</td>
 </tr>
 </tbody>
 </table>
@@ -145,6 +147,12 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="paramiko.ssh_exception.NoValidConnectionsError.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#paramiko.ssh_exception.NoValidConnectionsError.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="exception">
@@ -168,8 +176,8 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The command line that is generating this exception.</li>
-<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The error captured from the proxy command output.</li>
+<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The command line that is generating this exception.</li>
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The error captured from the proxy command output.</li>
 </ul>
 </td>
 </tr>
@@ -193,6 +201,7 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -278,11 +287,11 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017 Jeff Forcier.
+      &copy;2018 Jeff Forcier.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/api/ssh_exception.txt"

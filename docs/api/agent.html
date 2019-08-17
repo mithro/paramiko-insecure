@@ -41,6 +41,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="module-paramiko.agent">
@@ -144,7 +146,7 @@ object.  If the private key is encrypted and <code class="docutils literal"><spa
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_obj</strong> &#8211; the file-like object to read from</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key, if it&#8217;s encrypted</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key, if it&#8217;s encrypted</li>
 </ul>
 </td>
 </tr>
@@ -179,8 +181,8 @@ is useless on the abstract PKey class.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to read</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key file, if it&#8217;s
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to read</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key file, if it&#8217;s
 encrypted</li>
 </ul>
 </td>
@@ -212,7 +214,7 @@ public key files or recognized host keys.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a base64 <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> containing the public part of the key.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a base64 <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> containing the public part of the key.</td>
 </tr>
 </tbody>
 </table>
@@ -227,7 +229,7 @@ for judging the relative security of a key.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bits in the key (as an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bits in the key (as an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -242,7 +244,7 @@ secret is revealed.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a 16-byte <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> (binary) of the MD5 fingerprint, in SSH
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a 16-byte <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> (binary) of the MD5 fingerprint, in SSH
 format.</td>
 </tr>
 </tbody>
@@ -277,7 +279,7 @@ that data, verify that it was signed with this key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the data that was signed.</li>
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the data that was signed.</li>
 <li><strong>msg</strong> (<a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><em>Message</em></a>) &#8211; an SSH signature message</li>
 </ul>
 </td>
@@ -300,7 +302,7 @@ password is not <code class="docutils literal"><span class="pre">None</span></co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_obj</strong> &#8211; the file-like object to write into</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key</li>
 </ul>
 </td>
 </tr>
@@ -324,8 +326,8 @@ password is not <code class="docutils literal"><span class="pre">None</span></co
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to write</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key file</li>
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to write</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key file</li>
 </ul>
 </td>
 </tr>
@@ -349,7 +351,7 @@ asked from a remote fake agent (so use a unix socket for ex.)</p>
 <dl class="attribute">
 <dt id="paramiko.agent.AgentLocalProxy.daemon">
 <code class="descname">daemon</code><a class="headerlink" href="#paramiko.agent.AgentLocalProxy.daemon" title="Permalink to this definition">¶</a></dt>
-<dd><p>A boolean value indicating whether this thread is a daemon thread (True) or not (False).</p>
+<dd><p>A boolean value indicating whether this thread is a daemon thread.</p>
 <p>This must be set before start() is called, otherwise RuntimeError is
 raised. Its initial value is inherited from the creating thread; the
 main thread is not a daemon thread and therefore all threads created in
@@ -440,7 +442,7 @@ same thread object.</p>
 <dl class="attribute">
 <dt id="paramiko.agent.AgentProxyThread.daemon">
 <code class="descname">daemon</code><a class="headerlink" href="#paramiko.agent.AgentProxyThread.daemon" title="Permalink to this definition">¶</a></dt>
-<dd><p>A boolean value indicating whether this thread is a daemon thread (True) or not (False).</p>
+<dd><p>A boolean value indicating whether this thread is a daemon thread.</p>
 <p>This must be set before start() is called, otherwise RuntimeError is
 raised. Its initial value is inherited from the creating thread; the
 main thread is not a daemon thread and therefore all threads created in
@@ -524,7 +526,7 @@ same thread object.</p>
 <dl class="attribute">
 <dt id="paramiko.agent.AgentRemoteProxy.daemon">
 <code class="descname">daemon</code><a class="headerlink" href="#paramiko.agent.AgentRemoteProxy.daemon" title="Permalink to this definition">¶</a></dt>
-<dd><p>A boolean value indicating whether this thread is a daemon thread (True) or not (False).</p>
+<dd><p>A boolean value indicating whether this thread is a daemon thread.</p>
 <p>This must be set before start() is called, otherwise RuntimeError is
 raised. Its initial value is inherited from the creating thread; the
 main thread is not a daemon thread and therefore all threads created in
@@ -680,6 +682,7 @@ SSH agent</td>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -765,11 +768,11 @@ SSH agent</td>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017 Jeff Forcier.
+      &copy;2018 Jeff Forcier.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/api/agent.txt"

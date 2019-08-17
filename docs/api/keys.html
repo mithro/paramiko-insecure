@@ -41,6 +41,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="key-handling">
@@ -82,7 +84,7 @@ the string.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>msg</strong> (<a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><em>Message</em></a>) &#8211; an optional SSH <a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><code class="xref py py-obj docutils literal"><span class="pre">Message</span></code></a> containing a public key of this type.</li>
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional string containing a public key
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional string containing a public key
 of this type</li>
 </ul>
 </td>
@@ -130,7 +132,7 @@ object.  If the private key is encrypted and <code class="docutils literal"><spa
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_obj</strong> &#8211; the file-like object to read from</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key, if it&#8217;s encrypted</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key, if it&#8217;s encrypted</li>
 </ul>
 </td>
 </tr>
@@ -165,8 +167,8 @@ is useless on the abstract PKey class.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to read</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key file, if it&#8217;s
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to read</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to decrypt the key file, if it&#8217;s
 encrypted</li>
 </ul>
 </td>
@@ -198,7 +200,7 @@ public key files or recognized host keys.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a base64 <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> containing the public part of the key.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a base64 <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> containing the public part of the key.</td>
 </tr>
 </tbody>
 </table>
@@ -213,7 +215,7 @@ for judging the relative security of a key.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bits in the key (as an <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bits in the key (as an <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -228,7 +230,7 @@ secret is revealed.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a 16-byte <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> (binary) of the MD5 fingerprint, in SSH
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a 16-byte <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">string</span></code></a> (binary) of the MD5 fingerprint, in SSH
 format.</td>
 </tr>
 </tbody>
@@ -243,7 +245,7 @@ format.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">name of this private key type, in SSH terminology, as a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> (for
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">name of this private key type, in SSH terminology, as a <a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> (for
 example, <code class="docutils literal"><span class="pre">&quot;ssh-rsa&quot;</span></code>).</td>
 </tr>
 </tbody>
@@ -277,7 +279,7 @@ representing an SSH signature message.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the data to sign.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the data to sign.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">an SSH signature <a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><code class="xref py py-obj docutils literal"><span class="pre">message</span></code></a>.</td>
 </tr>
@@ -295,7 +297,7 @@ that data, verify that it was signed with this key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the data that was signed.</li>
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the data that was signed.</li>
 <li><strong>msg</strong> (<a class="reference internal" href="message.html#paramiko.message.Message" title="paramiko.message.Message"><em>Message</em></a>) &#8211; an SSH signature message</li>
 </ul>
 </td>
@@ -318,7 +320,7 @@ password is not <code class="docutils literal"><span class="pre">None</span></co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>file_obj</strong> &#8211; the file-like object to write into</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key</li>
 </ul>
 </td>
 </tr>
@@ -342,8 +344,8 @@ password is not <code class="docutils literal"><span class="pre">None</span></co
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to write</li>
-<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key file</li>
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; name of the file to write</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; an optional password to use to encrypt the key file</li>
 </ul>
 </td>
 </tr>
@@ -380,9 +382,9 @@ basically &#8220;I should be using <code class="docutils literal"><span class="p
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Type indicator, eg <code class="docutils literal"><span class="pre">ssh-rsa</span></code>.</li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; Type indicator, eg <code class="docutils literal"><span class="pre">ssh-rsa</span></code>.</li>
 <li><strong>blob</strong> &#8211; The blob bytes themselves.</li>
-<li><strong>comment</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; A comment, if one was given (e.g. file-based.)</li>
+<li><strong>comment</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; A comment, if one was given (e.g. file-based.)</li>
 </ul>
 </td>
 </tr>
@@ -437,7 +439,7 @@ generate a new host key or authentication key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of bits the generated key should be.</li>
+<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; number of bits the generated key should be.</li>
 <li><strong>progress_func</strong> &#8211; Unused</li>
 </ul>
 </td>
@@ -470,7 +472,7 @@ generate a new host key or authentication key.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of bits the generated key should be.</li>
+<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; number of bits the generated key should be.</li>
 <li><strong>progress_func</strong> &#8211; Unused</li>
 </ul>
 </td>
@@ -536,6 +538,7 @@ generate a new host key or authentication key.</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -628,11 +631,11 @@ generate a new host key or authentication key.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017 Jeff Forcier.
+      &copy;2018 Jeff Forcier.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/api/keys.txt"
