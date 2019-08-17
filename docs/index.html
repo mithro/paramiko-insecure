@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Welcome to Paramiko’s documentation! &#8212; Paramiko  documentation</title>
-    
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -25,7 +23,6 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Paramiko  documentation" href="#" />
     <link rel="next" title="Channel" href="api/channel.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -34,7 +31,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -45,8 +42,8 @@
           <div class="body" role="main">
             
   <div class="section" id="welcome-to-paramiko-s-documentation">
-<h1>Welcome to Paramiko&#8217;s documentation!<a class="headerlink" href="#welcome-to-paramiko-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>This site covers Paramiko&#8217;s usage &amp; API documentation. For basic info on what
+<h1>Welcome to Paramiko’s documentation!<a class="headerlink" href="#welcome-to-paramiko-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This site covers Paramiko’s usage &amp; API documentation. For basic info on what
 Paramiko is, including its public changelog &amp; how the project is maintained,
 please see <a class="reference external" href="http://paramiko.org">the main project website</a>.</p>
 <div class="section" id="api-documentation">
@@ -56,7 +53,7 @@ more direct control, pass a socket (or socket-like object) to a <a class="refere
 and use <a class="reference internal" href="api/transport.html#paramiko.transport.Transport.start_server" title="paramiko.transport.Transport.start_server"><code class="xref py py-obj docutils literal"><span class="pre">start_server</span></code></a> or <a class="reference internal" href="api/transport.html#paramiko.transport.Transport.start_client" title="paramiko.transport.Transport.start_client"><code class="xref py py-obj docutils literal"><span class="pre">start_client</span></code></a> to negotiate with the remote host as either a server
 or client.</p>
 <p>As a client, you are responsible for authenticating using a password or private
-key, and checking the server&#8217;s host key. (Key signature and verification is
+key, and checking the server’s host key. (Key signature and verification is
 done by paramiko, but you will need to provide private keys and check that the
 content of a public key matches what you expected to see.)</p>
 <p>As a server, you are responsible for deciding which users, passwords, and keys
@@ -149,7 +146,7 @@ by area of interest.)</p>
     
 
 <p>
-<a href="https://travis-ci.org/paramiko/paramiko">
+<a class="badge" href="https://travis-ci.org/paramiko/paramiko">
     <img
         alt="https://secure.travis-ci.org/paramiko/paramiko.svg?branch=master"
         src="https://secure.travis-ci.org/paramiko/paramiko.svg?branch=master"
@@ -204,19 +201,34 @@ by area of interest.)</p>
     </form>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+<h3 class="donation">Donate/support</h3>
+
+
+
+
+
+
+
+<p>
+Professionally-supported Paramiko is available with the
+<a href="https://tidelift.com/subscription/pkg/pypi-paramiko?utm_source=pypi-paramiko&utm_medium=referral&utm_campaign=docs">Tidelift Subscription</a>.
+</p>
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018 Jeff Forcier.
+      &copy;2019 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/index.txt"
+      <a href="_sources/index.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
