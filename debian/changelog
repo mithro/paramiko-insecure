@@ -9,8 +9,10 @@ paramiko (2.6.0-1) UNRELEASED; urgency=medium
     - convert to machine-parsable format
     - add myself to copyright (previous contributions were not mentioned)
     - update to new upstream release
+  * debian/patches/remove_pytest_relaxed.patch
+    - refresh patch
 
- -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 17:29:04 -0400
+ -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 18:05:18 -0400
 
 paramiko (2.4.2-0.1) unstable; urgency=medium
 
