@@ -1,8 +1,8 @@
 Source: paramiko
 Section: python
 Priority: optional
-Maintainer: Jeremy T. Bouse <jbouse@debian.org>
-Uploaders: Guido Guenther <agx@debian.org>
+Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
+Uploaders: Jeremy T. Bouse <jbouse@debian.org>, Guido Guenther <agx@debian.org>, Sandro Tosi <morph@debian.org>
 X-Python-Version: >= 2.6
 X-Python3-Version: >= 3.2
 Build-Depends: debhelper (>> 9),
