@@ -1,3 +1,9 @@
+paramiko (2.4.2-1) UNRELEASED; urgency=medium
+
+  * Acknowledge NMU: Closes: #892859, #904635
+
+ -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 14:29:10 -0400
+
 paramiko (2.4.2-0.1) unstable; urgency=medium
 
   * New upstream version 2.4.2 (Closes: #892859)
