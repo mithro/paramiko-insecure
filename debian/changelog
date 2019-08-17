@@ -5,6 +5,7 @@ paramiko (2.6.0-1) UNRELEASED; urgency=medium
   * debian/control
     - move under DPMT umbrella (with current maintainers blessing)
     - bump b-d on cryptograpy to >= 2.5
+    - drop obsolete X-Python*-Version fields
   * debian/copyright
     - convert to machine-parsable format
     - add myself to copyright (previous contributions were not mentioned)
@@ -12,7 +13,7 @@ paramiko (2.6.0-1) UNRELEASED; urgency=medium
   * debian/patches/remove_pytest_relaxed.patch
     - refresh patch
 
- -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 18:05:18 -0400
+ -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 18:06:24 -0400
 
 paramiko (2.4.2-0.1) unstable; urgency=medium
 
