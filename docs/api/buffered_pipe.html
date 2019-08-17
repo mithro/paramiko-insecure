@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Buffered pipes &#8212; Paramiko  documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -25,7 +23,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Buffered files" href="file.html" />
     <link rel="prev" title="SFTP" href="sftp.html" />
    
@@ -35,7 +32,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -47,7 +44,7 @@
             
   <div class="section" id="module-paramiko.buffered_pipe">
 <span id="buffered-pipes"></span><h1>Buffered pipes<a class="headerlink" href="#module-paramiko.buffered_pipe" title="Permalink to this headline">¶</a></h1>
-<p>Attempt to generalize the &#8220;feeder&#8221; part of a <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a>: an object which can be
+<p>Attempt to generalize the “feeder” part of a <a class="reference internal" href="channel.html#paramiko.channel.Channel" title="paramiko.channel.Channel"><code class="xref py py-obj docutils literal"><span class="pre">Channel</span></code></a>: an object which can be
 read from and closed, but is reading from a buffer fed by another thread.  The
 read operations are blocking and can have a timeout set.</p>
 <dl class="class">
@@ -64,7 +61,7 @@ file or socket, but is fed data from another thread.  This is used by
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>) of bytes buffered</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>) of bytes buffered</td>
 </tr>
 </tbody>
 </table>
@@ -92,7 +89,7 @@ has been emptied will return immediately with an empty string.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">any data that was in the buffer prior to clearing it out, as a
-<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
+<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -107,7 +104,7 @@ from a separate thread, so synchronization is done.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; the data to add, as a <code class="docutils literal"><span class="pre">str</span></code> or <code class="docutils literal"><span class="pre">bytes</span></code></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – the data to add, as a <code class="docutils literal"><span class="pre">str</span></code> or <code class="docutils literal"><span class="pre">bytes</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -129,15 +126,15 @@ before any data arrives.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>nbytes</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; maximum number of bytes to read</li>
-<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#float" title="(in Python v2.6)"><em>float</em></a>) &#8211; maximum seconds to wait (or <code class="docutils literal"><span class="pre">None</span></code>, the default, to wait forever)</li>
+<li><strong>nbytes</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – maximum number of bytes to read</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – maximum seconds to wait (or <code class="docutils literal"><span class="pre">None</span></code>, the default, to wait forever)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the read data, as a <code class="docutils literal"><span class="pre">str</span></code> or <code class="docutils literal"><span class="pre">bytes</span></code></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#paramiko.buffered_pipe.PipeTimeout" title="paramiko.buffered_pipe.PipeTimeout"><code class="xref py py-obj docutils literal"><span class="pre">PipeTimeout</span></code></a> &#8211; if a timeout was specified and no data was ready
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#paramiko.buffered_pipe.PipeTimeout" title="paramiko.buffered_pipe.PipeTimeout"><code class="xref py py-obj docutils literal"><span class="pre">PipeTimeout</span></code></a> – if a timeout was specified and no data was ready
 before that timeout</p>
 </td>
 </tr>
@@ -172,7 +169,7 @@ ready, the event will be cleared.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>event</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/threading.html#threading.Event" title="(in Python v2.7)"><em>threading.Event</em></a>) &#8211; the event to set/clear</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>event</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/threading.html#threading.Event" title="(in Python v2.7)"><em>threading.Event</em></a>) – the event to set/clear</td>
 </tr>
 </tbody>
 </table>
@@ -222,7 +219,7 @@ ready, the event will be cleared.</p>
     
 
 <p>
-<a href="https://travis-ci.org/paramiko/paramiko">
+<a class="badge" href="https://travis-ci.org/paramiko/paramiko">
     <img
         alt="https://secure.travis-ci.org/paramiko/paramiko.svg?branch=master"
         src="https://secure.travis-ci.org/paramiko/paramiko.svg?branch=master"
@@ -277,19 +274,34 @@ ready, the event will be cleared.</p>
     </form>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+<h3 class="donation">Donate/support</h3>
+
+
+
+
+
+
+
+<p>
+Professionally-supported Paramiko is available with the
+<a href="https://tidelift.com/subscription/pkg/pypi-paramiko?utm_source=pypi-paramiko&utm_medium=referral&utm_campaign=docs">Tidelift Subscription</a>.
+</p>
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018 Jeff Forcier.
+      &copy;2019 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/api/buffered_pipe.txt"
+      <a href="../_sources/api/buffered_pipe.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Exceptions &#8212; Paramiko  documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -25,7 +23,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="prev" title="Cross-platform pipe implementations" href="pipe.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -34,7 +31,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -61,18 +58,11 @@ specific reasons.)</p>
 <dt id="paramiko.ssh_exception.BadAuthenticationType">
 <em class="property">exception </em><code class="descclassname">paramiko.ssh_exception.</code><code class="descname">BadAuthenticationType</code><span class="sig-paren">(</span><em>explanation</em>, <em>types</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.ssh_exception.BadAuthenticationType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception raised when an authentication type (like password) is used, but
-the server isn&#8217;t allowing that type.  (It may only allow public-key, for
+the server isn’t allowing that type.  (It may only allow public-key, for
 example.)</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 1.1.</span></p>
 </div>
-<dl class="attribute">
-<dt id="paramiko.ssh_exception.BadAuthenticationType.allowed_types">
-<code class="descname">allowed_types</code><em class="property"> = []</em><a class="headerlink" href="#paramiko.ssh_exception.BadAuthenticationType.allowed_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of allowed authentication types provided by the server (possible
-values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;password&quot;</span></code>, and <code class="docutils literal"><span class="pre">&quot;publickey&quot;</span></code>).</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="exception">
@@ -84,9 +74,9 @@ values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</s
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; the hostname of the SSH server</li>
-<li><strong>got_key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the host key presented by the server</li>
-<li><strong>expected_key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the host key expected</li>
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the hostname of the SSH server</li>
+<li><strong>got_key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) – the host key presented by the server</li>
+<li><strong>expected_key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) – the host key expected</li>
 </ul>
 </td>
 </tr>
@@ -105,7 +95,7 @@ values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</s
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#int" title="(in Python v2.6)"><em>int</em></a>) &#8211; the error code returned by the server</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – the error code returned by the server</td>
 </tr>
 </tbody>
 </table>
@@ -118,7 +108,7 @@ values are: <code class="docutils literal"><span class="pre">&quot;none&quot;</s
 <dt id="paramiko.ssh_exception.NoValidConnectionsError">
 <em class="property">exception </em><code class="descclassname">paramiko.ssh_exception.</code><code class="descname">NoValidConnectionsError</code><span class="sig-paren">(</span><em>errors</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.ssh_exception.NoValidConnectionsError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multiple connection attempts were made and no families succeeded.</p>
-<p>This exception class wraps multiple &#8220;real&#8221; underlying connection errors,
+<p>This exception class wraps multiple “real” underlying connection errors,
 all of which represent failed connection attempts. Because these errors are
 not guaranteed to all be of the same error type (i.e. different errno,
 <a class="reference external" href="https://docs.python.org/2.7/library/socket.html#socket.error" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">socket.error</span></code></a> subclass, message, etc) we expose a single unified error
@@ -141,7 +131,7 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>errors</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The errors dict to store, as described by class docstring.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>errors</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – The errors dict to store, as described by class docstring.</td>
 </tr>
 </tbody>
 </table>
@@ -170,14 +160,14 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
 <dl class="exception">
 <dt id="paramiko.ssh_exception.ProxyCommandFailure">
 <em class="property">exception </em><code class="descclassname">paramiko.ssh_exception.</code><code class="descname">ProxyCommandFailure</code><span class="sig-paren">(</span><em>command</em>, <em>error</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.ssh_exception.ProxyCommandFailure" title="Permalink to this definition">¶</a></dt>
-<dd><p>The &#8220;ProxyCommand&#8221; found in the .ssh/config file returned an error.</p>
+<dd><p>The “ProxyCommand” found in the .ssh/config file returned an error.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The command line that is generating this exception.</li>
-<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2.6/library/functions.html#str" title="(in Python v2.6)"><em>str</em></a>) &#8211; The error captured from the proxy command output.</li>
+<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The command line that is generating this exception.</li>
+<li><strong>error</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The error captured from the proxy command output.</li>
 </ul>
 </td>
 </tr>
@@ -227,7 +217,7 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
     
 
 <p>
-<a href="https://travis-ci.org/paramiko/paramiko">
+<a class="badge" href="https://travis-ci.org/paramiko/paramiko">
     <img
         alt="https://secure.travis-ci.org/paramiko/paramiko.svg?branch=master"
         src="https://secure.travis-ci.org/paramiko/paramiko.svg?branch=master"
@@ -282,19 +272,34 @@ the differences are in the resolution of the hostname - e.g. IPv4 vs v6).</p>
     </form>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+<h3 class="donation">Donate/support</h3>
+
+
+
+
+
+
+
+<p>
+Professionally-supported Paramiko is available with the
+<a href="https://tidelift.com/subscription/pkg/pypi-paramiko?utm_source=pypi-paramiko&utm_medium=referral&utm_campaign=docs">Tidelift Subscription</a>.
+</p>
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018 Jeff Forcier.
+      &copy;2019 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/api/ssh_exception.txt"
+      <a href="../_sources/api/ssh_exception.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
