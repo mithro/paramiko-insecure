@@ -1,6 +1,6 @@
 paramiko (2.6.0-1) UNRELEASED; urgency=medium
 
-  * New upstream release
+  * New upstream release; Closes: #924178, #851474, #892860
   * Acknowledge NMU: Closes: #892859, #904635
   * debian/control
     - move under DPMT umbrella (with current maintainers blessing)
