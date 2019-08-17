@@ -8,6 +8,7 @@ paramiko (2.6.0-1) UNRELEASED; urgency=medium
     - drop obsolete X-Python*-Version fields
     - bump Standards-Version to 4.4.0 (no changes needed)
     - update Vcs-* fields to point to DPMT repo
+    - update long description; Closes: #766893
   * debian/copyright
     - convert to machine-parsable format
     - add myself to copyright (previous contributions were not mentioned)
@@ -17,7 +18,7 @@ paramiko (2.6.0-1) UNRELEASED; urgency=medium
   * debian/source/lintian-overrides
     - update for new jquery.js
 
- -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 18:12:51 -0400
+ -- Sandro Tosi <morph@debian.org>  Sat, 17 Aug 2019 18:42:43 -0400
 
 paramiko (2.4.2-0.1) unstable; urgency=medium
 
