@@ -3,7 +3,8 @@ Upstream-Name: paramiko
 Source: https://github.com/paramiko/paramiko/
 
 Files: *
-Copyright: 2003, 2004, 2005, 2006 Robey Pointer <robey@lag.net>
+Copyright: Copyright (c) 2003-2009  Robey Pointer <robeypointer@gmail.com>
+ Copyright (c) 2013-2019  Jeff Forcier <jeff@bitprophet.org>
 License: LGPL-2.1
 
 Files: debian/*
