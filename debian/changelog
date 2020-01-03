@@ -330,4 +330,3 @@ paramiko (1.1-1) unstable; urgency=low
   * Initial Release.
 
  -- Guido Guenther <agx@debian.org>  Mon, 31 Jan 2005 11:24:37 +0100
-
