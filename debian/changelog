@@ -1,4 +1,4 @@
-paramiko (2.6.0-2) UNRELEASED; urgency=medium
+paramiko (2.6.0-2) unstable; urgency=medium
 
   [ Ondřej Nový ]
   * Bump Standards-Version to 4.4.1.
@@ -6,7 +6,7 @@ paramiko (2.6.0-2) UNRELEASED; urgency=medium
   [ Sandro Tosi ]
   * Drop python2 support; Closes: #937238
 
- -- Sandro Tosi <morph@debian.org>  Thu, 09 Jan 2020 19:38:08 -0500
+ -- Sandro Tosi <morph@debian.org>  Thu, 09 Jan 2020 19:39:19 -0500
 
 paramiko (2.6.0-1) unstable; urgency=medium
 
