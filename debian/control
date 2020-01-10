@@ -5,14 +5,6 @@ Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.
 Uploaders: Jeremy T. Bouse <jbouse@debian.org>, Guido Guenther <agx@debian.org>, Sandro Tosi <morph@debian.org>
 Build-Depends: debhelper-compat (= 12),
                dh-python,
-               python-all (>= 2.6.6-3~),
-               python-pytest,
-               python-cryptography (>= 2.5),
-               python-ecdsa (>= 0.11),
-               python-bcrypt (>= 3.1.3),
-               python-nacl (>= 1.0.1),
-               python-pyasn1 (>= 0.1.7),
-               python-setuptools,
                python3-all,
                python3-pytest,
                python3-cryptography (>= 2.5),
@@ -43,24 +35,6 @@ Description: Make ssh v2 connections with Python (Documentation)
  encrypted tunnel (this is how SFTP works, for example).
  .
  This is the documentation for the package.
-
-Package: python-paramiko
-Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends}
-Provides: ${python:Provides}
-Suggests: python-gssapi (>= 0.6.1)
-Description: Make ssh v2 connections (Python 2)
- "Paramiko" is a combination of the Esperanto words for "paranoid" and "friend".
- It's a module for Python 2.7/3.4+ that implements the SSH2 protocol for secure
- (encrypted and authenticated) connections to remote machines. Unlike SSL (aka
- TLS), SSH2 protocol does not require hierarchical certificates signed by a
- powerful central authority. You may know SSH2 as the protocol that replaced
- Telnet and rsh for secure access to remote shells, but the protocol also
- includes the ability to open arbitrary channels to remote services across the
- encrypted tunnel (this is how SFTP works, for example).
- .
- This is the Python 2 version of the package.
 
 Package: python3-paramiko
 Architecture: all
