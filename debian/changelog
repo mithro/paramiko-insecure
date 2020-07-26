@@ -5,13 +5,14 @@ paramiko (2.7.1-2) UNRELEASED; urgency=medium
   * debian/control
     - add mock, invoke to b-d, needed by tests
     - wrap-and-sort
+    - bump Standards-Version to 4.5.0 (no changes needed)
   * debian/patches/add-tests-configs-directory.patch
     - add tests/configs directory, needed to run successfully the test suite,
       patch by Cesar Tulio Albuquerque de Almeida
   * debian/tests/control
     - install build-depends packages when running autopkgtests; Closes: #960899
 
- -- Sandro Tosi <morph@debian.org>  Sun, 26 Jul 2020 01:14:50 -0400
+ -- Sandro Tosi <morph@debian.org>  Sun, 26 Jul 2020 01:17:49 -0400
 
 paramiko (2.7.1-1) unstable; urgency=medium
 

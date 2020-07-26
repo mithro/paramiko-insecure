@@ -17,7 +17,7 @@ Build-Depends: debhelper-compat (= 12),
                python3-pyasn1 (>= 0.1.7),
                python3-pytest <!nocheck>,
                python3-setuptools,
-Standards-Version: 4.4.1
+Standards-Version: 4.5.0
 Homepage: https://github.com/paramiko/paramiko/
 Vcs-Git: https://salsa.debian.org/python-team/modules/paramiko.git
 Vcs-Browser: https://salsa.debian.org/python-team/modules/paramiko
