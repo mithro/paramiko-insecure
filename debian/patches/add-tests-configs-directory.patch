@@ -1,0 +1,523 @@
+Description: add tests/configs/ directory
+ Since version 2.7.0, tests/configs/ directory is required by the test suite
+ but it's not included in the PyPI tarball.
+Author: Cesar Tulio Albuquerque de Almeida <cesar-tulio@hotmail.com>
+Forwarded: https://github.com/paramiko/paramiko/issues/1726
+Last-Update: 2020-06-09
+
+Index: paramiko-2.7.1/tests/configs/basic
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/basic
+@@ -0,0 +1,4 @@
++CanonicalDomains paramiko.org
++
++Host www.paramiko.org
++    User rando
+Index: paramiko-2.7.1/tests/configs/canon
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/canon
+@@ -0,0 +1,8 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++
++IdentityFile base.key
++
++Host www.paramiko.org
++    User rando
++    IdentityFile canonicalized.key
+Index: paramiko-2.7.1/tests/configs/canon-always
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/canon-always
+@@ -0,0 +1,5 @@
++CanonicalDomains paramiko.org
++CanonicalizeHostname always
++
++Host www.paramiko.org
++    User rando
+Index: paramiko-2.7.1/tests/configs/canon-ipv4
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/canon-ipv4
+@@ -0,0 +1,6 @@
++CanonicalDomains paramiko.org
++CanonicalizeHostname yes
++AddressFamily inet
++
++Host www.paramiko.org
++    User rando
+Index: paramiko-2.7.1/tests/configs/canon-local
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/canon-local
+@@ -0,0 +1,6 @@
++Host www.paramiko.org
++    User rando
++
++Host www
++    CanonicalDomains paramiko.org
++    CanonicalizeHostname yes
+Index: paramiko-2.7.1/tests/configs/canon-local-always
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/canon-local-always
+@@ -0,0 +1,6 @@
++Host www.paramiko.org
++    User rando
++
++Host www
++    CanonicalDomains paramiko.org
++    CanonicalizeHostname always
+Index: paramiko-2.7.1/tests/configs/deep-canon
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/deep-canon
+@@ -0,0 +1,11 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++
++Host www.paramiko.org
++    User rando
++
++Host sub.www.paramiko.org
++    User deep
++
++Host subber.sub.www.paramiko.org
++    User deeper
+Index: paramiko-2.7.1/tests/configs/deep-canon-maxdots
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/deep-canon-maxdots
+@@ -0,0 +1,12 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++CanonicalizeMaxDots 2
++
++Host www.paramiko.org
++    User rando
++
++Host sub.www.paramiko.org
++    User deep
++
++Host subber.sub.www.paramiko.org
++    User deeper
+Index: paramiko-2.7.1/tests/configs/empty-canon
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/empty-canon
+@@ -0,0 +1,6 @@
++CanonicalizeHostname yes
++CanonicalDomains
++AddressFamily inet
++
++Host www.paramiko.org
++    User rando
+Index: paramiko-2.7.1/tests/configs/fallback-no
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/fallback-no
+@@ -0,0 +1,6 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++CanonicalizeFallbackLocal no
++
++Host www.paramiko.org
++    User rando
+Index: paramiko-2.7.1/tests/configs/fallback-yes
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/fallback-yes
+@@ -0,0 +1,6 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++CanonicalizeFallbackLocal yes
++
++Host www.paramiko.org
++    User rando
+Index: paramiko-2.7.1/tests/configs/hostname-exec-tokenized
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/hostname-exec-tokenized
+@@ -0,0 +1,2 @@
++Match exec "ping %h"
++    HostName pingable.%h
+Index: paramiko-2.7.1/tests/configs/hostname-tokenized
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/hostname-tokenized
+@@ -0,0 +1 @@
++HostName prefix.%h
+Index: paramiko-2.7.1/tests/configs/invalid
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/invalid
+@@ -0,0 +1 @@
++lolwut
+Index: paramiko-2.7.1/tests/configs/match-all
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-all
+@@ -0,0 +1,2 @@
++Match all
++    User awesome
+Index: paramiko-2.7.1/tests/configs/match-all-after-canonical
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-all-after-canonical
+@@ -0,0 +1,5 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++
++Match canonical all
++    User awesome
+Index: paramiko-2.7.1/tests/configs/match-all-and-more
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-all-and-more
+@@ -0,0 +1,2 @@
++Match all exec "lol nope"
++    HostName whatever
+Index: paramiko-2.7.1/tests/configs/match-all-and-more-before
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-all-and-more-before
+@@ -0,0 +1,2 @@
++Match exec "lol nope" all
++    HostName whatever
+Index: paramiko-2.7.1/tests/configs/match-all-before-canonical
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-all-before-canonical
+@@ -0,0 +1,5 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++
++Match all canonical
++    User oops
+Index: paramiko-2.7.1/tests/configs/match-canonical-no
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-canonical-no
+@@ -0,0 +1,7 @@
++CanonicalizeHostname no
++
++Match canonical all
++    User awesome
++
++Match !canonical host specific
++    User overload
+Index: paramiko-2.7.1/tests/configs/match-canonical-yes
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-canonical-yes
+@@ -0,0 +1,5 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++
++Match !canonical host www*
++    User hidden
+Index: paramiko-2.7.1/tests/configs/match-complex
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-complex
+@@ -0,0 +1,17 @@
++HostName bogus
++
++Match originalhost target host bogus
++    User rand
++
++Match originalhost remote localuser rando
++    User calrissian
++
++# Just to set user for subsequent match
++Match originalhost www
++    User calrissian
++
++Match !canonical originalhost www host bogus localuser rando user calrissian
++    Port 7777
++
++Match !canonical !originalhost www host bogus localuser rando !user calrissian
++    Port 1234
+Index: paramiko-2.7.1/tests/configs/match-exec
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-exec
+@@ -0,0 +1,16 @@
++Match exec "quoted"
++    User benjamin
++
++Match exec unquoted
++    User rando
++
++Match exec "quoted spaced"
++    User neil
++
++# Just to prepopulate values for tokenizing subsequent exec
++Host target
++    User intermediate
++    HostName configured
++
++Match exec "%d %h %L %l %n %p %r %u"
++    Port 1337
+Index: paramiko-2.7.1/tests/configs/match-exec-canonical
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-exec-canonical
+@@ -0,0 +1,10 @@
++CanonicalDomains paramiko.org
++CanonicalizeHostname always
++
++# This will match in the first, uncanonicalized pass
++Match !canonical exec uncanonicalized
++    User defenseless
++
++# And this will match the second time
++Match canonical exec canonicalized
++    Port 8007
+Index: paramiko-2.7.1/tests/configs/match-exec-negation
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-exec-negation
+@@ -0,0 +1,5 @@
++Match !exec "this succeeds"
++    User nope
++
++Match !exec "this fails"
++    User yup
+Index: paramiko-2.7.1/tests/configs/match-exec-no-arg
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-exec-no-arg
+@@ -0,0 +1,2 @@
++Match exec
++    User uh-oh
+Index: paramiko-2.7.1/tests/configs/match-host
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-host
+@@ -0,0 +1,2 @@
++Match host target
++    User rand
+Index: paramiko-2.7.1/tests/configs/match-host-canonicalized
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-host-canonicalized
+@@ -0,0 +1,8 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++
++Match host www.paramiko.org
++    User rand
++
++Match canonical host docs.paramiko.org
++    User eric
+Index: paramiko-2.7.1/tests/configs/match-host-from-match
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-host-from-match
+@@ -0,0 +1,5 @@
++Match host original-host
++    HostName substituted-host
++
++Match host substituted-host
++    User inner
+Index: paramiko-2.7.1/tests/configs/match-host-glob
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-host-glob
+@@ -0,0 +1,2 @@
++Match host *ever
++    User matrim
+Index: paramiko-2.7.1/tests/configs/match-host-glob-list
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-host-glob-list
+@@ -0,0 +1,8 @@
++Match host *ever
++    User matrim
++
++Match host somehost,someotherhost
++    User thom
++
++Match host goo*,!goof
++    User perrin
+Index: paramiko-2.7.1/tests/configs/match-host-name
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-host-name
+@@ -0,0 +1,4 @@
++HostName default-host
++
++Match host default-host
++    User silly
+Index: paramiko-2.7.1/tests/configs/match-host-negated
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-host-negated
+@@ -0,0 +1,2 @@
++Match !host www
++    User jeff
+Index: paramiko-2.7.1/tests/configs/match-host-no-arg
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-host-no-arg
+@@ -0,0 +1,2 @@
++Match host
++    User oops
+Index: paramiko-2.7.1/tests/configs/match-localuser
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-localuser
+@@ -0,0 +1,14 @@
++Match localuser gandalf
++    HostName gondor
++
++Match localuser b*
++    HostName shire
++
++Match localuser aragorn,frodo
++    HostName moria
++
++Match localuser gimli,!legolas
++    Port 7373
++
++Match !localuser sauron
++    HostName mordor
+Index: paramiko-2.7.1/tests/configs/match-localuser-no-arg
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-localuser-no-arg
+@@ -0,0 +1,2 @@
++Match localuser
++    User oops
+Index: paramiko-2.7.1/tests/configs/match-orighost
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-orighost
+@@ -0,0 +1,16 @@
++HostName bogus
++
++Match originalhost target
++    User tuon
++
++Match originalhost what*
++    User matrim
++
++Match originalhost comma,sep*
++    User chameleon
++
++Match originalhost yep,!nope
++    User skipped
++
++Match !originalhost www !originalhost nope
++    User thom
+Index: paramiko-2.7.1/tests/configs/match-orighost-canonical
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-orighost-canonical
+@@ -0,0 +1,5 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++
++Match originalhost www
++    User tuon
+Index: paramiko-2.7.1/tests/configs/match-orighost-no-arg
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-orighost-no-arg
+@@ -0,0 +1,2 @@
++Match originalhost
++    User oops
+Index: paramiko-2.7.1/tests/configs/match-user
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-user
+@@ -0,0 +1,14 @@
++Match user gandalf
++    HostName gondor
++
++Match user b*
++    HostName shire
++
++Match user aragorn,frodo
++    HostName moria
++
++Match user gimli,!legolas
++    Port 7373
++
++Match !user sauron
++    HostName mordor
+Index: paramiko-2.7.1/tests/configs/match-user-explicit
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-user-explicit
+@@ -0,0 +1,4 @@
++User explicit
++
++Match user explicit
++    HostName dumb
+Index: paramiko-2.7.1/tests/configs/match-user-no-arg
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/match-user-no-arg
+@@ -0,0 +1,2 @@
++Match user
++    User oops
+Index: paramiko-2.7.1/tests/configs/multi-canon-domains
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/multi-canon-domains
+@@ -0,0 +1,5 @@
++CanonicalizeHostname yes
++CanonicalDomains not-a-real-tld paramiko.org
++
++Host www.paramiko.org
++    User rando
+Index: paramiko-2.7.1/tests/configs/no-canon
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/no-canon
+@@ -0,0 +1,5 @@
++CanonicalizeHostname no
++CanonicalDomains paramiko.org
++
++Host www.paramiko.org
++    User rando
+Index: paramiko-2.7.1/tests/configs/robey
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/robey
+@@ -0,0 +1,17 @@
++# A timeless classic?
++# NOTE: some lines in here have 'extra' whitespace (incl trailing, and mixed
++# tabs/spaces!) on purpose.
++
++Host *
++    User robey
++    IdentityFile    =~/.ssh/id_rsa
++
++# comment
++Host *.example.com
++     User bjork
++Port=3333
++Host *
++   Crazy something dumb
++Host spoo.example.com
++Crazy something else
++
+Index: paramiko-2.7.1/tests/configs/zero-maxdots
+===================================================================
+--- /dev/null
++++ paramiko-2.7.1/tests/configs/zero-maxdots
+@@ -0,0 +1,9 @@
++CanonicalizeHostname yes
++CanonicalDomains paramiko.org
++CanonicalizeMaxDots 0
++
++Host www.paramiko.org
++    User rando
++
++Host sub.www.paramiko.org
++    User deep
