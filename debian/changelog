@@ -1,3 +1,14 @@
+paramiko (2.7.2-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+    - Rebase patches.
+  * Bump debhelper from old 12 to 13.
+  * Set upstream metadata fields: Bug-Submit.
+  * Set Rules-Requires-Root: no.
+
+ -- Tristan Seligmann <mithrandi@debian.org>  Wed, 02 Sep 2020 10:33:40 +0200
+
 paramiko (2.7.1-2) unstable; urgency=medium
 
   * debian/rules
