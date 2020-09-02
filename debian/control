@@ -5,7 +5,7 @@ Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.
 Uploaders: Jeremy T. Bouse <jbouse@debian.org>,
            Guido Guenther <agx@debian.org>,
            Sandro Tosi <morph@debian.org>,
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: debhelper-compat (= 13),
                dh-python,
                python3-all,
                python3-bcrypt (>= 3.1.3),
