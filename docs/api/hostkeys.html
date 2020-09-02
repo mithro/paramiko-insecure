@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Host keys / known_hosts files &#8212; Paramiko  documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -25,7 +23,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Key handling" href="keys.html" />
     <link rel="prev" title="SSH agents" href="agent.html" />
    
@@ -35,7 +32,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -50,7 +47,7 @@
 <dl class="class">
 <dt id="paramiko.hostkeys.HostKeys">
 <em class="property">class </em><code class="descclassname">paramiko.hostkeys.</code><code class="descname">HostKeys</code><span class="sig-paren">(</span><em>filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.hostkeys.HostKeys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Representation of an OpenSSH-style &#8220;known hosts&#8221; file.  Host keys can be
+<dd><p>Representation of an OpenSSH-style “known hosts” file.  Host keys can be
 read from one or more files, and then individual hosts can be looked up to
 verify server keys during SSH negotiation.</p>
 <p>A <a class="reference internal" href="#paramiko.hostkeys.HostKeys" title="paramiko.hostkeys.HostKeys"><code class="xref py py-obj docutils literal"><span class="pre">HostKeys</span></code></a> object can be treated like a dict; any dict lookup is
@@ -67,7 +64,7 @@ style host-key file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; filename to load host keys from, or <code class="docutils literal"><span class="pre">None</span></code></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – filename to load host keys from, or <code class="docutils literal"><span class="pre">None</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -83,9 +80,9 @@ style host-key file.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the hostname (or IP) to add</li>
-<li><strong>keytype</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; key type (<code class="docutils literal"><span class="pre">&quot;ssh-rsa&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;ssh-dss&quot;</span></code>)</li>
-<li><strong>key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the key to add</li>
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the hostname (or IP) to add</li>
+<li><strong>keytype</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – key type (<code class="docutils literal"><span class="pre">&quot;ssh-rsa&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;ssh-dss&quot;</span></code>)</li>
+<li><strong>key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) – the key to add</li>
 </ul>
 </td>
 </tr>
@@ -97,7 +94,7 @@ style host-key file.</p>
 <dt id="paramiko.hostkeys.HostKeys.load">
 <code class="descname">load</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.hostkeys.HostKeys.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a file of known SSH host keys, in the format used by OpenSSH.
-This type of file unfortunately doesn&#8217;t exist on Windows, but on
+This type of file unfortunately doesn’t exist on Windows, but on
 posix, it will usually be stored in
 <code class="docutils literal"><span class="pre">os.path.expanduser(&quot;~/.ssh/known_hosts&quot;)</span></code>.</p>
 <p>If this method is called multiple times, the host keys are merged,
@@ -107,9 +104,9 @@ replacing any existing entries and adding new ones.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to read host keys from</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the file to read host keys from</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error reading the file</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> – if there was an error reading the file</td>
 </tr>
 </tbody>
 </table>
@@ -126,9 +123,9 @@ lines will be split into individual key lines, which is arguably a bug.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file to write</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the file to write</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if there was an error writing the file</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">IOError</span></code> – if there was an error writing the file</td>
 </tr>
 </tbody>
 </table>
@@ -147,7 +144,7 @@ returned.  The keytype will be either <code class="docutils literal"><span class
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the hostname (or IP) to lookup</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the hostname (or IP) to lookup</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict of <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> -&gt; <a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><code class="xref py py-obj docutils literal"><span class="pre">PKey</span></code></a> keys associated with this host
 (or <code class="docutils literal"><span class="pre">None</span></code>)</td>
@@ -166,8 +163,8 @@ in this dictionary.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; hostname (or IP) of the SSH server</li>
-<li><strong>key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) &#8211; the key to check</li>
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – hostname (or IP) of the SSH server</li>
+<li><strong>key</strong> (<a class="reference internal" href="keys.html#paramiko.pkey.PKey" title="paramiko.pkey.PKey"><em>PKey</em></a>) – the key to check</li>
 </ul>
 </td>
 </tr>
@@ -187,15 +184,15 @@ in this dictionary.</p>
 <dl class="staticmethod">
 <dt id="paramiko.hostkeys.HostKeys.hash_host">
 <em class="property">static </em><code class="descname">hash_host</code><span class="sig-paren">(</span><em>hostname</em>, <em>salt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.hostkeys.HostKeys.hash_host" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a &#8220;hashed&#8221; form of the hostname, as used by OpenSSH when storing
+<dd><p>Return a “hashed” form of the hostname, as used by OpenSSH when storing
 hashed hostnames in the known_hosts file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the hostname to hash</li>
-<li><strong>salt</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; optional salt to use when hashing
+<li><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the hostname to hash</li>
+<li><strong>salt</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – optional salt to use when hashing
 (must be 20 bytes long)</li>
 </ul>
 </td>
@@ -218,7 +215,7 @@ hashed hostnames in the known_hosts file.</p>
 <dl class="class">
 <dt id="paramiko.hostkeys.HostKeyEntry">
 <em class="property">class </em><code class="descclassname">paramiko.hostkeys.</code><code class="descname">HostKeyEntry</code><span class="sig-paren">(</span><em>hostnames=None</em>, <em>key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.hostkeys.HostKeyEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Representation of a line in an OpenSSH-style &#8220;known hosts&#8221; file.</p>
+<dd><p>Representation of a line in an OpenSSH-style “known hosts” file.</p>
 <dl class="classmethod">
 <dt id="paramiko.hostkeys.HostKeyEntry.from_line">
 <em class="property">classmethod </em><code class="descname">from_line</code><span class="sig-paren">(</span><em>line</em>, <em>lineno=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.hostkeys.HostKeyEntry.from_line" title="Permalink to this definition">¶</a></dt>
@@ -226,13 +223,13 @@ hashed hostnames in the known_hosts file.</p>
 the type of key, and the key data. The line is expected to be in the
 format used by the OpenSSH known_hosts file.</p>
 <p>Lines are expected to not have leading or trailing whitespace.
-We don&#8217;t bother to check for comments or empty lines.  All of
+We don’t bother to check for comments or empty lines.  All of
 that should be taken care of before sending the line to us.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>line</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; a line from an OpenSSH known_hosts file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>line</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a line from an OpenSSH known_hosts file</td>
 </tr>
 </tbody>
 </table>
@@ -359,14 +356,14 @@ Professionally-supported Paramiko is available with the
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019 Jeff Forcier.
+      &copy;2020 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/api/hostkeys.txt"
+      <a href="../_sources/api/hostkeys.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
