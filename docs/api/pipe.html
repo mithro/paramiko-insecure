@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Cross-platform pipe implementations &#8212; Paramiko  documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -25,7 +23,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Exceptions" href="ssh_exception.html" />
     <link rel="prev" title="Buffered files" href="file.html" />
    
@@ -35,7 +32,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -55,7 +52,7 @@ will trigger as readable in <a class="reference external" href="https://docs.pyt
 <dl class="class">
 <dt id="paramiko.pipe.WindowsPipe">
 <em class="property">class </em><code class="descclassname">paramiko.pipe.</code><code class="descname">WindowsPipe</code><a class="headerlink" href="#paramiko.pipe.WindowsPipe" title="Permalink to this definition">¶</a></dt>
-<dd><p>On Windows, only an OS-level &#8220;WinSock&#8221; may be used in select(), but reads
+<dd><p>On Windows, only an OS-level “WinSock” may be used in select(), but reads
 and writes must be to the actual socket object.</p>
 <dl class="attribute">
 <dt id="paramiko.pipe.WindowsPipe.__weakref__">
@@ -68,7 +65,7 @@ and writes must be to the actual socket object.</p>
 <dl class="function">
 <dt id="paramiko.pipe.make_or_pipe">
 <code class="descclassname">paramiko.pipe.</code><code class="descname">make_or_pipe</code><span class="sig-paren">(</span><em>pipe</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.pipe.make_or_pipe" title="Permalink to this definition">¶</a></dt>
-<dd><p>wraps a pipe into two pipe-like objects which are &#8220;or&#8221;d together to
+<dd><p>wraps a pipe into two pipe-like objects which are “or”d together to
 affect the real pipe. if either returned pipe is set, the wrapped pipe
 is set. when both are cleared, the wrapped pipe is cleared.</p>
 </dd></dl>
@@ -178,14 +175,14 @@ Professionally-supported Paramiko is available with the
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019 Jeff Forcier.
+      &copy;2020 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/api/pipe.txt"
+      <a href="../_sources/api/pipe.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

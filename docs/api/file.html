@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Buffered files &#8212; Paramiko  documentation</title>
-    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -25,7 +23,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Paramiko  documentation" href="../index.html" />
     <link rel="next" title="Cross-platform pipe implementations" href="pipe.html" />
     <link rel="prev" title="Buffered pipes" href="buffered_pipe.html" />
    
@@ -35,7 +32,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -62,7 +59,7 @@ its own iterator.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">ValueError</span></code> &#8211; if the file is closed.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">ValueError</span></code> – if the file is closed.</td>
 </tr>
 </tbody>
 </table>
@@ -72,13 +69,13 @@ its own iterator.</p>
 <dt id="paramiko.file.BufferedFile.__next__">
 <code class="descname">__next__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.file.BufferedFile.__next__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the next line from the input, or raises <code class="docutils literal"><span class="pre">StopIteration</span></code>
-when EOF is hit.  Unlike python file objects, it&#8217;s okay to mix
+when EOF is hit.  Unlike python file objects, it’s okay to mix
 calls to <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#next" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">next</span></code></a> and <a class="reference internal" href="#paramiko.file.BufferedFile.readline" title="paramiko.file.BufferedFile.readline"><code class="xref py py-obj docutils literal"><span class="pre">readline</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">StopIteration</span></code> &#8211; when the end of the file is reached.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal"><span class="pre">StopIteration</span></code> – when the end of the file is reached.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a line (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a>) read from the file.</td>
 </tr>
@@ -116,7 +113,7 @@ text data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; maximum number of bytes to read</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – maximum number of bytes to read</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">data read from the file (as bytes), or an empty string if EOF was
 encountered immediately</td>
@@ -166,14 +163,14 @@ incomplete line may be returned.  An empty string is returned only when
 EOF is encountered immediately.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Unlike stdio&#8217;s <code class="docutils literal"><span class="pre">fgets</span></code>, the returned string contains null
+<p class="last">Unlike stdio’s <code class="docutils literal"><span class="pre">fgets</span></code>, the returned string contains null
 characters (<code class="docutils literal"><span class="pre">'\0'</span></code>) if they occurred in the input.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; maximum length of returned string.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – maximum length of returned string.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">next line of the file, or an empty string if the end of the
 file has been reached.<p>If the file was opened in binary (<code class="docutils literal"><span class="pre">'b'</span></code>) mode: bytes are returned
@@ -196,7 +193,7 @@ after rounding up to an internal buffer size) are read.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sizehint</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; desired maximum number of bytes to read.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sizehint</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – desired maximum number of bytes to read.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of lines read from the file.</td>
 </tr>
@@ -207,7 +204,7 @@ after rounding up to an internal buffer size) are read.</p>
 <dl class="method">
 <dt id="paramiko.file.BufferedFile.seek">
 <code class="descname">seek</code><span class="sig-paren">(</span><em>offset</em>, <em>whence=0</em><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.file.BufferedFile.seek" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the file&#8217;s current position, like stdio&#8217;s <code class="docutils literal"><span class="pre">fseek</span></code>.  Not all file
+<dd><p>Set the file’s current position, like stdio’s <code class="docutils literal"><span class="pre">fseek</span></code>.  Not all file
 objects support seeking.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -220,13 +217,13 @@ will move back to the end of the file).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; position to move to within the file, relative to <code class="docutils literal"><span class="pre">whence</span></code>.</li>
-<li><strong>whence</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; type of movement: 0 = absolute; 1 = relative to the current
+<li><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – position to move to within the file, relative to <code class="docutils literal"><span class="pre">whence</span></code>.</li>
+<li><strong>whence</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – type of movement: 0 = absolute; 1 = relative to the current
 position; 2 = relative to the end of the file.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">IOError</span></code> &#8211; if the file doesn&#8217;t support random access.</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">IOError</span></code> – if the file doesn’t support random access.</p>
 </td>
 </tr>
 </tbody>
@@ -251,8 +248,8 @@ raise an exception.</td>
 <dl class="method">
 <dt id="paramiko.file.BufferedFile.tell">
 <code class="descname">tell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paramiko.file.BufferedFile.tell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the file&#8217;s current position.  This may not be accurate or
-useful if the underlying file doesn&#8217;t support random access, or was
+<dd><p>Return the file’s current position.  This may not be accurate or
+useful if the underlying file doesn’t support random access, or was
 opened in append mode.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -290,7 +287,7 @@ written out.)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; <code class="docutils literal"><span class="pre">str</span></code>/<code class="docutils literal"><span class="pre">bytes</span></code> data to write</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – <code class="docutils literal"><span class="pre">str</span></code>/<code class="docutils literal"><span class="pre">bytes</span></code> data to write</td>
 </tr>
 </tbody>
 </table>
@@ -307,7 +304,7 @@ separators.)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> &#8211; an iterable sequence of strings.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sequence</strong> – an iterable sequence of strings.</td>
 </tr>
 </tbody>
 </table>
@@ -427,14 +424,14 @@ Professionally-supported Paramiko is available with the
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2019 Jeff Forcier.
+      &copy;2020 Jeff Forcier.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/api/file.txt"
+      <a href="../_sources/api/file.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
