@@ -29,6 +29,7 @@ Architecture: all
 Depends: libjs-jquery,
          libjs-underscore,
          ${misc:Depends},
+Multi-Arch: foreign
 Description: Make ssh v2 connections with Python (Documentation)
  "Paramiko" is a combination of the Esperanto words for "paranoid" and "friend".
  It's a module for Python 2.7/3.4+ that implements the SSH2 protocol for secure
