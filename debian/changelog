@@ -10,8 +10,10 @@ paramiko (2.8.0-1) UNRELEASED; urgency=medium
   * New upstream release
   * debian/watch
     - track github releases
+  * debian/gbp.conf
+    - remove gbp.conf file
 
- -- Sandro Tosi <morph@debian.org>  Thu, 14 Oct 2021 23:28:04 -0400
+ -- Sandro Tosi <morph@debian.org>  Fri, 15 Oct 2021 13:28:23 -0400
 
 paramiko (2.7.2-1) unstable; urgency=medium
 
