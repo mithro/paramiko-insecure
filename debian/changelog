@@ -1,4 +1,4 @@
-paramiko (2.7.2-2) UNRELEASED; urgency=medium
+paramiko (2.8.0-1) UNRELEASED; urgency=medium
 
   [ Ondřej Nový ]
   * d/control: Update Maintainer field with new Debian Python Team
@@ -7,10 +7,11 @@ paramiko (2.7.2-2) UNRELEASED; urgency=medium
     layout.
 
   [ Sandro Tosi ]
+  * New upstream release
   * debian/watch
     - track github releases
 
- -- Sandro Tosi <morph@debian.org>  Thu, 14 Oct 2021 23:27:20 -0400
+ -- Sandro Tosi <morph@debian.org>  Thu, 14 Oct 2021 23:28:04 -0400
 
 paramiko (2.7.2-1) unstable; urgency=medium
 
