@@ -1,4 +1,4 @@
-paramiko (2.8.0-1) UNRELEASED; urgency=medium
+paramiko (2.8.0-1) unstable; urgency=medium
 
   [ Ondřej Nový ]
   * d/control: Update Maintainer field with new Debian Python Team
@@ -15,7 +15,7 @@ paramiko (2.8.0-1) UNRELEASED; urgency=medium
   * debian/patches/remove_pytest_relaxed.patch
     - refresh patch
 
- -- Sandro Tosi <morph@debian.org>  Fri, 15 Oct 2021 13:33:44 -0400
+ -- Sandro Tosi <morph@debian.org>  Fri, 15 Oct 2021 13:33:52 -0400
 
 paramiko (2.7.2-1) unstable; urgency=medium
 
