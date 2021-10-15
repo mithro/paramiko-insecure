@@ -12,8 +12,10 @@ paramiko (2.8.0-1) UNRELEASED; urgency=medium
     - track github releases
   * debian/gbp.conf
     - remove gbp.conf file
+  * debian/patches/remove_pytest_relaxed.patch
+    - refresh patch
 
- -- Sandro Tosi <morph@debian.org>  Fri, 15 Oct 2021 13:28:23 -0400
+ -- Sandro Tosi <morph@debian.org>  Fri, 15 Oct 2021 13:33:44 -0400
 
 paramiko (2.7.2-1) unstable; urgency=medium
 

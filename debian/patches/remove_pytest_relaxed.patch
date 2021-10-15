@@ -8,20 +8,6 @@ Subject: remove_pytest_relaxed
  tests/test_client.py | 23 ++++++++++++-----------
  2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/setup.cfg b/setup.cfg
-index e503126..f319864 100644
---- a/setup.cfg
-+++ b/setup.cfg
-@@ -13,7 +13,6 @@ ignore = E124,E125,E128,E261,E301,E302,E303,E402,E721,W503,E203,E722
- max-line-length = 79
- 
- [tool:pytest]
--addopts = -p no:relaxed
- looponfailroots = tests paramiko
- filterwarnings = 
- 	ignore::DeprecationWarning:pkg_resources
-diff --git a/tests/test_client.py b/tests/test_client.py
-index 60ad310..afd1804 100644
 --- a/tests/test_client.py
 +++ b/tests/test_client.py
 @@ -33,7 +33,7 @@ import warnings
@@ -33,7 +19,7 @@ index 60ad310..afd1804 100644
  from mock import patch, Mock
  
  import paramiko
-@@ -682,12 +682,12 @@ class PasswordPassphraseTests(ClientTest):
+@@ -685,12 +685,12 @@ class PasswordPassphraseTests(ClientTest
          # Straightforward / duplicate of earlier basic password test.
          self._test_connection(password="pygmalion")
  
@@ -50,7 +36,7 @@ index 60ad310..afd1804 100644
  
      def test_passphrase_kwarg_used_for_key_passphrase(self):
          # Straightforward again, with new passphrase kwarg.
-@@ -705,14 +705,15 @@ class PasswordPassphraseTests(ClientTest):
+@@ -708,14 +708,15 @@ class PasswordPassphraseTests(ClientTest
              password="television",
          )
  
@@ -72,3 +58,13 @@ index 60ad310..afd1804 100644
 +                passphrase="wat? lol no",
 +            )
 +
+--- a/pytest.ini
++++ b/pytest.ini
+@@ -1,7 +1,4 @@
+ [pytest]
+-# We use pytest-relaxed just for its utils at the moment, so disable it at the
+-# plugin level until we adapt test organization to really use it.
+-addopts = -p no:relaxed
+ # Loop on failure
+ looponfailroots = tests paramiko
+ # Ignore some warnings we cannot easily handle.
