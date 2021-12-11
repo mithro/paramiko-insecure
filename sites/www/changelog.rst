@@ -2,6 +2,45 @@
 Changelog
 =========
 
+- :release:`2.8.1 <2021-11-28>`
+- :bug:`985` (via :issue:`992`) Fix listdir failure when server uses a locale.
+  Now on Python 2.7 `SFTPAttributes <paramiko.sftp_attr.SFTPAttributes>` will
+  decode abbreviated month names correctly rather than raise
+  ``UnicodeDecodeError```. Patch courtesy of Martin Packman.
+- :bug:`1024` Deleting items from `~paramiko.hostkeys.HostKeys` would
+  incorrectly raise `KeyError` even for valid keys, due to a logic bug. This
+  has been fixed. Report & patch credit: Jia Zhang.
+- :bug:`1257` (also :issue:`1266`) Update RSA and ECDSA key decoding
+  subroutines to correctly catch exception types thrown by modern
+  versions of Cryptography (specifically ``TypeError`` and
+  its internal ``UnsupportedAlgorithm``). These exception classes will now
+  become `~paramiko.ssh_exception.SSHException` instances instead of bubbling
+  up. Thanks to Ignat Semenov for the report and ``@tylergarcianet`` for an
+  early patch.
+- :bug:`-` (also :issue:`908`) Update `~paramiko.pkey.PKey` and subclasses to
+  compare (``__eq__``) via direct field/attribute comparison instead of hashing
+  (while retaining the existing behavior of ``__hash__`` via a slight
+  refactor). Big thanks to Josh Snyder and Jun Omae for the reports, and to
+  Josh Snyder for reproduction details & patch.
+
+  .. warning::
+    This fixes a security flaw! If you are running Paramiko on 32-bit systems
+    with low entropy (such as any 32-bit Python 2, or a 32-bit Python 3 which
+    is running with ``PYTHONHASHSEED=0``) it is possible for an attacker to
+    craft a new keypair from an exfiltrated public key, which Paramiko would
+    consider equal to the original key.
+
+    This could enable attacks such as, but not limited to, the following:
+
+    - Paramiko server processes would incorrectly authenticate the attacker
+      (using their generated private key) as if they were the victim. We see
+      this as the most plausible attack using this flaw.
+    - Paramiko client processes would incorrectly validate a connected server
+      (when host key verification is enabled) while subjected
+      to a man-in-the-middle attack. This impacts more users than the
+      server-side version, but also carries higher requirements for the
+      attacker, namely successful DNS poisoning or other MITM techniques.
+
 - :release:`2.8.0 <2021-10-09>`
 - :support:`-` Administrivia overhaul, including but not limited to:
 

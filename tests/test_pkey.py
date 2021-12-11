@@ -26,13 +26,23 @@ import os
 from binascii import hexlify
 from hashlib import md5
 
-from paramiko import RSAKey, DSSKey, ECDSAKey, Ed25519Key, Message, util
+from paramiko import (
+    RSAKey,
+    DSSKey,
+    ECDSAKey,
+    Ed25519Key,
+    Message,
+    util,
+    SSHException,
+)
 from paramiko.py3compat import StringIO, byte_chr, b, bytes, PY2
 
+from cryptography.exceptions import UnsupportedAlgorithm
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateNumbers
 from mock import patch
+import pytest
 
-from .util import _support
+from .util import _support, is_low_entropy
 
 
 # from openssh's ssh-keygen
@@ -161,6 +171,16 @@ class KeyTest(unittest.TestCase):
         s.seek(0)
         key2 = RSAKey.from_private_key(s)
         self.assertEqual(key, key2)
+
+    def test_load_rsa_transmutes_crypto_exceptions(self):
+        # TODO: nix unittest for pytest
+        for exception in (TypeError("onoz"), UnsupportedAlgorithm("oops")):
+            with patch(
+                "paramiko.rsakey.serialization.load_der_private_key"
+            ) as loader:
+                loader.side_effect = exception
+                with pytest.raises(SSHException, match=str(exception)):
+                    RSAKey.from_private_key_file(_support("test_rsa.key"))
 
     def test_load_rsa_password(self):
         key = RSAKey.from_private_key_file(
@@ -368,6 +388,17 @@ class KeyTest(unittest.TestCase):
         self.assertEqual(PUB_ECDSA_384.split()[1], key.get_base64())
         self.assertEqual(384, key.get_bits())
 
+    def test_load_ecdsa_transmutes_crypto_exceptions(self):
+        path = _support("test_ecdsa_256.key")
+        # TODO: nix unittest for pytest
+        for exception in (TypeError("onoz"), UnsupportedAlgorithm("oops")):
+            with patch(
+                "paramiko.ecdsakey.serialization.load_der_private_key"
+            ) as loader:
+                loader.side_effect = exception
+                with pytest.raises(SSHException, match=str(exception)):
+                    ECDSAKey.from_private_key_file(path)
+
     def test_compare_ecdsa_384(self):
         # verify that the private & public keys compare equal
         key = ECDSAKey.from_private_key_file(_support("test_ecdsa_384.key"))
@@ -550,6 +581,43 @@ class KeyTest(unittest.TestCase):
         self.assertTrue(key.can_sign())
         self.assertTrue(not pub.can_sign())
         self.assertEqual(key, pub)
+
+    # No point testing on systems that never exhibited the bug originally
+    @pytest.mark.skipif(
+        not is_low_entropy(), reason="Not a low-entropy system"
+    )
+    def test_ed25519_32bit_collision(self):
+        # Re: 2021.10.19 security report email: two different private keys
+        # which Paramiko compared as equal on low-entropy platforms.
+        original = Ed25519Key.from_private_key_file(
+            _support("badhash_key1.ed25519.key")
+        )
+        generated = Ed25519Key.from_private_key_file(
+            _support("badhash_key2.ed25519.key")
+        )
+        assert original != generated
+
+    def keys(self):
+        for key_class, filename in [
+            (RSAKey, "test_rsa.key"),
+            (DSSKey, "test_dss.key"),
+            (ECDSAKey, "test_ecdsa_256.key"),
+            (Ed25519Key, "test_ed25519.key"),
+        ]:
+            key1 = key_class.from_private_key_file(_support(filename))
+            key2 = key_class.from_private_key_file(_support(filename))
+            yield key1, key2
+
+    def test_keys_are_comparable(self):
+        for key1, key2 in self.keys():
+            assert key1 == key2
+
+    def test_keys_are_hashable(self):
+        # NOTE: this isn't a great test due to hashseed randomization under
+        # Python 3 preventing use of static values, but it does still prove
+        # that __hash__ is implemented/doesn't explode & works across instances
+        for key1, key2 in self.keys():
+            assert hash(key1) == hash(key2)
 
     def test_ed25519_nonbytes_password(self):
         # https://github.com/paramiko/paramiko/issues/1039
