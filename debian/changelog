@@ -3,8 +3,10 @@ paramiko (2.8.1-1) UNRELEASED; urgency=medium
   * New upstream release
   * debian/patches/PR1942.patch
     - add upstream PR to fix test_sftp.py failures
+  * debian/control
+    - bump Standards-Version to 4.6.0.1 (no changes needed)
 
- -- Sandro Tosi <morph@debian.org>  Sat, 11 Dec 2021 01:21:46 -0500
+ -- Sandro Tosi <morph@debian.org>  Sat, 11 Dec 2021 01:25:41 -0500
 
 paramiko (2.8.0-1) unstable; urgency=medium
 
