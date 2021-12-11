@@ -20,7 +20,7 @@
 RSA keys.
 """
 
-from cryptography.exceptions import InvalidSignature
+from cryptography.exceptions import InvalidSignature, UnsupportedAlgorithm
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
@@ -98,10 +98,9 @@ class RSAKey(PKey):
         else:
             return self.asbytes().decode("utf8", errors="ignore")
 
-    def __hash__(self):
-        return hash(
-            (self.get_name(), self.public_numbers.e, self.public_numbers.n)
-        )
+    @property
+    def _fields(self):
+        return (self.get_name(), self.public_numbers.e, self.public_numbers.n)
 
     def get_name(self):
         return "ssh-rsa"
@@ -186,7 +185,7 @@ class RSAKey(PKey):
                 key = serialization.load_der_private_key(
                     data, password=None, backend=default_backend()
                 )
-            except ValueError as e:
+            except (ValueError, TypeError, UnsupportedAlgorithm) as e:
                 raise SSHException(str(e))
         elif pkformat == self._PRIVATE_KEY_FORMAT_OPENSSH:
             n, e, d, iqmp, p, q = self._uint32_cstruct_unpack(data, "iiiiii")
