@@ -5,8 +5,10 @@ paramiko (2.8.1-1) UNRELEASED; urgency=medium
     - add upstream PR to fix test_sftp.py failures
   * debian/control
     - bump Standards-Version to 4.6.0.1 (no changes needed)
+  * debian/copyright
+    - extend packaging copyright years
 
- -- Sandro Tosi <morph@debian.org>  Sat, 11 Dec 2021 01:25:41 -0500
+ -- Sandro Tosi <morph@debian.org>  Sat, 11 Dec 2021 01:26:21 -0500
 
 paramiko (2.8.0-1) unstable; urgency=medium
 
