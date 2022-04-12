@@ -26,8 +26,8 @@ Signed-off-by: Stanislav Levin <slev@altlinux.org>
  def _decorate_with_locale(category, try_locales, test_method):
      """Decorate test_method to run after switching to a different locale."""
  
--    def _test_under_locale(testself):
-+    def _test_under_locale(testself, *args, **kwargs):
+-    def _test_under_locale(testself, sftp):
++    def _test_under_locale(testself, sftp, *args, **kwargs):
          original = locale.setlocale(category)
          while try_locales:
              try:
