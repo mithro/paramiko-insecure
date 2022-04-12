@@ -196,13 +196,20 @@ class PKey(object):
         """
         return u(encodebytes(self.asbytes())).replace("\n", "")
 
-    def sign_ssh_data(self, data):
+    def sign_ssh_data(self, data, algorithm=None):
         """
         Sign a blob of data with this private key, and return a `.Message`
         representing an SSH signature message.
 
-        :param str data: the data to sign.
+        :param str data:
+            the data to sign.
+        :param str algorithm:
+            the signature algorithm to use, if different from the key's
+            internal name. Default: ``None``.
         :return: an SSH signature `message <.Message>`.
+
+        .. versionchanged:: 2.9
+            Added the ``algorithm`` kwarg.
         """
         return bytes()
 
@@ -551,7 +558,18 @@ class PKey(object):
 
         :raises: ``IOError`` -- if there was an error writing the file.
         """
-        with open(filename, "w") as f:
+        # Ensure that we create new key files directly with a user-only mode,
+        # instead of opening, writing, then chmodding, which leaves us open to
+        # CVE-2022-24302.
+        # NOTE: O_TRUNC is a noop on new files, and O_CREAT is a noop on
+        # existing files, so using all 3 in both cases is fine. Ditto the use
+        # of the 'mode' argument; it should be safe to give even for existing
+        # files (though it will not act like a chmod in that case).
+        # TODO 3.0: turn into kwargs again
+        args = [os.O_WRONLY | os.O_TRUNC | os.O_CREAT, o600]
+        # NOTE: yea, you still gotta inform the FLO that it is in "write" mode
+        with os.fdopen(os.open(filename, *args), "w") as f:
+            # TODO 3.0: remove the now redundant chmod
             os.chmod(filename, o600)
             self._write_private_key(f, key, format, password=password)
 
