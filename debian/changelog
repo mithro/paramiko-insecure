@@ -1,3 +1,20 @@
+paramiko (2.10.3-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+    - Fix CVE-2022-24302 (Closes: #1008012)
+    - Add support for SHA-2 variants of RSA key verification algorithms
+      to support openssh >= 8.8p1-1 (Closes: #1007168, LP: #1961979)
+  * Refresh PR1942.patch
+  * Fix spelling mistake of distributed
+  * Drop unused source-is-missing lintian override
+  * Ignore very-long-line-length-in-source-file lintian alert
+  * Update debian/copyright
+  * d/p/thread-setdaemon-deprecation.patch: patch out a deprecation warning
+    with Python 3.10 (LP: #1959095)
+
+ -- Benjamin Drung <bdrung@ubuntu.com>  Tue, 12 Apr 2022 16:40:12 +0200
+
 paramiko (2.8.1-1) unstable; urgency=medium
 
   * New upstream release
