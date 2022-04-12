@@ -1,0 +1,8 @@
+# Upstream uses black to wrap long lines. These lines are cannot be wrapped.
+very-long-line-length-in-source-file paramiko/kex_group14.py line * is 530 characters long (>512)
+very-long-line-length-in-source-file paramiko/kex_group16.py line * is 1042 characters long (>512)
+very-long-line-length-in-source-file paramiko/kex_gss.py line * is 530 characters long (>512)
+very-long-line-length-in-source-file tests/test_kex.py line * is 1253 characters long (>512)
+very-long-line-length-in-source-file tests/test_pkey.py line * is 619 characters long (>512)
+# Public SSH keys used for tests. They are not wrapped.
+very-long-line-length-in-source-file tests/cert_support/test_*.key-cert.pub line 1 is * characters long (>512)
