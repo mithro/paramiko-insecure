@@ -1,4 +1,3 @@
 remove_pytest_relaxed.patch
 PR1942.patch
 Fix-spelling-mistake-of-distributed.patch
-thread-setdaemon-deprecation.patch
