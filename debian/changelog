@@ -1,3 +1,12 @@
+paramiko (2.10.4-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * Drop patch that is included upstream.
+  * Drop upstream signing key. The release tarballs on GitHub are not signed.
+
+ -- Benjamin Drung <bdrung@ubuntu.com>  Mon, 16 May 2022 09:42:31 +0200
+
 paramiko (2.10.3-1) unstable; urgency=medium
 
   * Team upload.
