@@ -1,1 +1,2 @@
 remove_pytest_relaxed.patch
+CVE-2022-24302.patch
