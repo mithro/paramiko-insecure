@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 
 export PYBUILD_NAME=paramiko
-export PYBUILD_DISABLE=test
 export LC_ALL=C.UTF-8
 
 %:
