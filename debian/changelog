@@ -1,0 +1,305 @@
+paramiko (2.4.2-0.1) unstable; urgency=medium
+
+  * New upstream version 2.4.2 (Closes: #892859)
+  * Fix autopkgtests (switch to pytest) (Closes: #904635)
+
+ -- Gaudenz Steinlin <gaudenz@debian.org>  Sat, 01 Dec 2018 14:30:29 +0100
+
+paramiko (2.4.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.4.0
+  * Update build for 2.4.0 (Closes: #871249, #882322, #698075)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Wed, 07 Mar 2018 14:59:55 -0500
+
+paramiko (2.0.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.0.0 (Closes: #826737)
+  * Correct email address for patch
+  * Update Standards-Version to 3.9.8, no changes needed
+  * Update doc file names to match upstream changes
+  * Update crypto dependencies
+  * Clean up debian/control, debian/rules and lintian issues
+  * Upstream bug tracking check (Closes: #783313, #754851)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Wed, 08 Jun 2016 23:56:41 -0400
+
+paramiko (1.16.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.16.0 (Closes: #816618)
+  * Update debian/patches
+  * Add Python pyasn1 and gssapi build depends (Closes: #804582)
+  * Use upstream test script
+  * Update debian/watch to use pypi.debian.net
+  * Fix dh_auto_test override
+  * Update Standards-Version to 3.9.7, no changes needed
+  * Remove unneeded option
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Mon, 11 Apr 2016 15:47:02 -0400
+
+paramiko (1.15.3-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.15.3
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sun, 25 Oct 2015 22:46:34 -0400
+
+paramiko (1.15.2-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.15.2
+  * Update Standards-Version (no changes needed)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Wed, 08 Jul 2015 10:35:09 -0400
+
+paramiko (1.15.1-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.15.1
+  * Update gbp.conf section headers for newer version
+  * Move from epydoc to sphinx for doc build
+  * Add patch to localize generated documentation
+  * Implement pybuild buildsystem
+  * debian/gbp.conf: Update postbuild for git-buildpackage
+  * Imported Upstream version 1.15.0
+  * Specify minimum required version of ecdsa
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 23 Sep 2014 14:07:59 -0400
+
+paramiko (1.14.1-1) unstable; urgency=medium
+
+  [ Thomas Kluyver ]
+  * Add autopkgtest information
+
+  [ Jeremy T. Bouse ]
+  * Include upstream GitHub Pull Request #352 to fix RC bug.
+    Thanks to Jelmer Vernooij <jelmer> (Closes: #750517, #755910)
+  * Imported Upstream version 1.14.1
+  * Revert "Include upstream GitHub Pull Request #352 to fix RC bug"
+    as it was included in upstream bug fix release 1.14.1 to remove
+    the regression introduced into 1.14.0.
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Thu, 28 Aug 2014 22:23:51 -0700
+
+paramiko (1.14.0-2) unstable; urgency=low
+
+  * Add extend-diff-ignore to debian/source/options.
+    Thanks to Thomas Goirand <zigo>
+  * Add python-ecdsa to Build-Depends (Closes: #702571)
+  * Add Python 3 support to build.
+    Thanks to Thomas Goirand <zigo> (Closes: #697600, #749512)
+  * Clean up build environment
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 27 May 2014 21:30:02 -0400
+
+paramiko (1.14.0-1) unstable; urgency=low
+
+  * Imported Upstream version 1.14.0 (Closes: #742005)
+  * Update Standards-Version to 3.9.5
+  * Fix paramiko-doc overwriting /usr/share/doc-base/python-paramiko.
+    Thanks to Felix Geyer <fgeyer@debian.org> (Closes: #718004)
+  * debian/patches/*: Removed patch applied upstream
+  * debian/control: Move VCS location
+  * debian/control: Fix type in paramiko-doc block
+  * debian/control: Removed unknown XS-Testsuite
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sun, 11 May 2014 23:01:05 -0400
+
+paramiko (1.10.1-1) unstable; urgency=low
+
+  * Imported Upstream version 1.10.1
+  * debian/control: Revise debhelper Build-Depends entry
+  * debian/{control,watch}: Update for new maintainer and source address
+    (Closes: #690080) - thanks to Mike Gabriel <mike.gabriel@das-
+    netzwerkteam.de>
+  * debian/gbp.conf: Add standard git-buildpackage settings
+  * debian/patches/*: Removed patch included in upstream
+  * debian/patches/*: Removed hostkey patch that caused problems -
+    thanks to Lars Noschinski <lars@public.noschinski.de>
+  * debian/*: clean up build files for new version
+  * debian/control: Add Build-Depend on python-epydoc
+  * debian/patches/*: Add patch to remove upstream Makefile
+  * debian/*: Build out separate paramiko-doc package (Closes: #682255)
+    - thanks to Touko Korpela <touko.korpela@iki.fi>
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Thu, 27 Jun 2013 22:59:08 -0400
+
+paramiko (1.7.7.1-3) unstable; urgency=low
+
+  * Accept NMU uploads (Closes: #659007, #668239)
+  * Update package to clean up lintian findings
+  * debian/source/local-options: set unapply-patches option
+  * debian/watch: Don't need to use uupdate with gbp
+  * debian/control: Upgrade Debian Standard (no changes needed)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Mon, 09 Jul 2012 11:02:38 -0400
+
+paramiko (1.7.7.1-2.2) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Add Fix-SSHException-when-re-keying-over-a-fast-connection.patch patch.
+    Fix bug "Transfers fail after 1GB; rekeying window too small".
+    (Closes: #659007)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Sat, 07 Jul 2012 17:09:08 +0200
+
+paramiko (1.7.7.1-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix broken host key handling when port != 22 (Closes: 668239)
+
+ -- Luk Claes <luk@debian.org>  Thu, 05 Jul 2012 00:38:56 +0000
+
+paramiko (1.7.7.1-2) unstable; urgency=low
+
+  * debian/*: Update build to use dh_python2 (Closes: #637379)
+  * Debian package build environment cleanup
+  * Acknowledge previous NMU patch that was included in upstream update
+    release Thanks Jelmer Vernooij <jelmer@debian.org> (Closes: #611361)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sun, 02 Oct 2011 13:46:01 -0400
+
+paramiko (1.7.7.1-1) unstable; urgency=low
+
+  * Imported Upstream version 1.7.7.1 (Closes: #627754)
+  * debian/patches: Patches included in upstream
+  * debian/control: Updated standards version (no change)
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 31 May 2011 21:23:55 -0400
+
+paramiko (1.7.6-6) unstable; urgency=low
+
+  * Add back quilt support NMU removed & update clean target
+  * Accept NMU upload. Thanks Jelmer Vernooij <jelmer@debian.org>
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sat, 29 Jan 2011 12:02:16 -0500
+
+paramiko (1.7.6-5.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Avoid deprecated RandomPool. Patch by Gary van der Merwe. Closes:
+    #576697
+  * Try connecting to each available address family until one succeeds.
+    Patch by Andrew Bennetts.  Closes: #602251
+  * Bump standards version to 3.9.1 (no changes).
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Fri, 28 Jan 2011 12:35:12 +0100
+
+paramiko (1.7.6-5) unstable; urgency=low
+
+  * debian/control: Fix python-crypto version dependency
+  * debian/rules: Remove simple-patchsys.mk
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sat, 17 Jul 2010 00:00:40 -0400
+
+paramiko (1.7.6-4) unstable; urgency=low
+
+  * Update Standards-Version to 3.9.0
+  * debian/control: Add versioned dependency on python-crypto (Closes:
+    #479596)
+  * debian/control: Build-Depends python-all-dev to python-all
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Fri, 16 Jul 2010 10:54:06 -0400
+
+paramiko (1.7.6-3) unstable; urgency=medium
+
+  * Add conflict against fabric 0.9.0-1 (Closes: #563490) - thanks to
+    Chris Lamb <lamby@debian.org> for being a packaging tool
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Mon, 04 Jan 2010 10:12:32 -0500
+
+paramiko (1.7.6-2) unstable; urgency=low
+
+  * debian/control: Fix last remaining lintian warning
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Wed, 16 Dec 2009 08:15:36 -0500
+
+paramiko (1.7.6-1) unstable; urgency=low
+
+  * Imported Upstream version 1.7.6 (Closes: #543784)
+  * Fix formatting error for __all__ in paramiko/__init__.py (Closes:
+    #494836)
+  * Update debian/watch syntax
+  * Package build clean-up
+  * Include docs/ contents with build (LP: #364998)
+  * Update Build-Depends
+  * debian/control: Update Vcs-* entries
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 15 Dec 2009 09:46:29 -0500
+
+paramiko (1.7.4-0.1) unstable; urgency=medium
+
+  * NMU.
+  * New upstream version.
+    - Fix random number regression (stop using RandomPool). Closes: #490961.
+
+ -- Matthias Klose <doko@debian.org>  Fri, 18 Jul 2008 14:16:08 +0200
+
+paramiko (1.7.3-1) unstable; urgency=low
+
+  * New upstream version
+    Closes: #475505.
+  * Acknowledge NMU changes
+  * Missing examples included
+    Closes: #455547.
+  * Confirmed new upstream version corrected FutureWarning
+    Closes: #405552.
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Sun, 04 May 2008 11:41:27 -0400
+
+paramiko (1.7.2-0.1) unstable; urgency=low
+
+  * Non-maintainer upload to DELAYED/14-day. (¹)
+  * New upstream release. (Closes: #415060)
+  * Drop the patch introduced in 1.6.4-1.1, as it's part of 1.7.2.
+
+    (¹) Counting since the initial 1.7.1-0.1 upload in Jan 13th.
+
+ -- Adeodato Simó <dato@net.com.org.es>  Thu, 24 Jan 2008 13:54:18 +0100
+
+paramiko (1.6.4-1.1) unstable; urgency=high
+
+  * Non-maintainer upload by security team.
+  * Fix insecure use of RandomPool if paramiko is used for threads or multiple
+    forked processes. This enables one session to predict random data of
+    another session using its own random data.
+    (CVE id pending; Closes: #460706).
+
+ -- Nico Golde <nion@debian.org>  Mon, 14 Jan 2008 19:36:40 +0100
+
+paramiko (1.6.4-1) unstable; urgency=low
+
+  * New upstream release (Closes: #344734, #382348).
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 26 Dec 2006 15:48:42 -0500
+
+paramiko (1.5.2-0.1) unstable; urgency=low
+
+  [ Wouter van Heyst ]
+  * Non-maintainer upload.
+  * New upstream release.
+    + Drop python_script_fix.patch and pathmangle.sh, no longer needed.
+  * Merge some ubuntu changes.
+    + Add watch file.
+    + Update copyright file.
+
+ -- Robert Collins <robertc@robertcollins.net>  Fri, 28 Jul 2006 14:26:29 +1000
+
+paramiko (1.5-1.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix B-D-I/B-D glitches.
+  * Update package to the new python policy (Closes: #373472).
+
+ -- Pierre Habouzit <madcoder@debian.org>  Thu, 29 Jun 2006 23:00:34 +0200
+
+paramiko (1.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Initial package upload (Closes: #292942).
+
+ -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 18 Oct 2005 14:57:46 -0700
+
+paramiko (1.1-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Guido Guenther <agx@debian.org>  Mon, 31 Jan 2005 11:24:37 +0100
+

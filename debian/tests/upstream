@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+pytest --verbose
+pytest-3 --verbose
