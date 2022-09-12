@@ -1,3 +1,12 @@
+paramiko (2.4.2-0.1+deb10u1) buster-security; urgency=high
+
+  * CVE-2022-24302: Prevent a race condition between creation and subsequent
+    chmod in the write_private_key_file function which could have allowed
+    unauthorised information disclosures.
+  * Re-enable testsuite.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 12 Sep 2022 10:32:20 +0100
+
 paramiko (2.4.2-0.1) unstable; urgency=medium
 
   * New upstream version 2.4.2 (Closes: #892859)
