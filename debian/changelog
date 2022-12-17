@@ -1,4 +1,4 @@
-paramiko (2.12.0-1) UNRELEASED; urgency=medium
+paramiko (2.12.0-1) unstable; urgency=medium
 
   * New upstream release
   * debian/patches/
@@ -8,7 +8,7 @@ paramiko (2.12.0-1) UNRELEASED; urgency=medium
   * debian/copyright
     - extend packaging copyright years
 
- -- Sandro Tosi <morph@debian.org>  Sat, 17 Dec 2022 13:54:56 -0500
+ -- Sandro Tosi <morph@debian.org>  Sat, 17 Dec 2022 14:09:43 -0500
 
 paramiko (2.10.4-1) unstable; urgency=medium
 
