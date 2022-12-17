@@ -2,6 +2,51 @@
 Changelog
 =========
 
+- :release:`2.12.0 <2022-11-04>`
+- :feature:`2125` (also re: :issue:`2054`) Add a ``transport_factory`` kwarg to
+  `SSHClient.connect <paramiko.client.SSHClient.connect>` for advanced
+  users to gain more control over early Transport setup and manipulation.
+  Thanks to Noah Pederson for the patch.
+- :release:`2.11.1 <2022-11-04>`
+- :release:`2.10.6 <2022-11-04>`
+- :bug:`1822` (via, and relating to, far too many other issues to mention here)
+  Update `~paramiko.client.SSHClient` so it explicitly closes its wrapped
+  socket object upon encountering socket errors at connection time. This should
+  help somewhat with certain classes of memory leaks, resource warnings, and/or
+  errors (though we hasten to remind everyone that Client and Transport have
+  their own ``.close()`` methods for use in non-error situations!). Patch
+  courtesy of ``@YoavCohen``.
+- bug:`1637` (via :issue:`1599`) Raise `~paramiko.ssh_exception.SSHException`
+  explicitly when blank private key data is loaded, instead of the natural
+  result of ``IndexError``. This should help more bits of Paramiko or
+  Paramiko-adjacent codebases to correctly handle this class of error. Credit:
+  Nicholas Dietz.
+- :release:`2.11.0 <2022-05-16>`
+- :release:`2.10.5 <2022-05-16>`
+- :release:`2.9.5 <2022-05-16>`
+- :bug:`1933` Align signature verification algorithm with OpenSSH re:
+  zero-padding signatures which don't match their nominal size/length. This
+  shouldn't affect most users, but will help Paramiko-implemented SSH servers
+  handle poorly behaved clients such as PuTTY. Thanks to Jun Omae for catch &
+  patch.
+- :bug:`2017` OpenSSH 7.7 and older has a bug preventing it from understanding
+  how to perform SHA2 signature verification for RSA certificates (specifically
+  certs - not keys), so when we added SHA2 support it broke all clients using
+  RSA certificates with these servers. This has been fixed in a manner similar
+  to what OpenSSH's own client does: a version check is performed and the
+  algorithm used is downgraded if needed. Reported by Adarsh Chauhan, with fix
+  suggested by Jun Omae.
+- :support:`2038` (via :issue:`2039`) Recent versions of Cryptography have
+  deprecated Blowfish algorithm support; in lieu of an easy method for users to
+  remove it from the list of algorithms Paramiko tries to import and use, we've
+  decided to remove it from our "preferred algorithms" list. This will both
+  discourage use of a weak algorithm, and avoid warnings. Credit for
+  report/patch goes to Mike Roest.
+- :bug:`2008` (via :issue:`2010`) Windows-native SSH agent support as merged in
+  2.10 could encounter ``Errno 22`` ``OSError`` exceptions in some scenarios
+  (eg server not cleanly closing a relevant named pipe). This has been worked
+  around and should be less problematic. Reported by Danilo Campana Fuchs and
+  patched by Jun Omae.
 - :release:`2.10.4 <2022-04-25>`
 - :release:`2.9.4 <2022-04-25>`
 - :support:`1838 backported` (via :issue:`1870`/:issue:`2028`) Update
@@ -10,12 +55,18 @@ Changelog
   under Python 3.10. Thanks to Karthikeyan Singaravelan for the report,
   ``@Narendra-Neerukonda`` for the patch, and to Thomas Grainger and Jun Omae
   for patch workshopping.
+- :feature:`1951` Add SSH config token expansion (eg ``%h``, ``%p``) when
+  parsing ``ProxyJump`` directives. Patch courtesy of Bruno Inec.
 - :bug:`1964` (via :issue:`2024` as also reported in :issue:`2023`)
   `~paramiko.pkey.PKey` instances' ``__eq__`` did not have the usual safety
   guard in place to ensure they were being compared to another ``PKey`` object,
   causing occasional spurious ``BadHostKeyException`` (among other things).
   This has been fixed. Thanks to Shengdun Hua for the original report/patch and
   to Christopher Papke for the final version of the fix.
+- :support:`2004` (via :issue:`2011`) Apply unittest ``skipIf`` to tests
+  currently using SHA1 in their critical path, to avoid failures on systems
+  starting to disable SHA1 outright in their crypto backends (eg RHEL 9).
+  Report & patch via Paul Howarth.
 - :bug:`2035` Servers offering certificate variants of hostkey algorithms (eg
   ``ssh-rsa-cert-v01@openssh.com``) could not have their host keys verified by
   Paramiko clients, as it only ever considered non-cert key types for that part
@@ -39,7 +90,7 @@ Changelog
       <https://bitprophet.org/projects/#roadmap>`_.
 
 - :release:`2.10.1 <2022-03-11>`
-- :bug:`-` (`CVE-2022-24302
+- :bug:`- (2.10+)` (`CVE-2022-24302
   <https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-24302>`_) Creation
   of new private key files using `~paramiko.pkey.PKey` subclasses was subject
   to a race condition between file creation & mode modification, which could be

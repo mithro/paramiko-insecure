@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Paramiko; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA.
 
 """
 some unit tests to make sure sftp works.
@@ -277,7 +277,7 @@ class TestSFTP(object):
         sftp.open(sftp.FOLDER + "/canard.txt", "w").close()
         try:
             folder_contents = sftp.listdir(sftp.FOLDER)
-            self.assertEqual(["canard.txt"], folder_contents)
+            assert ["canard.txt"] == folder_contents
         finally:
             sftp.remove(sftp.FOLDER + "/canard.txt")
 
@@ -797,7 +797,7 @@ class TestSFTP(object):
         """Test SFTPAttributes under a locale with non-ascii time strings."""
         some_stat = os.stat(sftp.FOLDER)
         sftp_attributes = SFTPAttributes.from_stat(some_stat, u("a_directory"))
-        self.assertTrue(b"a_directory" in sftp_attributes.asbytes())
+        assert b"a_directory" in sftp_attributes.asbytes()
 
     def test_sftp_attributes_empty_str(self, sftp):
         sftp_attributes = SFTPAttributes()

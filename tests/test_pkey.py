@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Paramiko; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA.
 
 """
 Some unit tests for public/private key objects.
@@ -44,7 +44,7 @@ from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateNumbers
 from mock import patch, Mock
 import pytest
 
-from .util import _support, is_low_entropy
+from .util import _support, is_low_entropy, requires_sha1_signing
 
 
 # from openssh's ssh-keygen
@@ -186,6 +186,11 @@ class KeyTest(unittest.TestCase):
                 with pytest.raises(SSHException, match=str(exception)):
                     RSAKey.from_private_key_file(_support("test_rsa.key"))
 
+    def test_loading_empty_keys_errors_usefully(self):
+        # #1599 - raise SSHException instead of IndexError
+        with pytest.raises(SSHException, match="no lines"):
+            RSAKey.from_private_key_file(_support("blank_rsa.key"))
+
     def test_load_rsa_password(self):
         key = RSAKey.from_private_key_file(
             _support("test_rsa_password.key"), "television"
@@ -256,6 +261,7 @@ class KeyTest(unittest.TestCase):
         pub = RSAKey(data=key.asbytes())
         self.assertTrue(pub.verify_ssh_sig(b"ice weasels", msg))
 
+    @requires_sha1_signing
     def test_sign_and_verify_ssh_rsa(self):
         self._sign_and_verify_rsa("ssh-rsa", SIGNED_RSA)
 
@@ -280,6 +286,7 @@ class KeyTest(unittest.TestCase):
         pub = DSSKey(data=key.asbytes())
         self.assertTrue(pub.verify_ssh_sig(b"ice weasels", msg))
 
+    @requires_sha1_signing
     def test_generate_rsa(self):
         key = RSAKey.generate(1024)
         msg = key.sign_ssh_data(b"jerri blank")

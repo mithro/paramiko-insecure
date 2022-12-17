@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Paramiko; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA.
 
 """
 SSH client & key policies
@@ -237,6 +237,7 @@ class SSHClient(ClosingContextManager):
         gss_trust_dns=True,
         passphrase=None,
         disabled_algorithms=None,
+        transport_factory=None,
     ):
         """
         Connect to an SSH server and authenticate to it.  The server's host key
@@ -314,6 +315,12 @@ class SSHClient(ClosingContextManager):
         :param dict disabled_algorithms:
             an optional dict passed directly to `.Transport` and its keyword
             argument of the same name.
+        :param transport_factory:
+            an optional callable which is handed a subset of the constructor
+            arguments (primarily those related to the socket, GSS
+            functionality, and algorithm selection) and generates a
+            `.Transport` instance to be used by this client. Defaults to
+            `.Transport.__init__`.
 
         :raises:
             `.BadHostKeyException` -- if the server's host key could not be
@@ -333,6 +340,8 @@ class SSHClient(ClosingContextManager):
             Added the ``passphrase`` argument.
         .. versionchanged:: 2.6
             Added the ``disabled_algorithms`` argument.
+        .. versionchanged:: 2.12
+            Added the ``transport_factory`` argument.
         """
         if not sock:
             errors = {}
@@ -350,6 +359,10 @@ class SSHClient(ClosingContextManager):
                     # Break out of the loop on success
                     break
                 except socket.error as e:
+                    # As mentioned in socket docs it is better
+                    # to close sockets explicitly
+                    if sock:
+                        sock.close()
                     # Raise anything that isn't a straight up connection error
                     # (such as a resolution error)
                     if e.errno not in (ECONNREFUSED, EHOSTUNREACH):
@@ -367,7 +380,9 @@ class SSHClient(ClosingContextManager):
             if len(errors) == len(to_try):
                 raise NoValidConnectionsError(errors)
 
-        t = self._transport = Transport(
+        if transport_factory is None:
+            transport_factory = Transport
+        t = self._transport = transport_factory(
             sock,
             gss_kex=gss_kex,
             gss_deleg_creds=gss_deleg_creds,

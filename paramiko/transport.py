@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Paramiko; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA.
 
 """
 Core protocol implementation
@@ -158,7 +158,6 @@ class Transport(threading.Thread, ClosingContextManager):
         "aes128-cbc",
         "aes192-cbc",
         "aes256-cbc",
-        "blowfish-cbc",
         "3des-cbc",
     )
     _preferred_macs = (
@@ -231,12 +230,6 @@ class Transport(threading.Thread, ClosingContextManager):
             "mode": modes.CTR,
             "block-size": 16,
             "key-size": 32,
-        },
-        "blowfish-cbc": {
-            "class": algorithms.Blowfish,
-            "mode": modes.CBC,
-            "block-size": 8,
-            "key-size": 16,
         },
         "aes128-cbc": {
             "class": algorithms.AES,
