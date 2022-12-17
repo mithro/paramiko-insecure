@@ -1,8 +1,10 @@
 paramiko (2.12.0-1) UNRELEASED; urgency=medium
 
   * New upstream release
+  * debian/patches/
+    - refresh, remove patches merged upstream
 
- -- Sandro Tosi <morph@debian.org>  Fri, 16 Dec 2022 23:55:17 -0500
+ -- Sandro Tosi <morph@debian.org>  Sat, 17 Dec 2022 13:52:13 -0500
 
 paramiko (2.10.4-1) unstable; urgency=medium
 

@@ -10,22 +10,23 @@ Subject: remove_pytest_relaxed
 
 --- a/tests/test_client.py
 +++ b/tests/test_client.py
-@@ -33,7 +33,7 @@ import warnings
- import weakref
+@@ -34,7 +34,7 @@ import weakref
  from tempfile import mkstemp
  
+ import pytest
 -from pytest_relaxed import raises
 +from pytest import raises
  from mock import patch, Mock
  
  import paramiko
-@@ -685,12 +685,12 @@ class PasswordPassphraseTests(ClientTest
+@@ -785,13 +785,13 @@ class PasswordPassphraseTests(ClientTest
          # Straightforward / duplicate of earlier basic password test.
          self._test_connection(password="pygmalion")
  
 -    # TODO: more granular exception pending #387; should be signaling "no auth
 -    # methods available" because no key and no password
 -    @raises(SSHException)
+     @requires_sha1_signing
      def test_passphrase_kwarg_not_used_for_password_auth(self):
          # Using the "right" password in the "wrong" field shouldn't work.
 -        self._test_connection(passphrase="pygmalion")
@@ -34,13 +35,14 @@ Subject: remove_pytest_relaxed
 +        with raises(SSHException):
 +            self._test_connection(passphrase='pygmalion')
  
+     @requires_sha1_signing
      def test_passphrase_kwarg_used_for_key_passphrase(self):
-         # Straightforward again, with new passphrase kwarg.
-@@ -708,14 +708,15 @@ class PasswordPassphraseTests(ClientTest
+@@ -811,15 +811,16 @@ class PasswordPassphraseTests(ClientTest
              password="television",
          )
  
 -    @raises(AuthenticationException)  # TODO: more granular
+     @requires_sha1_signing
      def test_password_kwarg_not_used_for_passphrase_when_passphrase_kwarg_given(  # noqa
          self
      ):
