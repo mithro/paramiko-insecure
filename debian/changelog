@@ -5,8 +5,10 @@ paramiko (2.12.0-1) UNRELEASED; urgency=medium
     - refresh, remove patches merged upstream
   * debian/control
     - bump Standards-Version to 4.6.1.0 (no changes needed)
+  * debian/copyright
+    - extend packaging copyright years
 
- -- Sandro Tosi <morph@debian.org>  Sat, 17 Dec 2022 13:53:49 -0500
+ -- Sandro Tosi <morph@debian.org>  Sat, 17 Dec 2022 13:54:56 -0500
 
 paramiko (2.10.4-1) unstable; urgency=medium
 

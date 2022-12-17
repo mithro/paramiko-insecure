@@ -43,7 +43,7 @@ Copyright: 2005 John Arbash-Meinel <john@arbash-meinel.com>
 License: LGPL-2.1
 
 Files: debian/*
-Copyright: 2019-2021 Sandro Tosi <morph@debian.org>
+Copyright: 2019-2022 Sandro Tosi <morph@debian.org>
            2022 Benjamin Drung <bdrung@ubuntu.com>
 License: LGPL-2.1
 
