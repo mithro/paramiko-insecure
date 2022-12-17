@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Paramiko; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA.
 
 """
 Common API for all public keys.
@@ -324,6 +324,8 @@ class PKey(object):
 
     def _read_private_key(self, tag, f, password=None):
         lines = f.readlines()
+        if not lines:
+            raise SSHException("no lines in {} private key file".format(tag))
 
         # find the BEGIN tag
         start = 0

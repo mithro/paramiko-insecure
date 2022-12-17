@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Paramiko; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA.
 
 """
 Some unit tests for the ssh2 protocol in Transport.
@@ -61,7 +61,7 @@ from paramiko.common import (
 from paramiko.py3compat import bytes, byte_chr
 from paramiko.message import Message
 
-from .util import needs_builtin, _support, slow
+from .util import needs_builtin, _support, requires_sha1_signing, slow
 from .loop import LoopSocket
 
 
@@ -196,9 +196,9 @@ class TransportTest(unittest.TestCase):
     def test_security_options(self):
         o = self.tc.get_security_options()
         self.assertEqual(type(o), SecurityOptions)
-        self.assertTrue(("aes256-cbc", "blowfish-cbc") != o.ciphers)
-        o.ciphers = ("aes256-cbc", "blowfish-cbc")
-        self.assertEqual(("aes256-cbc", "blowfish-cbc"), o.ciphers)
+        self.assertTrue(("aes256-cbc", "aes192-cbc") != o.ciphers)
+        o.ciphers = ("aes256-cbc", "aes192-cbc")
+        self.assertEqual(("aes256-cbc", "aes192-cbc"), o.ciphers)
         try:
             o.ciphers = ("aes256-cbc", "made-up-cipher")
             self.assertTrue(False)
@@ -1289,6 +1289,7 @@ class TestSHA2SignatureKeyExchange(unittest.TestCase):
     # are new tests in test_pkey.py which use known signature blobs to prove
     # the SHA2 family was in fact used!
 
+    @requires_sha1_signing
     def test_base_case_ssh_rsa_still_used_as_fallback(self):
         # Prove that ssh-rsa is used if either, or both, participants have SHA2
         # algorithms disabled
@@ -1411,6 +1412,7 @@ class TestSHA2SignaturePubkeys(unittest.TestCase):
         ) as (tc, ts, err):
             assert isinstance(err, AuthenticationException)
 
+    @requires_sha1_signing
     def test_ssh_rsa_still_used_when_sha2_disabled(self):
         privkey = RSAKey.from_private_key_file(_support("test_rsa.key"))
         # NOTE: this works because key obj comparison uses public bytes

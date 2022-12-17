@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Paramiko; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA.
 
 """
 RSA keys.
@@ -141,12 +141,16 @@ class RSAKey(PKey):
         if isinstance(key, rsa.RSAPrivateKey):
             key = key.public_key()
 
+        # NOTE: pad received signature with leading zeros, key.verify()
+        # expects a signature of key size (e.g. PuTTY doesn't pad)
+        sign = msg.get_binary()
+        diff = key.key_size - len(sign) * 8
+        if diff > 0:
+            sign = b"\x00" * ((diff + 7) // 8) + sign
+
         try:
             key.verify(
-                msg.get_binary(),
-                data,
-                padding.PKCS1v15(),
-                self.HASHES[sig_algorithm](),
+                sign, data, padding.PKCS1v15(), self.HASHES[sig_algorithm]()
             )
         except InvalidSignature:
             return False
