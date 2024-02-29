@@ -24,7 +24,7 @@ Test the used APIs for GSS-API / SSPI authentication
 
 import socket
 
-from .util import needs_gssapi, KerberosTestCase, update_env
+from ._util import needs_gssapi, KerberosTestCase, update_env
 
 #
 # NOTE: KerberosTestCase skips all tests if it was unable to import k5test
@@ -37,7 +37,7 @@ from .util import needs_gssapi, KerberosTestCase, update_env
 @needs_gssapi
 class GSSAPITest(KerberosTestCase):
     def setUp(self):
-        super(GSSAPITest, self).setUp()
+        super().setUp()
         # TODO: these vars should all come from os.environ or whatever the
         # approved pytest method is for runtime-configuring test data.
         self.krb5_mech = "1.2.840.113554.1.2.2"
