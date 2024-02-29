@@ -1,3 +1,13 @@
+paramiko (3.4.0-1~1.gbpe841d9) UNRELEASED; urgency=medium
+
+  ** SNAPSHOT build @e841d95d0c56783a057e477e412a8db3e47acd3f **
+
+  * Team upload
+  * New upstream version 3.4.0
+  * Add debian/salsa-ci.yml
+
+ -- Santiago Ruano Rincón <santiago@debian.org>  Wed, 28 Feb 2024 23:11:38 -0300
+
 paramiko (2.12.0-3) unstable; urgency=medium
 
   * remove myself
