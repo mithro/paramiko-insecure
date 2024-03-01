@@ -1,12 +1,15 @@
-paramiko (3.4.0-1~1.gbpe841d9) UNRELEASED; urgency=medium
+paramiko (3.4.0-1~3.gbp8a8e7f) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @e841d95d0c56783a057e477e412a8db3e47acd3f **
+  ** SNAPSHOT build @8a8e7f53bf3cda09b89f8b9068d8cb85aac4cc09 **
 
   * Team upload
   * New upstream version 3.4.0
   * Add debian/salsa-ci.yml
+  * Update debian/patches/remove_pytest_relaxed.patch
+  * Add python3-icecream to build-dependencies
+  * Fix nose deprecation errors produced by pytest. Patch: 0001-Use-pytest-s-setup_method-in-pytest-8-the-nose-metho.patch
 
- -- Santiago Ruano Rincón <santiago@debian.org>  Wed, 28 Feb 2024 23:11:38 -0300
+ -- Santiago Ruano Rincón <santiago@debian.org>  Thu, 29 Feb 2024 23:53:14 -0300
 
 paramiko (2.12.0-3) unstable; urgency=medium
 
