@@ -1,1 +1,2 @@
 remove_pytest_relaxed.patch
+0001-Use-pytest-s-setup_method-in-pytest-8-the-nose-metho.patch
