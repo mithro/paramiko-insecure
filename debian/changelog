@@ -1,6 +1,6 @@
-paramiko (3.4.0-1~3.gbp8a8e7f) UNRELEASED; urgency=medium
+paramiko (3.4.0-1~4.gbpb0aeb5) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @8a8e7f53bf3cda09b89f8b9068d8cb85aac4cc09 **
+  ** SNAPSHOT build @b0aeb5e29f34153613add6b3bcb09bbb1ebbd776 **
 
   * Team upload
   * New upstream version 3.4.0
@@ -8,8 +8,9 @@ paramiko (3.4.0-1~3.gbp8a8e7f) UNRELEASED; urgency=medium
   * Update debian/patches/remove_pytest_relaxed.patch
   * Add python3-icecream to build-dependencies
   * Fix nose deprecation errors produced by pytest. Patch: 0001-Use-pytest-s-setup_method-in-pytest-8-the-nose-metho.patch
+  * Fix 32-bit-ism in protocol seqno rollover test from Terrapin fix. Patch from upstream
 
- -- Santiago Ruano Rincón <santiago@debian.org>  Thu, 29 Feb 2024 23:53:14 -0300
+ -- Santiago Ruano Rincón <santiago@debian.org>  Sat, 02 Mar 2024 16:59:01 -0300
 
 paramiko (2.12.0-3) unstable; urgency=medium
 
