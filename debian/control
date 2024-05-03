@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Debian Python Team <team+python@tracker.debian.org>
 Uploaders: Jeremy T. Bouse <jbouse@debian.org>,
            Guido Guenther <agx@debian.org>,
+           Santiago Ruano Rincón <santiagorr@riseup.net>,
 Build-Depends: debhelper-compat (= 13),
                dh-python,
                python3-all,
