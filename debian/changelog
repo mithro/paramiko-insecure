@@ -1,3 +1,19 @@
+paramiko (3.4.0-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream version 3.4.0
+    - Fix Terrapin MitM attack (CVE-2023-48795) (Closes: ##1059006)
+  * Add debian/salsa-ci.yml
+  * Update debian/patches/remove_pytest_relaxed.patch
+  * Add python3-icecream to build-dependencies
+  * Fix nose deprecation errors produced by pytest. Patch:
+    0001-Use-pytest-s-setup_method-in-pytest-8-the-nose-metho.patch
+  * Fix 32-bit-ism in protocol seqno rollover test from Terrapin fix. Patch
+    from upstream
+  * Add myself to Uploaders
+
+ -- Santiago Ruano Rincón <santiagorr@riseup.net>  Fri, 03 May 2024 07:10:06 -0300
+
 paramiko (2.12.0-3) unstable; urgency=medium
 
   * remove myself

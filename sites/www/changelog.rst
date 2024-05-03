@@ -2,6 +2,286 @@
 Changelog
 =========
 
+- :release:`3.4.0 <2023-12-18>`
+- :feature:`-` `Transport` grew a new ``packetizer_class`` kwarg for overriding
+  the packet-handler class used internally. Mostly for testing, but advanced
+  users may find this useful when doing deep hacks.
+- :bug:`-` Address `CVE 2023-48795<https://terrapin-attack.com/>`_ (aka the
+  "Terrapin Attack", a vulnerability found in the SSH protocol re: treatment of
+  packet sequence numbers) as follows:
+
+    - The vulnerability only impacts encrypt-then-MAC digest algorithms in
+      tandem with CBC ciphers, and ChaCha20-poly1305; of these, Paramiko
+      currently only implements ``hmac-sha2-(256|512)-etm`` in tandem with
+      ``AES-CBC``. If you are unable to upgrade to Paramiko versions containing
+      the below fixes right away, you may instead use the
+      ``disabled_algorithms`` connection option to disable the ETM MACs and/or
+      the CBC ciphers (this option is present in Paramiko >=2.6).
+    - As the fix for the vulnerability requires both ends of the connection to
+      cooperate, the below changes will only take effect when the remote end is
+      OpenSSH >= 9.6 (or equivalent, such as Paramiko in server mode, as of
+      this patch version) and configured to use the new "strict kex" mode.
+      Paramiko will always attempt to use "strict kex" mode if offered by the
+      server, unless you override this by specifying ``strict_kex=False`` in
+      `Transport.__init__`.
+    - Paramiko will now raise an `SSHException` subclass (`MessageOrderError`)
+      when protocol messages are received in unexpected order. This includes
+      situations like receiving ``MSG_DEBUG`` or ``MSG_IGNORE`` during initial
+      key exchange, which are no longer allowed during strict mode.
+    - Key (re)negotiation -- i.e. ``MSG_NEWKEYS``, whenever it is encountered
+      -- now resets packet sequence numbers. (This should be invisible to users
+      during normal operation, only causing exceptions if the exploit is
+      encountered, which will usually result in, again, `MessageOrderError`.)
+    - Sequence number rollover will now raise `SSHException` if it occurs
+      during initial key exchange (regardless of strict mode status).
+
+  Thanks to Fabian Bäumer, Marcus Brinkmann, and Jörg Schwenk for submitting
+  details on the CVE prior to release.
+
+- :bug:`-` Tweak ``ext-info-(c|s)`` detection during KEXINIT protocol phase;
+  the original implementation made assumptions based on an OpenSSH
+  implementation detail.
+- :release:`3.3.1 <2023-07-28>`
+- :bug:`-` Cleaned up some very old root level files, mostly just to exercise
+  some of our doc build and release machinery. This changelog entry
+  intentionally left blank! ``nothing-to-see-here-move-along.gif``
+- :release:`3.3.0 <2023-07-28>`
+- :feature:`1907` (solves :issue:`1992`) Add support and tests for ``Match
+  final …`` (frequently used in ProxyJump configurations to exclude the jump
+  host) to our :ref:`SSH config parser <ssh-config-support>`. Patch by
+  ``@commonism``.
+- :feature:`2058` (solves :issue:`1587` and possibly others) Add an explicit
+  ``max_concurrent_prefetch_requests`` argument to
+  `paramiko.client.SSHClient.get` and `paramiko.client.SSHClient.getfo`,
+  allowing users to limit the number of concurrent requests used during
+  prefetch. Patch by ``@kschoelhorn``, with a test by ``@bwinston-sdp``.
+- :release:`3.2.0 <2023-05-25>`
+- :bug:`- major` Fixed a very sneaky bug found at the apparently
+  rarely-traveled intersection of ``RSA-SHA2`` keys, certificates, SSH agents,
+  and stricter-than-OpenSSH server targets. This manifested as yet another
+  "well, if we turn off SHA2 at one end or another, everything works again"
+  problem, for example with version 12 of the Teleport server endpoint.
+
+  This has been fixed; Paramiko tweaked multiple aspects of how it requests
+  agent signatures, and the agent appears to do the right thing now.
+
+  Thanks to Ryan Stoner for the bug report and testing.
+- :bug:`2012 major` (also :issue:`1961` and countless others) The
+  ``server-sig-algs`` and ``RSA-SHA2`` features added around Paramiko 2.9 or
+  so, had the annoying side effect of not working with servers that don't
+  support *either* of those feature sets, requiring use of
+  ``disabled_algorithms`` to forcibly disable the SHA2 algorithms on Paramiko's
+  end.
+
+  The **experimental** `~paramiko.transport.ServiceRequestingTransport` (noted
+  in its own entry in this changelog) includes a fix for this issue,
+  specifically by falling back to the same algorithm as the in-use pubkey if
+  it's in the algorithm list (leaving the "first algorithm in said list" as an
+  absolute final fallback).
+- :feature:`-` Implement ``_fields()`` on `~paramiko.agent.AgentKey` so that it
+  may be compared (via ``==``) with other `~paramiko.pkey.PKey` instances.
+- :bug:`23 major` Since its inception, Paramiko has (for reasons lost to time)
+  implemented authentication as a side effect of handling affirmative replies
+  to ``MSG_SERVICE_REQUEST`` protocol messages. What this means is Paramiko
+  makes one such request before every ``MSG_USERAUTH_REQUEST``, i.e. every auth
+  attempt.
+
+  OpenSSH doesn't care if clients send multiple service requests, but other
+  server implementations are often stricter in what they accept after an
+  initial service request (due to the RFCs not being clear). This can result in
+  odd behavior when a user doesn't authenticate successfully on the very first
+  try (for example, when the right key for a target host is the third in one's
+  ssh-agent).
+
+  This version of Paramiko now contains an opt-in
+  `~paramiko.transport.Transport` subclass,
+  `~paramiko.transport.ServiceRequestingTransport`, which more-correctly
+  implements service request handling in the Transport, and uses an
+  auth-handler subclass internally which has been similarly adapted. Users
+  wanting to try this new experimental code path may hand this class to
+  `SSHClient.connect <paramiko.client.SSHClient.connect>` as its
+  ``transport_factory`` kwarg.
+
+  .. warning::
+      This feature is **EXPERIMENTAL** and its code may be subject to change.
+
+      In addition:
+        - minor backwards incompatible changes exist in the new code paths,
+          most notably the removal of the (inconsistently applied and rarely
+          used) ``event`` arguments to the ``auth_xxx`` methods.
+        - GSSAPI support has only been partially implemented, and is untested.
+
+  .. note::
+      Some minor backwards-*compatible* changes were made to the **existing**
+      Transport and AuthHandler classes to facilitate the new code. For
+      example, ``Transport._handler_table`` and
+      ``AuthHandler._client_handler_table`` are now properties instead of raw
+      attributes.
+
+- :feature:`387` Users of `~paramiko.client.SSHClient` can now configure the
+  authentication logic Paramiko uses when connecting to servers; this
+  functionality is intended for advanced users and higher-level libraries such
+  as `Fabric <https://fabfile.org>`_. See `~paramiko.auth_strategy` for
+  details.
+
+  Fabric's co-temporal release includes a proof-of-concept use of this feature,
+  implementing an auth flow much closer to that of the OpenSSH client (versus
+  Paramiko's legacy behavior). It is **strongly recommended** that if this
+  interests you, investigate replacing any direct use of ``SSHClient`` with
+  Fabric's ``Connection``.
+
+  .. warning::
+      This feature is **EXPERIMENTAL**; please see its docs for details.
+
+- :feature:`-` Enhanced `~paramiko.agent.AgentKey` with new attributes, such
+  as:
+
+    - Added a ``comment`` attribute (and constructor argument);
+      `Agent.get_keys() <paramiko.agent.Agent.get_keys>` now uses this kwarg to
+      store any comment field sent over by the agent. The original version of
+      the agent feature inexplicably did not store the comment anywhere.
+    - Agent-derived keys now attempt to instantiate a copy of the appropriate
+      key class for access to other algorithm-specific members (eg key size).
+      This is available as the ``.inner_key`` attribute.
+
+  .. note::
+      This functionality is now in use in Fabric's new ``--list-agent-keys``
+      feature, as well as in Paramiko's debug logging.
+
+- :feature:`-` `~paramiko.pkey.PKey` now offers convenience
+  "meta-constructors", static methods that simplify the process of
+  instantiating the correct subclass for a given key input.
+
+  For example, `PKey.from_path <paramiko.pkey.PKey.from_path>` can load a file
+  path without knowing *a priori* what type of key it is (thanks to some handy
+  methods within our cryptography dependency). Going forwards, we expect this
+  to be the primary method of loading keys by user code that runs on "human
+  time" (i.e. where some minor efficiencies are worth the convenience).
+
+  In addition, `PKey.from_type_string <paramiko.pkey.PKey.from_type_string>`
+  now exists, and is being used in some internals to load ssh-agent keys.
+
+  As part of these changes, `~paramiko.pkey.PKey` and friends grew an
+  `~paramiko.pkey.PKey.identifiers` classmethod; this is inspired by the
+  `~paramiko.ecdsakey.ECDSAKey.supported_key_format_identifiers` classmethod
+  (which now refers to the new method.) This also includes adding a ``.name``
+  attribute to most key classes (which will eventually replace ``.get_name()``.
+
+- :feature:`-` `~paramiko.pkey.PKey` grew a new ``.algorithm_name`` property
+  which displays the key algorithm; this is typically derived from the value of
+  `~paramiko.pkey.PKey.get_name`. For example, ED25519 keys have a ``get_name``
+  of ``ssh-ed25519`` (the SSH protocol key type field value), and now have a
+  ``algorithm_name`` of ``ED25519``.
+- :feature:`-` `~paramiko.pkey.PKey` grew a new ``.fingerprint`` property which
+  emits a fingerprint string matching the SHA256+Base64 values printed by
+  various OpenSSH tooling (eg ``ssh-add -l``, ``ssh -v``). This is intended to
+  help troubleshoot Paramiko-vs-OpenSSH behavior and will eventually replace
+  the venerable ``get_fingerprint`` method.
+- :bug:`- major` `~paramiko.agent.AgentKey` had a dangling Python 3
+  incompatible ``__str__`` method returning bytes. This method has been
+  removed, allowing the superclass' (`~paramiko.pkey.PKey`) method to run
+  instead.
+- :release:`3.1.0 <2023-03-10>`
+- :feature:`2013` (solving :issue:`2009`, plus others) Add an explicit
+  ``channel_timeout`` keyword argument to `paramiko.client.SSHClient.connect`,
+  allowing users to configure the previously-hardcoded default value of 3600
+  seconds. Thanks to ``@VakarisZ`` and ``@ilija-lazoroski`` for the report and
+  patch, with credit to Mike Salvatore for patch review.
+- :feature:`2173` Accept single tabs as field separators (in addition to
+  single spaces) in `<paramiko.hostkeys.HostKeyEntry.from_line>` for parity
+  with OpenSSH's KnownHosts parser. Patched by Alex Chavkin.
+- :support:`2178 backported` Apply ``codespell`` to the codebase, which found a
+  lot of very old minor spelling mistakes in docstrings. Also modernize many
+  instances of ``*largs`` vs ``*args`` and ``**kwarg`` vs ``**kwargs``. Patch
+  courtesy of Yaroslav Halchenko, with review from Brian Skinn.
+- :release:`3.0.0 <2023-01-20>`
+- :bug:`2110 major` Remove some unnecessary ``__repr__`` calls when handling
+  bytes-vs-str conversions. This was apparently doing a lot of unintentional
+  data processing, which adds up in some use cases -- such as SFTP transfers,
+  which may now be significantly faster. Kudos to Shuhua Zhong for catch &
+  patch.
+- :bug:`2165 major` Streamline some redundant (and costly) byte conversion
+  calls in the packetizer and the core SFTP module. This should lead to some
+  SFTP speedups at the very least. Thanks to Alex Gaynor for the patch.
+- :support:`-` ``paramiko.util.retry_on_signal`` (and any internal uses of
+  same, and also any internal retries of ``EINTR`` on eg socket operations) has
+  been removed. As of Python 3.5, per `PEP 475
+  <https://peps.python.org/pep-0475/>`_, this functionality (and retrying
+  ``EINTR`` generally) is now part of the standard library.
+
+  .. warning::
+    This change is backwards incompatible if you were explicitly
+    importing/using this particular function. The observable behavior otherwise
+    should not be changing.
+
+- :support:`732` (also re: :issue:`630`) `~paramiko.config.SSHConfig` used to
+  straight-up delete the ``proxycommand`` key from config lookup results when
+  the source config said ``ProxyCommand none``. This has been altered to
+  preserve the key and give it the Python value ``None``, thus making the
+  Python representation more in line with the source config file.
+
+  .. warning::
+    This change is backwards incompatible if you were relying on the old (1.x,
+    2.x) behavior for some reason (eg assuming all ``proxycommand`` values were
+    valid subcommand strings).
+
+- :support:`-` The behavior of private key classes' (ie anything inheriting
+  from `~paramiko.pkey.PKey`)  private key writing methods used to perform a
+  manual, extra ``chmod`` call after writing. This hasn't been strictly
+  necessary since the mid 2.x release line (when key writing started giving the
+  ``mode`` argument to `os.open`), and has now been removed entirely.
+
+  This should only be observable if you were mocking Paramiko's system calls
+  during your own testing, or similar.
+- :support:`-` ``PKey.__cmp__`` has been removed. Ordering-oriented comparison
+  of key files is unlikely to have ever made sense (the old implementation
+  attempted to order by the hashes of the key material) and so we have not
+  bothered setting up ``__lt__`` and friends at this time. The class continues
+  to have its original ``__eq__`` untouched.
+
+  .. warning::
+    This change is backwards incompatible if you were actually trying to sort
+    public key objects (directly or indirectly). Please file bug reports
+    detailing your use case if you have some intractable need for this
+    behavior, and we'll consider adding back the necessary Python 3 magic
+    methods so that it works as before.
+
+- :bug:`- major` A handful of lower-level classes (notably
+  `paramiko.message.Message` and `paramiko.pkey.PKey`) previously returned
+  `bytes` objects from their implementation of ``__str__``, even under Python
+  3; and there was never any ``__bytes__`` method.
+
+  These issues have been fixed by renaming ``__str__`` to ``__bytes__`` and
+  relying on Python's default "stringification returns the output of
+  ``__repr__``" behavior re: any real attempts to ``str()`` such objects.
+- :support:`-` ``paramiko.common.asbytes`` has been moved to
+  ``paramiko.util.asbytes``.
+
+  .. warning::
+    This change is backwards incompatible if you were directly using this
+    function (which is unlikely).
+
+- :support:`-` Remove the now irrelevant ``paramiko.py3compat`` module.
+
+  .. warning::
+    This change is backwards incompatible. Such references should be
+    search-and-replaced with their modern Python 3.6+ equivalents; in some
+    cases, still-useful methods or values have been moved to ``paramiko.util``
+    (most) or ``paramiko.common`` (``byte_*``).
+
+- :support:`-` Drop support for Python versions less than 3.6, including Python
+  2. So long and thanks for all the fish!
+
+  .. warning::
+    This change is backwards incompatible. However, our packaging metadata has
+    been updated to include ``python_requires``, so this should not cause
+    breakage unless you're on an old installation method that can't read this
+    metadata.
+
+  .. note::
+    As part of this change, our dependencies have been updated; eg we now
+    require Cryptography>=3.3, up from 2.5.
+
 - :release:`2.12.0 <2022-11-04>`
 - :feature:`2125` (also re: :issue:`2054`) Add a ``transport_factory`` kwarg to
   `SSHClient.connect <paramiko.client.SSHClient.connect>` for advanced
@@ -1042,7 +1322,7 @@ Changelog
   functionality to address hangs from dropped network connections and/or failed
   handshakes. Credit to ``@vazir`` and ``@dacut`` for the original patches and
   to Olle Lundberg for reimplementation.
-- :bug:`490` Skip invalid/unparseable lines in ``known_hosts`` files, instead
+- :bug:`490` Skip invalid/unparsable lines in ``known_hosts`` files, instead
   of raising `~paramiko.ssh_exception.SSHException`. This brings Paramiko's
   behavior more in line with OpenSSH, which silently ignores such input. Catch
   & patch courtesy of Martin Topholm.

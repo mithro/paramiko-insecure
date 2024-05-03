@@ -1,0 +1,55 @@
+From 9f6fe4c926931920570fac84fa2fcdc9de8a3324 Mon Sep 17 00:00:00 2001
+From: Jeff Forcier <jeff@bitprophet.org>
+Date: Sat, 10 Feb 2024 21:29:48 -0500
+Subject: [PATCH] Fix 32-bit-ism in protocol seqno rollover test from Terrapin
+ fix
+
+Fixes #2353
+---
+ sites/www/changelog.rst | 2 ++
+ tests/test_transport.py | 9 ++++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/sites/www/changelog.rst b/sites/www/changelog.rst
+index 00f42a70..3f886fc8 100644
+--- a/sites/www/changelog.rst
++++ b/sites/www/changelog.rst
+@@ -2,6 +2,8 @@
+ Changelog
+ =========
+ 
++- :bug:`2353` Fix a 64-bit-ism in the test suite so the tests don't encounter a
++  false negative on 32-bit systems. Reported by Stanislav Levin.
+ - :release:`3.4.0 <2023-12-18>`
+ - :feature:`-` `Transport` grew a new ``packetizer_class`` kwarg for overriding
+   the packet-handler class used internally. Mostly for testing, but advanced
+diff --git a/tests/test_transport.py b/tests/test_transport.py
+index 67e2eb45..59f871b8 100644
+--- a/tests/test_transport.py
++++ b/tests/test_transport.py
+@@ -1419,16 +1419,19 @@ class TestStrictKex:
+             def __init__(self, *args, **kwargs):
+                 super().__init__(*args, **kwargs)
+                 # Induce an about-to-rollover seqno, such that it rolls over
+-                # during initial kex.
++                # during initial kex. (Sequence numbers are uint32, so we need
++                # the largest possible 32bit integer such that incrementing it
++                # will roll over to 0.)
++                last_seq = 2**32 - 1
+                 setattr(
+                     self.packetizer,
+                     "_Packetizer__sequence_number_in",
+-                    sys.maxsize,
++                    last_seq,
+                 )
+                 setattr(
+                     self.packetizer,
+                     "_Packetizer__sequence_number_out",
+-                    sys.maxsize,
++                    last_seq,
+                 )
+ 
+         with raises(
+-- 
+2.43.0
+
