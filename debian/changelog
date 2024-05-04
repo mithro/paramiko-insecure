@@ -1,7 +1,7 @@
 paramiko (3.4.0-1) unstable; urgency=medium
 
   * Team upload
-  * New upstream version 3.4.0
+  * New upstream version 3.4.0 (Closes: #1039443, #1060963)
     - Fix Terrapin MitM attack (CVE-2023-48795) (Closes: #1059006)
   * Add debian/salsa-ci.yml
   * Update debian/patches/remove_pytest_relaxed.patch
