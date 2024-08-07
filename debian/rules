@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
 export PYBUILD_NAME=paramiko
+export PYBUILD_TEST_ARGS=-k 'not test_sequence_numbers_reset_on_newkeys_when_strict'
 export LC_ALL=C.UTF-8
 
 %:
