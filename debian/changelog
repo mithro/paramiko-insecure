@@ -1,3 +1,11 @@
+paramiko (3.4.1-1~1.gbp09c776) UNRELEASED; urgency=medium
+
+  ** SNAPSHOT build @09c7766955b0de2f2a3bac887ac6aa4c050cf704 **
+
+  * New upstream version 3.4.1
+
+ -- Santiago Ruano Rincón <santiagorr@riseup.net>  Sun, 25 Aug 2024 15:38:29 -0300
+
 paramiko (3.4.0-2) unstable; urgency=medium
 
   * Team upload
