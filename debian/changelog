@@ -1,10 +1,11 @@
-paramiko (3.4.1-1~1.gbp09c776) UNRELEASED; urgency=medium
+paramiko (3.4.1-1~2.gbp5e0858) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @09c7766955b0de2f2a3bac887ac6aa4c050cf704 **
+  ** SNAPSHOT build @5e0858489a152dac6c206dc226538b18310966f0 **
 
   * New upstream version 3.4.1
+  * Remove upstream patches no longer needed
 
- -- Santiago Ruano Rincón <santiagorr@riseup.net>  Sun, 25 Aug 2024 15:38:29 -0300
+ -- Santiago Ruano Rincón <santiagorr@riseup.net>  Sun, 25 Aug 2024 17:34:23 -0300
 
 paramiko (3.4.0-2) unstable; urgency=medium
 
