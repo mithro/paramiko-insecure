@@ -1,0 +1,36 @@
+Description: Add identifier for ED25519 certificates
+Origin: https://github.com/paramiko/paramiko/pull/2434/commits/a8fb7aa74a03f8b73ae7166864808110629db47b
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1071675
+Forwarded: not-needed
+
+diff --git a/paramiko/ed25519key.py b/paramiko/ed25519key.py
+index e5e81ac51..422f060de 100644
+--- a/paramiko/ed25519key.py
++++ b/paramiko/ed25519key.py
+@@ -41,6 +41,10 @@ class Ed25519Key(PKey):
+ 
+     name = "ssh-ed25519"
+ 
++    @classmethod
++    def identifiers(cls):
++        return [cls.name, "ssh-ed25519-cert-v01@openssh.com"]
++
+     def __init__(
+         self, msg=None, data=None, filename=None, password=None, file_obj=None
+     ):
+diff --git a/tests/pkey.py b/tests/pkey.py
+index 691fda0fd..f2c651f81 100644
+--- a/tests/pkey.py
++++ b/tests/pkey.py
+@@ -219,7 +219,10 @@ def dss_is_protocol_name(self):
+             assert DSSKey.identifiers() == ["ssh-dss"]
+ 
+         def ed25519_is_protocol_name(self):
+-            assert Ed25519Key.identifiers() == ["ssh-ed25519"]
++            assert Ed25519Key.identifiers() == [
++                "ssh-ed25519",
++                "ssh-ed25519-cert-v01@openssh.com",
++            ]
+ 
+         def ecdsa_is_all_curve_names(self):
+             assert ECDSAKey.identifiers() == [

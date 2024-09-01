@@ -1,3 +1,10 @@
+paramiko (3.4.1-2) unstable; urgency=medium
+
+  * Team upload.
+  * Fix ed25519 as used by duplicity (Closes: #1071675)
+
+ -- Alexandre Detiste <tchet@debian.org>  Sun, 01 Sep 2024 16:40:57 +0200
+
 paramiko (3.4.1-1) unstable; urgency=medium
 
   * New upstream version 3.4.1
