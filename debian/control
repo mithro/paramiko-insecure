@@ -34,7 +34,7 @@ Depends: libjs-jquery,
 Multi-Arch: foreign
 Description: Make ssh v2 connections with Python (Documentation)
  "Paramiko" is a combination of the Esperanto words for "paranoid" and "friend".
- It's a module for Python 2.7/3.4+ that implements the SSH2 protocol for secure
+ It's a module for Python that implements the SSH2 protocol for secure
  (encrypted and authenticated) connections to remote machines. Unlike SSL (aka
  TLS), SSH2 protocol does not require hierarchical certificates signed by a
  powerful central authority. You may know SSH2 as the protocol that replaced
@@ -53,7 +53,7 @@ Recommends: python3-invoke,
 Suggests: python3-gssapi (>= 0.6.1),
 Description: Make ssh v2 connections (Python 3)
  "Paramiko" is a combination of the Esperanto words for "paranoid" and "friend".
- It's a module for Python 2.7/3.4+ that implements the SSH2 protocol for secure
+ It's a module for Python that implements the SSH2 protocol for secure
  (encrypted and authenticated) connections to remote machines. Unlike SSL (aka
  TLS), SSH2 protocol does not require hierarchical certificates signed by a
  powerful central authority. You may know SSH2 as the protocol that replaced
