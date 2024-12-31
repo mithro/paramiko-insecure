@@ -1,3 +1,15 @@
+paramiko (3.5.0-1~1.gbpfc6db7) UNRELEASED-experimental; urgency=medium
+
+  ** SNAPSHOT build @fc6db74ed039b1cc70faa8216335f07c375a8e5f **
+
+  [ Alexandre Detiste ]
+  * remove obsolete ref. to Python2
+
+  [ Santiago Ruano Rincón ]
+  * New upstream version 3.5.0
+
+ -- Santiago Ruano Rincón <santiago@debian.org>  Mon, 30 Dec 2024 21:11:00 -0500
+
 paramiko (3.4.1-2) unstable; urgency=medium
 
   * Team upload.
