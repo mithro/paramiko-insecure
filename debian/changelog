@@ -1,3 +1,9 @@
+paramiko (3.5.0-1) unstable; urgency=low
+
+  * Upload to unstable
+
+ -- Santiago Ruano Rincón <santiago@debian.org>  Mon, 20 Jan 2025 17:22:45 -0500
+
 paramiko (3.5.0-1~exp1) experimental; urgency=medium
 
   [ Alexandre Detiste ]
