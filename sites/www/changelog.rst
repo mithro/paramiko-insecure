@@ -2,13 +2,39 @@
 Changelog
 =========
 
+- :release:`3.5.1 <2025-02-03>`
+- :bug:`2490` Private key material is now explicitly 'unpadded' during
+  decryption, removing a reliance on some lax OpenSSL behavior & making us
+  compatible with future Cryptography releases. Patch courtesy of Alex Gaynor.
+- :release:`3.5.0 <2024-09-15>`
+- :feature:`982` (via :issue:`2444`, which was a rebase of :issue:`2157`) Add
+  support for AES-GCM encryption ciphers (128 and 256 bit variants). Thanks to
+  Alex Gaynor for the report (& for cryptography review), Shen Cheng for the
+  original PR, and Chris Mason for the updated PR; plus as usual to everyone
+  who tested the patches and reported their results!
+
+  This functionality has been tested in client mode against OpenSSH 9.0, 9.2,
+  and 9.6, as well as against a number of proprietary appliance SSH servers.
+- :bug:`-` Check for ``None`` transport members inside
+  `~paramiko.channel.Channel` when closing the channel; this likely doesn't
+  come up much in the real world, but was causing warnings in the test suite.
+- :release:`3.4.1 <2024-08-11>`
+- :release:`3.3.2 <2024-08-11>`
+- :bug:`2419` (fixed in :issue:`2421`) Massage our import of the TripleDES
+  cipher to support Cryptography >=43; this should prevent
+  ``CryptographyDeprecationWarning`` from appearing upon import. Thanks to
+  Erick Alejo for the report and Bryan Banda for the patch.
+- :bug:`2420` Modify a test-harness skiptest check to work with newer versions
+  of Cryptography. Props to Paul Howarth for the patch.
+- :bug:`2353` Fix a 64-bit-ism in the test suite so the tests don't encounter a
+  false negative on 32-bit systems. Reported by Stanislav Levin.
 - :release:`3.4.0 <2023-12-18>`
 - :feature:`-` `Transport` grew a new ``packetizer_class`` kwarg for overriding
   the packet-handler class used internally. Mostly for testing, but advanced
   users may find this useful when doing deep hacks.
-- :bug:`-` Address `CVE 2023-48795<https://terrapin-attack.com/>`_ (aka the
-  "Terrapin Attack", a vulnerability found in the SSH protocol re: treatment of
-  packet sequence numbers) as follows:
+- :bug:`- major` Address `CVE 2023-48795 <https://terrapin-attack.com/>`_ (aka
+  the "Terrapin Attack", a vulnerability found in the SSH protocol re:
+  treatment of packet sequence numbers) as follows:
 
     - The vulnerability only impacts encrypt-then-MAC digest algorithms in
       tandem with CBC ciphers, and ChaCha20-poly1305; of these, Paramiko
@@ -38,8 +64,8 @@ Changelog
   Thanks to Fabian Bäumer, Marcus Brinkmann, and Jörg Schwenk for submitting
   details on the CVE prior to release.
 
-- :bug:`-` Tweak ``ext-info-(c|s)`` detection during KEXINIT protocol phase;
-  the original implementation made assumptions based on an OpenSSH
+- :bug:`- major` Tweak ``ext-info-(c|s)`` detection during KEXINIT protocol
+  phase; the original implementation made assumptions based on an OpenSSH
   implementation detail.
 - :release:`3.3.1 <2023-07-28>`
 - :bug:`-` Cleaned up some very old root level files, mostly just to exercise
