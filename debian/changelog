@@ -1,3 +1,10 @@
+paramiko (3.5.1-2) unstable; urgency=medium
+
+  * Team upload.
+  * Ignore host keys with markers (Closes: #1096078)
+
+ -- Timo Röhling <roehling@debian.org>  Mon, 17 Feb 2025 22:52:38 +0100
+
 paramiko (3.5.1-1) unstable; urgency=medium
 
   * Team upload.
