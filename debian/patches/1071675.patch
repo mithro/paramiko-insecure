@@ -1,10 +1,17 @@
-Description: Add identifier for ED25519 certificates
+From: Alexandre Detiste <tchet@debian.org>
+Date: Mon, 17 Feb 2025 22:30:38 +0100
+Subject: Add identifier for ED25519 certificates
+
 Origin: https://github.com/paramiko/paramiko/pull/2434/commits/a8fb7aa74a03f8b73ae7166864808110629db47b
 Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1071675
 Forwarded: not-needed
+---
+ paramiko/ed25519key.py | 4 ++++
+ tests/pkey.py          | 5 ++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/paramiko/ed25519key.py b/paramiko/ed25519key.py
-index e5e81ac51..422f060de 100644
+index e5e81ac..422f060 100644
 --- a/paramiko/ed25519key.py
 +++ b/paramiko/ed25519key.py
 @@ -41,6 +41,10 @@ class Ed25519Key(PKey):
@@ -19,10 +26,10 @@ index e5e81ac51..422f060de 100644
          self, msg=None, data=None, filename=None, password=None, file_obj=None
      ):
 diff --git a/tests/pkey.py b/tests/pkey.py
-index 691fda0fd..f2c651f81 100644
+index 691fda0..f2c651f 100644
 --- a/tests/pkey.py
 +++ b/tests/pkey.py
-@@ -219,7 +219,10 @@ def dss_is_protocol_name(self):
+@@ -219,7 +219,10 @@ class PKey_:
              assert DSSKey.identifiers() == ["ssh-dss"]
  
          def ed25519_is_protocol_name(self):

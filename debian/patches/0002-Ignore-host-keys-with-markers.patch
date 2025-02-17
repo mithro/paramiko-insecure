@@ -1,0 +1,22 @@
+From: =?utf-8?q?Timo_R=C3=B6hling?= <roehling@debian.org>
+Date: Mon, 17 Feb 2025 22:39:54 +0100
+Subject: Ignore host keys with markers
+
+Hotfix to prevent paramiko from choking on @cert-authority entries
+---
+ paramiko/hostkeys.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/paramiko/hostkeys.py b/paramiko/hostkeys.py
+index 4d47e95..e0138aa 100644
+--- a/paramiko/hostkeys.py
++++ b/paramiko/hostkeys.py
+@@ -89,7 +89,7 @@ class HostKeys(MutableMapping):
+         with open(filename, "r") as f:
+             for lineno, line in enumerate(f, 1):
+                 line = line.strip()
+-                if (len(line) == 0) or (line[0] == "#"):
++                if (len(line) == 0) or (line[0] == "#") or (line[0] == "@"):
+                     continue
+                 try:
+                     entry = HostKeyEntry.from_line(line, lineno)
