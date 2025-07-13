@@ -1,0 +1,26 @@
+From: rebcim <68267550+rebcim@users.noreply.github.com>
+Date: Wed, 4 Jun 2025 14:13:52 +0200
+Subject: Fixed version parsing issue with OpenSSH 10.0
+
+Regex matches now for Version 1..7 but not for 10.
+
+Origin: other, https://github.com/paramiko/paramiko/pull/2516
+Bug-Debian: https://bugs.debian.org/1108434
+Last-Update: 2025-07-13
+---
+ paramiko/auth_handler.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/paramiko/auth_handler.py b/paramiko/auth_handler.py
+index bc7f298..2b54877 100644
+--- a/paramiko/auth_handler.py
++++ b/paramiko/auth_handler.py
+@@ -321,7 +321,7 @@ class AuthHandler:
+         # regarding server-sig-algs, it's impossible to fit this into the rest
+         # of the logic here.
+         if key_type.endswith("-cert-v01@openssh.com") and re.search(
+-            r"-OpenSSH_(?:[1-6]|7\.[0-7])", self.transport.remote_version
++            r"-OpenSSH_(?:[1-6]\.|7\.[0-7])", self.transport.remote_version
+         ):
+             pubkey_algo = "ssh-rsa-cert-v01@openssh.com"
+             self.transport._agreed_pubkey_algorithm = pubkey_algo
