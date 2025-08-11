@@ -2,6 +2,35 @@
 Changelog
 =========
 
+- :release:`4.0.0 <2025-08-03>`
+- :support:`-` Administrivia update:
+
+  - dropped support for Python <3.9
+  - migrated packaging metadata and practices to use ``pyproject.toml``
+  - removed the now-vestigial ``ed25519`` packaging 'extra' (support for this
+    hasn't required additional dependencies in a number of releases now, just
+    the core ones)
+  - moved Invoke requirement to core dependencies, and removed
+    ``paramiko[invoke]`` from extras
+  - with those two changes, ``paramiko[all]`` becomes much less useful, and has
+    itself been axed
+  - removed the very old and wizened ``setup_helper.py`` which was only needed
+    on ancient (for this century) versions of macOS.
+  - removed ``paramiko.__all__``, as it was redundant (guessing it dated back
+    to some *very* old Python versions; anyone using ``import *`` these days -
+    shame! - should still be fine as we never *had* any 'private' members in
+    ``__all__`` and AFAICT that was the only reason ever to use it in the first
+    place (as ``import *`` skips names like ``_private``).
+
+- :support:`973` Removed support for the DSA (aka DSS) key algorithm, as it has
+  been badly outdated and insecure for a decade or more at this point, and was
+  recently completely removed from OpenSSH as well.
+
+  If you were still using DSA out of sheer inertia: we strongly recommend
+  upgrading to Ed25519 (or maybe ECDSA).
+
+  If you were still using DSA because of target hosts you do not control:
+  please continue using Paramiko 3.x.
 - :release:`3.5.1 <2025-02-03>`
 - :bug:`2490` Private key material is now explicitly 'unpadded' during
   decryption, removing a reliance on some lax OpenSSL behavior & making us
