@@ -10,10 +10,10 @@ Forwarded: not-needed
  tests/pkey.py          | 5 ++++-
  2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/paramiko/ed25519key.py b/paramiko/ed25519key.py
-index e5e81ac..422f060 100644
---- a/paramiko/ed25519key.py
-+++ b/paramiko/ed25519key.py
+Index: paramiko/paramiko/ed25519key.py
+===================================================================
+--- paramiko.orig/paramiko/ed25519key.py
++++ paramiko/paramiko/ed25519key.py
 @@ -41,6 +41,10 @@ class Ed25519Key(PKey):
  
      name = "ssh-ed25519"
@@ -25,12 +25,12 @@ index e5e81ac..422f060 100644
      def __init__(
          self, msg=None, data=None, filename=None, password=None, file_obj=None
      ):
-diff --git a/tests/pkey.py b/tests/pkey.py
-index 691fda0..f2c651f 100644
---- a/tests/pkey.py
-+++ b/tests/pkey.py
-@@ -219,7 +219,10 @@ class PKey_:
-             assert DSSKey.identifiers() == ["ssh-dss"]
+Index: paramiko/tests/pkey.py
+===================================================================
+--- paramiko.orig/tests/pkey.py
++++ paramiko/tests/pkey.py
+@@ -213,7 +213,10 @@ class PKey_:
+             ]
  
          def ed25519_is_protocol_name(self):
 -            assert Ed25519Key.identifiers() == ["ssh-ed25519"]
