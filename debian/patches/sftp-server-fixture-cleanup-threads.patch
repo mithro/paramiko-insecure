@@ -1,0 +1,39 @@
+From: Colin Watson <cjwatson@debian.org>
+Date: Sun, 22 Feb 2026 13:58:54 +0000
+Subject: Clean up threads in sftp_server fixture
+
+The `sftp_server` fixture never cleaned up the server thread; this was
+easily visible by watching `htop` while running the test suite.
+
+On some underpowered architectures this could eventually result in
+`RuntimeError: can't start new thread`.  This was the root cause of
+https://bugs.debian.org/1127663.
+
+Forwarded: https://github.com/paramiko/paramiko/pull/2577
+Bug-Debian: https://bugs.debian.org/1127663
+Last-Update: 2026-02-22
+---
+ tests/conftest.py | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 9073a38..d382301 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -95,9 +95,13 @@ def sftp_server():
+     event.wait(1.0)
+     # Make & yield connection.
+     tc.connect(username="slowdive", password="pygmalion")
+-    yield tc
+-    # TODO: any need for shutdown? Why didn't old suite do so? Or was that the
+-    # point of the "join all threads from threading module" crap in test.py?
++    try:
++        yield tc
++    finally:
++        tc.close()
++        ts.close()
++        socks.close()
++        sockc.close()
+ 
+ 
+ @pytest.fixture
