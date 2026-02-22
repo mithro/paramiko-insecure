@@ -1,3 +1,10 @@
+paramiko (4.0.0-2) unstable; urgency=medium
+
+  * Team upload.
+  * Clean up threads in sftp_server fixture (closes: #1127663).
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 22 Feb 2026 14:10:30 +0000
+
 paramiko (4.0.0-1) unstable; urgency=low
 
   * New upstream version 4.0.0
