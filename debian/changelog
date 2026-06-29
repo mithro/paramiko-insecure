@@ -1,3 +1,15 @@
+paramiko (4.0.0-3) unstable; urgency=medium
+
+  * Team upload.
+  * Salsa CI: test the <!nocheck> profile
+  * Drop "Rules-Requires-Root: no": it is the default now
+  * Bump Standards-Version to 4.7.4, drop Priority: tag
+  * Rewrite d/watch in v5 format
+  * Replace FSF postal address with a reference to https://www.gnu.org/...
+  * Mark most python3-* build-dependencies as <!nocheck>
+
+ -- Alexandre Detiste <tchet@debian.org>  Mon, 29 Jun 2026 13:46:24 +0200
+
 paramiko (4.0.0-2) unstable; urgency=medium
 
   * Team upload.
