@@ -23,7 +23,6 @@ Standards-Version: 4.7.2
 Homepage: https://github.com/paramiko/paramiko/
 Vcs-Git: https://salsa.debian.org/python-team/packages/paramiko.git
 Vcs-Browser: https://salsa.debian.org/python-team/packages/paramiko
-Rules-Requires-Root: no
 Testsuite: autopkgtest-pkg-pybuild
 
 Package: paramiko-doc
