@@ -1,3 +1,5 @@
-version=4
-opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%paramiko-$1.tar.gz%" \
-https://github.com/paramiko/paramiko/tags (?:.*?/)?v?(\d[\d.]*)\.tar\.gz
+Version: 5
+
+Source: https://github.com/paramiko/paramiko/tags
+Matching-Pattern: (?:.*?/)?v?(\d[\d.]*)\.tar\.gz
+Filenamemangle: s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%paramiko-$1.tar.gz%
