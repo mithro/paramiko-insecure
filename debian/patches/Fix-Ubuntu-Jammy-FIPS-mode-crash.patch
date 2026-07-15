@@ -1,0 +1,35 @@
+From: Eric Berry <eric.berry@canonical.com>
+Date: Mon, 9 Sep 2024 14:49:49 -0700
+Subject: Fix Ubuntu Jammy FIPS mode crash
+
+When one enables FIPS mode on a Jammy system and then attempts to use
+paramiko in Python, the module crashes.
+
+Bug: https://github.com/paramiko/paramiko/issues/2442
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/paramiko/+bug/2072974
+Forwarded: https://github.com/paramiko/paramiko/issues/2442<F5>
+---
+ paramiko/kex_curve25519.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/paramiko/kex_curve25519.py b/paramiko/kex_curve25519.py
+index 20c23e4..002d6bb 100644
+--- a/paramiko/kex_curve25519.py
++++ b/paramiko/kex_curve25519.py
+@@ -1,6 +1,7 @@
+ import binascii
+ import hashlib
+ 
++import cryptography.exceptions
+ from cryptography.exceptions import UnsupportedAlgorithm
+ from cryptography.hazmat.primitives import constant_time, serialization
+ from cryptography.hazmat.primitives.asymmetric.x25519 import (
+@@ -30,6 +31,8 @@ class KexCurve25519:
+             X25519PrivateKey.generate()
+         except UnsupportedAlgorithm:
+             return False
++        except cryptography.exceptions.InternalError:
++            return False
+         else:
+             return True
+ 

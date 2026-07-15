@@ -2,3 +2,4 @@
 0002-Ignore-host-keys-with-markers.patch
 openssh-10.patch
 sftp-server-fixture-cleanup-threads.patch
+Fix-Ubuntu-Jammy-FIPS-mode-crash.patch
