@@ -1,3 +1,11 @@
+paramiko (4.0.0-4) unstable; urgency=medium
+
+  * Team upload.
+  * Fix error in FIPS mode with X25519 isSupported check (LP: #2072974)
+  * Update lintian override for very-long-line-length-in-source-file
+
+ -- Benjamin Drung <bdrung@debian.org>  Wed, 15 Jul 2026 17:21:06 +0200
+
 paramiko (4.0.0-3) unstable; urgency=medium
 
   * Team upload.
