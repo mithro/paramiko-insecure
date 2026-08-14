@@ -1,3 +1,12 @@
+paramiko (5.0.0-1~1.gbpbaddbf) UNRELEASED; urgency=medium
+
+  ** SNAPSHOT build @baddbf18fe1595d2446633f8b871b3d8d2595e53 **
+
+  * New upstream version 5.0.0
+  * Remove debian/patches/openssh-10.patch
+
+ -- Santiago Ruano Rincón <santiagorr@riseup.net>  Fri, 14 Aug 2026 16:10:28 -0300
+
 paramiko (4.0.0-4) unstable; urgency=medium
 
   * Team upload.
