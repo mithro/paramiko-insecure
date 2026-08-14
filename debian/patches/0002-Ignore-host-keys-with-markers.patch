@@ -7,11 +7,11 @@ Hotfix to prevent paramiko from choking on @cert-authority entries
  paramiko/hostkeys.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/paramiko/hostkeys.py b/paramiko/hostkeys.py
-index 4d47e95..e0138aa 100644
---- a/paramiko/hostkeys.py
-+++ b/paramiko/hostkeys.py
-@@ -89,7 +89,7 @@ class HostKeys(MutableMapping):
+Index: paramiko/paramiko/hostkeys.py
+===================================================================
+--- paramiko.orig/paramiko/hostkeys.py
++++ paramiko/paramiko/hostkeys.py
+@@ -87,7 +87,7 @@ class HostKeys(MutableMapping):
          with open(filename, "r") as f:
              for lineno, line in enumerate(f, 1):
                  line = line.strip()

@@ -12,10 +12,10 @@ Forwarded: https://github.com/paramiko/paramiko/issues/2442<F5>
  paramiko/kex_curve25519.py | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/paramiko/kex_curve25519.py b/paramiko/kex_curve25519.py
-index 20c23e4..002d6bb 100644
---- a/paramiko/kex_curve25519.py
-+++ b/paramiko/kex_curve25519.py
+Index: paramiko/paramiko/kex_curve25519.py
+===================================================================
+--- paramiko.orig/paramiko/kex_curve25519.py
++++ paramiko/paramiko/kex_curve25519.py
 @@ -1,6 +1,7 @@
  import binascii
  import hashlib

@@ -16,11 +16,11 @@ Last-Update: 2026-02-22
  tests/conftest.py | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/tests/conftest.py b/tests/conftest.py
-index 9073a38..d382301 100644
---- a/tests/conftest.py
-+++ b/tests/conftest.py
-@@ -95,9 +95,13 @@ def sftp_server():
+Index: paramiko/tests/conftest.py
+===================================================================
+--- paramiko.orig/tests/conftest.py
++++ paramiko/tests/conftest.py
+@@ -94,9 +94,13 @@ def sftp_server():
      event.wait(1.0)
      # Make & yield connection.
      tc.connect(username="slowdive", password="pygmalion")
