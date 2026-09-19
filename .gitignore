@@ -12,3 +12,8 @@ _build
 coverage.xml
 htmlcov
 uv.lock
+built-debs/
+*.deb
+*.buildinfo
+*.changes
+.pc/
