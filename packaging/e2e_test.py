@@ -41,7 +41,6 @@ def check_side_by_side():
     import paramiko_legacy
     assert Path(paramiko.__file__).parent.name == "paramiko"
     assert Path(paramiko_legacy.__file__).parent.name == "paramiko_legacy"
-    assert not hasattr(paramiko, "DSSKey"), "stock paramiko has DSSKey?!"
     assert hasattr(paramiko_legacy, "DSSKey")
     print(f"stock paramiko {paramiko.__version__} and paramiko_legacy "
           f"{paramiko_legacy.__version__} import together")
@@ -121,7 +120,7 @@ def keygen(path, key_type):
     run("ssh-keygen", "-q", "-N", "", "-t", key_type, *bits, "-f", str(path))
 
 
-def attempt(module_name, sshd, user_key, key_class):
+def attempt(module_name, sshd, user_key, key_class, disabled=None):
     """Connect with `module_name`, run a command. Return (ok, detail)."""
     mod = importlib.import_module(module_name)
     client = mod.SSHClient()
@@ -140,15 +139,17 @@ def attempt(module_name, sshd, user_key, key_class):
         # Pin the host key exactly: this checks the legacy host-key algorithm
         # really verified, rather than trusting whatever was offered.
         host_pub = sshd.host_key.with_suffix(".pub").read_text().split()
+        host_class = {"ssh-rsa": "RSAKey", "ssh-dss": "DSSKey"}[host_pub[0]]
         client.get_host_keys().add(
             f"[127.0.0.1]:{sshd.port}", host_pub[0],
-            mod.PKey.from_type_string(host_pub[0], _b64(host_pub[1])),
+            getattr(mod, host_class)(data=_b64(host_pub[1])),
         )
         client.set_missing_host_key_policy(mod.RejectPolicy())
         client.connect(
             "127.0.0.1", port=sshd.port, username="root", pkey=pkey,
             allow_agent=False, look_for_keys=False, timeout=10,
             banner_timeout=10, auth_timeout=10,
+            disabled_algorithms=disabled,
         )
         t = client.get_transport()
         _, out, _ = client.exec_command("echo legacy-ok")
@@ -158,7 +159,9 @@ def attempt(module_name, sshd, user_key, key_class):
                 if m.startswith("Agreed upon '")]
         detail = (f"kex={kex[-1] if kex else '?'} "
                   f"hostkey={t.host_key_type} "
-                  f"userauth={auth[-1] if auth else '?'} "
+                  # paramiko only logs the agreed algorithm for RSA keys;
+                  # for any other key the algorithm is the key's own type.
+                  f"userauth={auth[-1] if auth else pkey.get_name()} "
                   f"cipher={t.local_cipher} mac={t.local_mac} -> {result!r}")
         return result == "legacy-ok", detail
     except Exception as e:  # stock paramiko is *expected* to fail here
@@ -174,7 +177,9 @@ def _b64(s):
 
 
 SCENARIOS = [
-    # name, host key type, user key type, key class, sshd options
+    # name, host key type, user key type, key class, sshd options.
+    # The sshd options allow exactly one legacy algorithm of each kind; the
+    # negative control disables that same algorithm in paramiko_legacy.
     ("group1-sha1 kex + ssh-rsa (SHA-1) host key and user auth",
      "rsa", "rsa", "RSAKey", [
          "KexAlgorithms diffie-hellman-group1-sha1",
@@ -203,6 +208,41 @@ SCENARIOS = [
      ]),
 ]
 
+# sshd_config keyword -> paramiko disabled_algorithms key.
+DISABLE_KEYS = {
+    "KexAlgorithms": "kex",
+    "HostKeyAlgorithms": "keys",
+    "PubkeyAcceptedAlgorithms": "pubkeys",
+    "Ciphers": "ciphers",
+    "MACs": "macs",
+}
+
+
+def legacy_only(options):
+    """disabled_algorithms turning off exactly what the sshd requires."""
+    disabled = {}
+    for opt in options:
+        word, value = opt.split()
+        disabled.setdefault(DISABLE_KEYS[word], []).extend(value.split(","))
+    return disabled
+
+
+# OpenSSH 7.2-9.x advertises rsa-sha2-* in server-sig-algs even when
+# PubkeyAcceptedAlgorithms refuses them, and paramiko (like upstream 3.x)
+# trusts the advertisement. Servers too old to know rsa-sha2 send no
+# server-sig-algs, and then paramiko_legacy picks ssh-rsa by itself. So, as a
+# user must for such a server, turn rsa-sha2 off for RSA user auth.
+RSA_SHA1_ONLY = {"pubkeys": ["rsa-sha2-512", "rsa-sha2-256"]}
+
+
+def client_options(key_class):
+    return RSA_SHA1_ONLY if key_class == "RSAKey" else None
+
+
+def stock_major():
+    import paramiko
+    return int(paramiko.__version__.split(".")[0])
+
 
 def check_interop():
     failures = []
@@ -225,16 +265,31 @@ def check_interop():
             keygen(user_key, user_type)
             sshd.authorize(user_key.with_suffix(".pub"))
             with sshd:
+                control_ok, control = attempt(
+                    "paramiko_legacy", sshd, user_key, key_class,
+                    disabled=legacy_only(options))
                 stock_ok, stock = attempt("paramiko", sshd, user_key,
-                                          key_class)
+                                          key_class,
+                                          client_options(key_class))
                 legacy_ok, legacy = attempt("paramiko_legacy", sshd,
-                                            user_key, key_class)
+                                            user_key, key_class,
+                                            client_options(key_class))
             print(f"\n== {name}")
-            print(f"   stock paramiko:  {stock}")
+            print(f"   paramiko_legacy, legacy algorithms disabled: {control}")
+            print(f"   stock paramiko: {stock}")
             print(f"   paramiko_legacy: {legacy}")
-            if stock_ok:
-                failures.append(f"{name}: stock paramiko connected, so the "
-                                "server is not legacy-only; test is vacuous")
+            # Negative control: without its legacy algorithms paramiko_legacy
+            # must be refused, else the server is not legacy-only and the
+            # positive result below would prove nothing.
+            if control_ok:
+                failures.append(f"{name}: connected with the legacy "
+                                "algorithms disabled; test is vacuous")
+            # Paramiko 5 removed every legacy algorithm used here (4.0 already
+            # removed DSA). Older stock versions (bookworm 2.12, trixie 3.5)
+            # still have them, so for those this is informational only.
+            if stock_ok and stock_major() >= 5:
+                failures.append(f"{name}: stock paramiko "
+                                f"{stock_major()}.x connected?!")
             if not legacy_ok:
                 failures.append(f"{name}: paramiko_legacy failed: {legacy}")
                 print((sshd.dir / "sshd.log").read_text())

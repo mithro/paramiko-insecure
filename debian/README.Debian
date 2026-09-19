@@ -32,6 +32,18 @@ peer offers nothing better. To pin a session to exactly what an old device
 needs, use Transport.get_security_options() or the disabled_algorithms
 argument to SSHClient.connect().
 
+RSA user keys and servers that advertise more than they accept: OpenSSH 9.2
+(Debian bookworm) sends rsa-sha2-256/512 in server-sig-algs even when its
+PubkeyAcceptedAlgorithms only allows ssh-rsa (OpenSSH 10.0 does not), and
+paramiko believes the advertisement. If RSA authentication is rejected by
+such a server, force SHA-1 signatures:
+
+    client.connect(..., disabled_algorithms={
+        "pubkeys": ["rsa-sha2-512", "rsa-sha2-256"]})
+
+Servers too old to know rsa-sha2 do not send server-sig-algs at all, and then
+ssh-rsa is chosen automatically.
+
 Loggers are named "paramiko_legacy.*", so their output can be told apart from
 the stock module's.
 

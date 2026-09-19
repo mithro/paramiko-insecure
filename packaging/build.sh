@@ -35,6 +35,21 @@ rm -rf built-debs tmp
 mk-build-deps --install --remove \
   --tool 'apt-get -y --no-install-recommends' debian/control
 
+# bookworm's setuptools (66) predates PEP 639: it rejects an SPDX string for
+# project.license and a project.license-files key. Rewrite them to the older
+# table form in this throwaway copy only. Exact-match, so a changed upstream
+# pyproject.toml fails here loudly instead of building something different.
+if [ "$SUITE" = bookworm ]; then
+  python3 - <<'PY'
+from pathlib import Path
+p = Path("pyproject.toml")
+s = p.read_text()
+old = 'license = "LGPL-2.1"\nlicense-files = ["LICENSE"]\n'
+assert s.count(old) == 1, "pyproject.toml license lines changed upstream"
+p.write_text(s.replace(old, 'license = {text = "LGPL-2.1"}\n'))
+PY
+fi
+
 dpkg-buildpackage -us -uc -b
 
 mkdir -p "$OUT"
