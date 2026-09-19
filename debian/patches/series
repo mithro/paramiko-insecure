@@ -2,3 +2,13 @@
 0002-Ignore-host-keys-with-markers.patch
 sftp-server-fixture-cleanup-threads.patch
 Fix-Ubuntu-Jammy-FIPS-mode-crash.patch
+legacy/0001-revert-Bump-group-exchange-kex-min-bits-to-2048.patch
+legacy/0002-revert-Fix-some-tests-that-were-incorrectly-passing.patch
+legacy/0003-revert-Remove-GSSAPI-support.patch
+legacy/0004-revert-Remove-SHA1-based-non-GSS-kex-methods.patch
+legacy/0005-revert-Lintin-ain-t-easy.patch
+legacy/0006-revert-Fix-or-remove-last-few-ssh-rsa-related-tests.patch
+legacy/0007-revert-Streamline-RSA-pubkey-algorithm-handling-now-that-.patch
+legacy/0008-revert-Fold-smarter-choose-fallback-pubkey-algorithm-into.patch
+legacy/0009-revert-Remove-SHA1-support-from-RSA-key-handling.patch
+legacy/0010-revert-Fixes-973-remove-DSA-DSS-support.patch
