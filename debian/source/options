@@ -1,2 +1,3 @@
 extend-diff-ignore = "^[^/]*[.]egg-info/"
 extend-diff-ignore = "^docs/index.html"
+extend-diff-ignore = "^(README\.md|packaging/|\.github/)"
