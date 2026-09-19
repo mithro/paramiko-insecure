@@ -2,7 +2,7 @@ name: Debian package + apt repo
 
 # Builds python3-paramiko-legacy -- Debian's paramiko 5 with the legacy SSH
 # algorithms upstream removed restored, installed as the separate module
-# paramiko_legacy -- for bookworm, trixie and sid, tests each build against a
+# paramiko_legacy -- for bookworm, trixie, forky and sid, tests each build against a
 # real legacy-only OpenSSH server, and publishes a signed apt repository to
 # GitHub Pages.
 #
@@ -29,7 +29,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [bookworm, trixie, sid]
+        # forky is Debian testing. sid also reports VERSION_CODENAME=forky
+        # in /etc/os-release, so publishing forky keeps the README's
+        # one-line sources.list entry correct on sid too.
+        suite: [bookworm, trixie, forky, sid]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -74,7 +77,7 @@ jobs:
       id-token: write
     uses: mithro/apt-repo-action/.github/workflows/publish-apt.yml@main
     with:
-      suites: "bookworm trixie sid"
+      suites: "bookworm trixie forky sid"
       architectures: "all"
       origin: paramiko-legacy
       description: "paramiko with legacy (insecure) SSH algorithms, as paramiko_legacy"

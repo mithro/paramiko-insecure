@@ -1,7 +1,7 @@
 # paramiko-legacy
 
 Debian's **paramiko 5** with the legacy SSH algorithms upstream removed put
-back, packaged as **`python3-paramiko-legacy`** for bookworm, trixie and sid,
+back, packaged as **`python3-paramiko-legacy`** for bookworm, trixie, forky and sid,
 and published as a signed APT repository at
 <https://mith.ro/paramiko-legacy/>.
 
@@ -65,7 +65,9 @@ $ sudo apt update
 $ sudo apt install python3-paramiko-legacy
 ```
 
-Suites: `bookworm`, `trixie`, `sid`. The package is `Architecture: all`.
+Suites: `bookworm`, `trixie`, `forky` (testing) and `sid`. The package is
+`Architecture: all`. sid reports `forky` as its codename, so the line above
+gives sid systems the `forky` suite; write `sid` in it instead if you prefer.
 
 A Debian package that needs legacy SSH should declare
 `Depends: python3-paramiko-legacy` and `import paramiko_legacy`.
