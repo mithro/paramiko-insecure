@@ -1,3 +1,14 @@
+paramiko-legacy (5.0.0-1+legacy1) unstable; urgency=medium
+
+  * Fork of Debian's paramiko 5.0.0-1 as paramiko-legacy, installed as the
+    paramiko_legacy module so it co-installs with python3-paramiko.
+  * Revert upstream's removal of DSA keys, SHA-1 RSA signatures, SHA-1 key
+    exchange, GSSAPI and 1024-bit group-exchange moduli
+    (debian/patches/legacy/).
+  * Drop the paramiko-doc binary package; python3-paramiko's docs apply.
+
+ -- Tim 'mithro' Ansell <me@mith.ro>  Sat, 19 Sep 2026 20:38:23 +0930
+
 paramiko (5.0.0-1) unstable; urgency=medium
 
   * New upstream version 5.0.0

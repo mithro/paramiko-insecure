@@ -1,9 +1,6 @@
-Source: paramiko
+Source: paramiko-legacy
 Section: python
-Maintainer: Debian Python Team <team+python@tracker.debian.org>
-Uploaders: Jeremy T. Bouse <jbouse@debian.org>,
-           Guido Guenther <agx@debian.org>,
-           Santiago Ruano Rincón <santiagorr@riseup.net>,
+Maintainer: Tim 'mithro' Ansell <me@mith.ro>
 Build-Depends: debhelper-compat (= 13),
                dh-sequence-python3,
                pybuild-plugin-pyproject,
@@ -19,45 +16,32 @@ Build-Depends: debhelper-compat (= 13),
                python3-pytest-relaxed <!nocheck>,
                python3-setuptools,
 Standards-Version: 4.7.4
-Homepage: https://github.com/paramiko/paramiko/
-Vcs-Git: https://salsa.debian.org/python-team/packages/paramiko.git
-Vcs-Browser: https://salsa.debian.org/python-team/packages/paramiko
+Homepage: https://github.com/mithro/paramiko-legacy
+Vcs-Git: https://github.com/mithro/paramiko-legacy.git
+Vcs-Browser: https://github.com/mithro/paramiko-legacy
 Testsuite: autopkgtest-pkg-pybuild
 
-Package: paramiko-doc
-Section: doc
-Architecture: all
-Depends: libjs-jquery,
-         libjs-underscore,
-         ${misc:Depends},
-Multi-Arch: foreign
-Description: Make ssh v2 connections with Python (Documentation)
- "Paramiko" is a combination of the Esperanto words for "paranoid" and "friend".
- It's a module for Python that implements the SSH2 protocol for secure
- (encrypted and authenticated) connections to remote machines. Unlike SSL (aka
- TLS), SSH2 protocol does not require hierarchical certificates signed by a
- powerful central authority. You may know SSH2 as the protocol that replaced
- Telnet and rsh for secure access to remote shells, but the protocol also
- includes the ability to open arbitrary channels to remote services across the
- encrypted tunnel (this is how SFTP works, for example).
- .
- This is the documentation for the package.
-
-Package: python3-paramiko
+Package: python3-paramiko-legacy
 Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
-Provides: ${python3:Provides},
 Recommends: python3-invoke,
 Suggests: python3-gssapi (>= 0.6.1),
-Description: Make ssh v2 connections (Python 3)
- "Paramiko" is a combination of the Esperanto words for "paranoid" and "friend".
- It's a module for Python that implements the SSH2 protocol for secure
- (encrypted and authenticated) connections to remote machines. Unlike SSL (aka
- TLS), SSH2 protocol does not require hierarchical certificates signed by a
- powerful central authority. You may know SSH2 as the protocol that replaced
- Telnet and rsh for secure access to remote shells, but the protocol also
- includes the ability to open arbitrary channels to remote services across the
- encrypted tunnel (this is how SFTP works, for example).
+Description: SSH2 for Python with legacy, INSECURE algorithms (paramiko_legacy)
+ Paramiko 5 with the legacy SSH support that upstream removed in 4.0 and 5.0
+ restored, for talking to old devices (switches, BMCs, embedded systems)
+ whose SSH servers cannot be upgraded:
  .
- This is the Python 3 version of the package.
+  * DSA ("ssh-dss") host and user keys;
+  * SHA-1 RSA signatures ("ssh-rsa");
+  * SHA-1 key exchange: diffie-hellman-group1-sha1, diffie-hellman-group14-sha1
+    and diffie-hellman-group-exchange-sha1, with 1024-bit group-exchange
+    moduli;
+  * GSSAPI authentication and key exchange.
+ .
+ These algorithms are broken or badly weakened. Modern algorithms are still
+ preferred whenever the peer offers them.
+ .
+ The module is installed as "paramiko_legacy", so this package can be
+ installed alongside python3-paramiko without affecting it: only code that
+ explicitly does "import paramiko_legacy" gets the legacy algorithms.

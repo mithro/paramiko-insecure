@@ -1,7 +1,0 @@
-paramiko (4.0.0-1) unstable; urgency=low
-
-  To stay inline with current cryptographic best practices and with OpenSSH,
-  this release of paramiko (4.0.0) drops support for DSA keys.  You need to
-  update any remaining setup still using the deprecated DSA algorithm.
-
- -- Santiago Ruano Rincón <santiagorr@riseup.net>  Thu, 04 Sep 2025 08:51:53 -0300

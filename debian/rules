@@ -1,8 +1,23 @@
 #!/usr/bin/make -f
 
-export PYBUILD_NAME=paramiko
+export PYBUILD_NAME=paramiko-legacy
 export PYBUILD_TEST_ARGS=-k 'not test_sequence_numbers_reset_on_newkeys_when_strict'
 export LC_ALL=C.UTF-8
 
 %:
 	dh $@ --buildsystem=pybuild
+
+# Install as "paramiko_legacy" so python3-paramiko is never shadowed; see
+# debian/legacy/rename-module.py. The patches in debian/patches are written
+# against upstream's names, so this runs after they are applied and is undone
+# again by clean.
+execute_before_dh_auto_configure:
+	python3 debian/legacy/rename-module.py apply
+
+execute_after_dh_auto_clean:
+	python3 debian/legacy/rename-module.py revert
+
+# Belt and braces: fail the build if anything would land under the stock
+# module's name, which would make the two packages collide.
+execute_after_dh_auto_install:
+	! find debian/python3-paramiko-legacy -name 'paramiko' -o -name 'paramiko-*' | grep .

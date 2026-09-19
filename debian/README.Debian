@@ -1,0 +1,38 @@
+python3-paramiko-legacy
+=======================
+
+This is paramiko with legacy, insecure SSH algorithms restored. It exists to
+talk to old devices whose SSH servers cannot be upgraded. Do not use it for
+anything else.
+
+It installs the module "paramiko_legacy", never "paramiko", so it sits beside
+python3-paramiko without changing it. Code opts in explicitly:
+
+    import paramiko_legacy as paramiko
+
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.RejectPolicy())
+    client.load_host_keys("/path/to/known_hosts")
+    client.connect("old-switch.example", username="admin", password="...")
+
+Restored, relative to paramiko 5:
+
+  * ssh-dss (DSA) host and user keys, including DSSKey;
+  * ssh-rsa (RSA with SHA-1) signatures;
+  * diffie-hellman-group1-sha1, diffie-hellman-group14-sha1 and
+    diffie-hellman-group-exchange-sha1 key exchange;
+  * group-exchange moduli down to 1024 bits (5.0 requires 2048);
+  * GSSAPI authentication and key exchange (needs python3-gssapi).
+
+CBC ciphers (aes*-cbc, 3des-cbc) and hmac-sha1/hmac-md5 were never removed
+upstream and are available in both packages.
+
+Modern algorithms are still preferred: a legacy one is only negotiated when the
+peer offers nothing better. To pin a session to exactly what an old device
+needs, use Transport.get_security_options() or the disabled_algorithms
+argument to SSHClient.connect().
+
+Loggers are named "paramiko_legacy.*", so their output can be told apart from
+the stock module's.
+
+Source and apt repository: https://github.com/mithro/paramiko-legacy
