@@ -7,9 +7,11 @@ ARG SUITE=trixie
 FROM debian:${SUITE}
 
 COPY built-debs/python3-paramiko-insecure_*.deb /debs/
+COPY built-debs/python3-cryptography-insecure_*.deb /debs/
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        /debs/python3-cryptography-insecure_*.deb \
         /debs/python3-paramiko-insecure_*.deb python3-paramiko \
     && rm -rf /var/lib/apt/lists/*
 

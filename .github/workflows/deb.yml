@@ -40,10 +40,20 @@ jobs:
       # Build-dependencies resolve from the suite's own archive. bookworm
       # builds with the nocheck profile (no python3-pytest-relaxed there);
       # the other suites run the full upstream test suite during the build.
-      - name: Build in debian:${{ matrix.suite }}
+      # The private copy of cryptography, from the same suite's source.
+      # paramiko_insecure imports it instead of the system one, so it has to
+      # exist before the package below is built or tested.
+      - name: Build python3-cryptography-insecure in debian:${{ matrix.suite }}
         run: |
           set -eux
           mkdir -p built-debs
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/w" -w /w \
+            debian:${{ matrix.suite }} sh packaging/cryptography-insecure/build.sh
+
+      - name: Build python3-paramiko-insecure in debian:${{ matrix.suite }}
+        run: |
+          set -eux
           docker run --rm \
             -v "$GITHUB_WORKSPACE:/w" -w /w \
             debian:${{ matrix.suite }} sh packaging/build.sh
@@ -85,7 +95,9 @@ jobs:
     uses: mithro/apt-repo-action/.github/workflows/publish-apt.yml@main
     with:
       suites: "bookworm trixie forky sid"
-      architectures: "all"
+      # python3-cryptography-insecure has a compiled extension, so the
+      # repository carries real architectures as well as "all".
+      architectures: "all amd64"
       origin: paramiko-insecure
       description: "paramiko with obsolete, insecure SSH algorithms, as paramiko_insecure"
       keyring-name: paramiko-insecure.gpg

@@ -13,8 +13,8 @@ method it checks, in one process:
   * paramiko_insecure connects, with the host key pinned, runs a command, and
     (where the server has it) transfers a file over SFTP.
 
-Both modules are imported here at once, which is the co-installation claim
-made concrete.
+All four modules -- both paramikos and both cryptographys -- are imported
+here at once, which is the co-installation claim made concrete.
 """
 
 import json
@@ -24,6 +24,8 @@ import time
 import traceback
 from pathlib import Path
 
+import cryptography
+import cryptography_insecure
 import paramiko
 import paramiko_insecure
 
@@ -114,6 +116,20 @@ def main():
           f"{paramiko_insecure.__version__} imported together in one process")
     print(f"stock has DSSKey: {hasattr(paramiko, 'DSSKey')}; "
           f"paramiko_insecure has DSSKey: {hasattr(paramiko_insecure, 'DSSKey')}")
+    print(f"system cryptography {cryptography.__version__} at "
+          f"{Path(cryptography.__file__).parent}")
+    print(f"private cryptography_insecure {cryptography_insecure.__version__} at "
+          f"{Path(cryptography_insecure.__file__).parent}")
+    # paramiko_insecure must reach the private copy and nothing else: it is
+    # what keeps DSA working whatever the system cryptography retires.
+    used = {m.split(".")[0] for m in sys.modules if "cryptography" in m}
+    assert "cryptography_insecure" in used, used
+    # Not just "the name is importable": the objects paramiko_insecure
+    # actually holds must come from the private copy.
+    serialization = paramiko_insecure.pkey.serialization
+    assert serialization.__name__.startswith("cryptography_insecure."), \
+        serialization.__name__
+    print(f"paramiko_insecure.pkey.serialization is {serialization.__name__}")
 
     stock_major = int(paramiko.__version__.split(".")[0])
     failures = []

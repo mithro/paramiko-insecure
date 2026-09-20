@@ -6,6 +6,7 @@ set -eux
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
+  ./built-debs/python3-cryptography-insecure_*.deb \
   ./built-debs/python3-paramiko-insecure_*.deb \
   python3-paramiko openssh-server openssh-client
 mkdir -p /run/sshd

@@ -46,6 +46,24 @@ better.
 what these devices actually need — so there is less obsolete code to keep
 working.
 
+## Its own private cryptography
+
+`paramiko_insecure` does not use the system `cryptography`. It uses
+**`cryptography_insecure`**, shipped by `python3-cryptography-insecure` and
+pulled in automatically, which is the same Debian source renamed the same way.
+
+That is not paranoia about the system copy: upstream cryptography is retiring
+exactly what this package needs. Version 49 warns that "SSH DSA key support is
+deprecated and will be removed in a future release", and 3DES has already moved
+to `hazmat.decrepit`. When those go, `python3-paramiko` should follow the
+removal and this package should not — which is only possible if it has its own
+copy.
+
+The rename covers the Rust extension too, not just the Python tree. The
+extension registers its submodules in `sys.modules` under names compiled into
+it, so a half-rename would let the private copy overwrite the system copy's
+entries and break `cryptography` for everything else in the process.
+
 ## Opting in, explicitly
 
 The package installs the module **`paramiko_insecure`**, never `paramiko`:
@@ -53,6 +71,7 @@ The package installs the module **`paramiko_insecure`**, never `paramiko`:
 | | `python3-paramiko` | `python3-paramiko-insecure` |
 |---|---|---|
 | import | `import paramiko` | `import paramiko_insecure` |
+| crypto | `cryptography` | `cryptography_insecure` |
 | files | `…/dist-packages/paramiko/` | `…/dist-packages/paramiko_insecure/` |
 | dist-info | `paramiko-5.0.0.dist-info` | `paramiko_insecure-5.0.0.dist-info` |
 | loggers | `paramiko.*` | `paramiko_insecure.*` |
@@ -124,11 +143,14 @@ branches and `debian/*`/`upstream/*` tags are kept, so it works with `gbp`.
    package's references to itself using Python's tokenizer, so only imports,
    attribute chains and module-path strings are touched. It is an exact
    bijection: `debian/rules clean` reverts it byte for byte.
-3. **`packaging/build.sh`**: `dpkg-buildpackage` inside `debian:<suite>`, with
+3. **`packaging/cryptography-insecure/`**: fetches that suite's
+   `python-cryptography` source, renames it (Python, Rust module paths and
+   Debian packaging) and builds `python3-cryptography-insecure`.
+4. **`packaging/build.sh`**: `dpkg-buildpackage` inside `debian:<suite>`, with
    build-dependencies from that suite only. trixie, forky and sid run the full
    upstream test suite during the build; bookworm lacks
    `python3-pytest-relaxed`, so it builds with the `nocheck` profile.
-4. **`packaging/e2e_test.py`**: installs the `.deb` next to stock
+5. **`packaging/e2e_test.py`**: installs the `.deb` next to stock
    `python3-paramiko` and connects to real SSH servers that speak only the
    obsolete algorithms (see below).
 
@@ -170,10 +192,10 @@ Put hand-porting notes in an `Insecure-Note:` section of a commit message and
 
 ## Known limitations
 
-- **cryptography is deprecating SSH DSA.** python3-cryptography 49 (sid) warns
-  that "SSH DSA key support is deprecated and will be removed in a future
-  release", which is why this package ships its own
-  `python3-cryptography-insecure`.
+- **cryptography is deprecating SSH DSA.** Handled by shipping
+  `python3-cryptography-insecure` (above), but when upstream removes DSA
+  outright, that private copy will have to carry a patch to keep it, or be
+  pinned to the last version that had it.
 - **RSA user auth against a server that over-advertises.** OpenSSH 9.2 lists
   `rsa-sha2-*` in `server-sig-algs` even when its `PubkeyAcceptedAlgorithms`
   only allows `ssh-rsa`, and paramiko believes it. Pass

@@ -36,10 +36,12 @@ from pathlib import Path
 # (original, renamed) for the package this source tree builds.
 PACKAGE = ("paramiko", "paramiko_insecure")
 # Modules referenced but not contained here; rewritten in place, never moved.
-# Filled in once python3-cryptography-insecure exists; see debian/rules.
+# python3-cryptography-insecure carries a private copy of cryptography, so
+# that this package keeps DSA and 3DES whatever the system cryptography
+# drops next, and needs no algorithm the system copy has retired.
 REFERENCE_ONLY = [
     ("cryptography", "cryptography_insecure"),
-] if Path("debian/insecure/use-private-cryptography").exists() else []
+]
 # Directories of Python source to rewrite, besides the package itself.
 EXTRA_DIRS = ("tests",)
 # (original line, renamed line) -- exact, whole-line matches only.
@@ -47,8 +49,7 @@ PYPROJECT_LINES = [
     ('name = "paramiko"', 'name = "paramiko_insecure"'),
     ('packages = ["paramiko"]', 'packages = ["paramiko_insecure"]'),
 ]
-# Added to PYPROJECT_LINES when the private cryptography is in use, so the
-# built package depends on it rather than on the system one.
+# So the built package depends on the private copy, not the system one.
 PRIVATE_CRYPTO_LINE = (
     '  "cryptography>=3.3",', '  "cryptography_insecure>=3.3",'
 )

@@ -42,6 +42,13 @@ upstream and are available in both packages.
 
 GSSAPI/Kerberos is NOT restored. The scope here is core SSH, SFTP and SCP.
 
+This package uses its own copy of cryptography, python3-cryptography-insecure,
+installed as "cryptography_insecure", rather than the system one. Upstream
+cryptography is retiring what is needed here: DSA is deprecated as of version
+49, and 3DES has already moved to hazmat.decrepit. The private copy means
+python3-cryptography can follow those removals without breaking this package,
+and that nothing else on the machine is held back by it.
+
 Modern algorithms are still preferred: an obsolete one is only negotiated when
 the device offers nothing better. Nothing is gained by disabling the good ones.
 
