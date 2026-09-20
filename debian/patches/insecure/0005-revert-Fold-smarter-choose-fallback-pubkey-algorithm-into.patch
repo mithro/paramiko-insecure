@@ -1,18 +1,19 @@
 From: Tim 'mithro' Ansell <me@mith.ro>
 Subject: Revert "Fold smarter _choose_fallback_pubkey_algorithm into base AuthHandler"
 
-Restore legacy SSH support removed upstream, for talking to old
-devices that cannot be upgraded. Shipped only in the separate
-paramiko_legacy module; python3-paramiko is untouched.
+Restore obsolete SSH support removed upstream, so that decades-old
+equipment that cannot be upgraded can still be reached. Shipped only
+in the separate paramiko_insecure module; python3-paramiko is left
+untouched.
 
 Origin: vendor, reverts https://github.com/paramiko/paramiko/commit/d99939c27ad8e35ec278d11581d155c309757182
 Forwarded: not-needed
 ---
 diff --git a/paramiko/auth_handler.py b/paramiko/auth_handler.py
-index b927a2a2..f088912f 100644
+index 1ffca3d3..686c61b1 100644
 --- a/paramiko/auth_handler.py
 +++ b/paramiko/auth_handler.py
-@@ -294,18 +294,15 @@ class AuthHandler:
+@@ -259,18 +259,15 @@ class AuthHandler:
          return self.transport._key_info[algorithm](Message(keyblob))
  
      def _choose_fallback_pubkey_algorithm(self, key_type, my_algos):
@@ -40,7 +41,7 @@ index b927a2a2..f088912f 100644
  
      def _finalize_pubkey_algorithm(self, key_type):
          # Short-circuit for non-RSA keys
-@@ -1084,3 +1081,18 @@ class AuthOnlyHandler(AuthHandler):
+@@ -779,3 +776,18 @@ class AuthOnlyHandler(AuthHandler):
              m.add_string(submethods)
  
          return self.send_auth_request(username, "keyboard-interactive", finish)
@@ -60,7 +61,7 @@ index b927a2a2..f088912f 100644
 +        self._log(DEBUG, msg)
 +        return algo
 diff --git a/tests/auth.py b/tests/auth.py
-index 70335386..14a57f1f 100644
+index edffd334..7fc9f88e 100644
 --- a/tests/auth.py
 +++ b/tests/auth.py
 @@ -25,6 +25,7 @@ from paramiko import (
@@ -151,22 +152,57 @@ index 70335386..14a57f1f 100644
  class SHA2SignaturePubkeys:
      def pubkey_auth_honors_disabled_algorithms(self):
          privkey = RSAKey.from_private_key_file(_support("rsa.key"))
-@@ -202,6 +276,7 @@ class SHA2SignaturePubkeys:
-         ) as (tc, _):
-             assert tc.is_authenticated()
+@@ -165,8 +239,53 @@ class SHA2SignaturePubkeys:
+             assert isinstance(err, SSHException)
+             assert "no RSA pubkey algorithms" in str(err)
  
++    def client_sha2_disabled_server_sha1_disabled_no_match(self):
++        privkey = RSAKey.from_private_key_file(_support("rsa.key"))
++        with server(
++            pubkeys=[privkey],
++            connect=dict(pkey=privkey),
++            # TODO: update or maybe just nuke this test now
++            client_init=_disable_sha2_pubkey,
++            server_init=_disable_sha1_pubkey,
++            catch_error=True,
++        ) as (tc, ts, err):
++            assert isinstance(err, AuthenticationException)
++
++    def client_sha1_disabled_server_sha2_disabled_no_match(self):
++        privkey = RSAKey.from_private_key_file(_support("rsa.key"))
++        with server(
++            pubkeys=[privkey],
++            connect=dict(pkey=privkey),
++            # TODO: update or maybe just nuke this test now
++            client_init=_disable_sha1_pubkey,
++            server_init=_disable_sha2_pubkey,
++            catch_error=True,
++        ) as (tc, ts, err):
++            assert isinstance(err, AuthenticationException)
++
++    def ssh_rsa_still_used_when_sha2_disabled(self):
++        privkey = RSAKey.from_private_key_file(_support("rsa.key"))
++        # NOTE: this works because key obj comparison uses public bytes
++        # TODO: would be nice for PKey to grow a legit "give me another obj of
++        # same class but just the public bits" using asbytes()
++        with server(
++            # TODO: update
++            pubkeys=[privkey],
++            connect=dict(pkey=privkey),
++            init=_disable_sha2,
++        ) as (tc, _):
++            assert tc.is_authenticated()
++
 +    # TODO: isn't this duplicating some of the earlier tests? if not, update it
      def first_client_preferred_algo_used_when_no_server_sig_algs(self):
          privkey = RSAKey.from_private_key_file(_support("rsa.key"))
-         # Server pretending to be an apparently common setup:
-@@ -210,10 +285,6 @@ class SHA2SignaturePubkeys:
-         # This is the scenario in which Paramiko has to guess-the-algo, and
-         # where servers that don't support sha2 or server-sig-algs give us
-         # trouble.
--        # TODO: disabling sha2 _in this case_ might be ok, _as long as_ we
--        # update to account for the client's new first preference being
--        # something besides ssh-rsa (and where the client also has that
--        # disabled?)
-         server_init = dict(_disable_sha2_pubkey, server_sig_algs=False)
++        # Server pretending to be an apparently common setup:
++        # - doesn't support (or have enabled) sha2
++        # - also doesn't support (or have enabled) server-sig-algs/ext-info
++        # This is the scenario in which Paramiko has to guess-the-algo, and
++        # where servers that don't support sha2 or server-sig-algs give us
++        # trouble.
++        server_init = dict(_disable_sha2_pubkey, server_sig_algs=False)
          with server(
              pubkeys=[privkey],
+             connect=dict(username="slowdive", pkey=privkey),

@@ -1,42 +1,82 @@
-python3-paramiko-legacy
-=======================
+python3-paramiko-insecure
+=========================
 
-This is paramiko with legacy, insecure SSH algorithms restored. It exists to
-talk to old devices whose SSH servers cannot be upgraded. Do not use it for
-anything else.
+Read this before using the package.
 
-It installs the module "paramiko_legacy", never "paramiko", so it sits beside
-python3-paramiko without changing it. Code opts in explicitly:
+A connection made with paramiko_insecure is roughly as private and as
+trustworthy as telnet or rsh. The algorithms it restores are broken or badly
+weakened: an attacker who can see the traffic, or sit in the middle of it, can
+be expected to read the session and to impersonate either end. The encryption
+is theatre; do not rely on it.
 
-    import paramiko_legacy as paramiko
+Therefore:
 
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.RejectPolicy())
-    client.load_host_keys("/path/to/known_hosts")
-    client.connect("old-switch.example", username="admin", password="...")
+  * Use it only on a physically secure or otherwise isolated network -- a lab
+    bench, a management VLAN with no route off it, or a direct cable.
+  * Never use it across the public internet, or over any network you would not
+    be willing to send the same commands over telnet.
+  * Assume every password and every byte typed into such a session is
+    disclosed, and that anything it reports back may have been altered.
+  * Where a device supports anything better, use python3-paramiko instead.
 
-Restored, relative to paramiko 5:
+Why it exists
+-------------
+
+Some equipment is 20 years or older, installed where replacing it is not
+possible -- remote sites, sealed enclosures, machinery whose vendor is long
+gone -- and its SSH server speaks nothing newer. The choice is not between
+this package and a secure connection; it is between this package and telnet,
+or no access at all.
+
+What is restored, relative to paramiko 5
+----------------------------------------
 
   * ssh-dss (DSA) host and user keys, including DSSKey;
   * ssh-rsa (RSA with SHA-1) signatures;
   * diffie-hellman-group1-sha1, diffie-hellman-group14-sha1 and
     diffie-hellman-group-exchange-sha1 key exchange;
-  * group-exchange moduli down to 1024 bits (5.0 requires 2048);
-  * GSSAPI authentication and key exchange (needs python3-gssapi).
+  * group-exchange moduli down to 1024 bits (paramiko 5 requires 2048).
 
 CBC ciphers (aes*-cbc, 3des-cbc) and hmac-sha1/hmac-md5 were never removed
 upstream and are available in both packages.
 
-Modern algorithms are still preferred: a legacy one is only negotiated when the
-peer offers nothing better. To pin a session to exactly what an old device
-needs, use Transport.get_security_options() or the disabled_algorithms
-argument to SSHClient.connect().
+GSSAPI/Kerberos is NOT restored. The scope here is core SSH, SFTP and SCP.
+
+Modern algorithms are still preferred: an obsolete one is only negotiated when
+the device offers nothing better. Nothing is gained by disabling the good ones.
+
+Using it
+--------
+
+The module is installed as "paramiko_insecure", never as "paramiko", so this
+package changes nothing for existing users of python3-paramiko. Import it by
+its own name, and do NOT alias it:
+
+    import paramiko_insecure                      # yes
+    import paramiko_insecure as paramiko          # NO
+
+Aliasing hides which connections are unprotected, which is the one thing a
+reader of the code most needs to see. Keep the name at every call site:
+
+    client = paramiko_insecure.SSHClient()
+    client.load_host_keys("/path/to/known_hosts")
+    client.set_missing_host_key_policy(paramiko_insecure.RejectPolicy())
+    client.connect("old-switch.example", username="admin", password="...")
+
+Passwords: an SSH key would be better, but equipment this old frequently
+supports password authentication only, so password login is left enabled.
+Assume any password used over such a connection is compromised, and do not
+reuse it anywhere else.
+
+Host keys: still check them. Verification is weak here (a DSA or SHA-1 RSA
+host key can be forged by a capable attacker), but it does detect the ordinary
+case of talking to the wrong box.
 
 RSA user keys and servers that advertise more than they accept: OpenSSH 9.2
 (Debian bookworm) sends rsa-sha2-256/512 in server-sig-algs even when its
-PubkeyAcceptedAlgorithms only allows ssh-rsa (OpenSSH 10.0 does not), and
-paramiko believes the advertisement. If RSA authentication is rejected by
-such a server, force SHA-1 signatures:
+PubkeyAcceptedAlgorithms only allows ssh-rsa, and paramiko believes the
+advertisement. If RSA authentication is rejected by such a server, force SHA-1
+signatures:
 
     client.connect(..., disabled_algorithms={
         "pubkeys": ["rsa-sha2-512", "rsa-sha2-256"]})
@@ -44,7 +84,7 @@ such a server, force SHA-1 signatures:
 Servers too old to know rsa-sha2 do not send server-sig-algs at all, and then
 ssh-rsa is chosen automatically.
 
-Loggers are named "paramiko_legacy.*", so their output can be told apart from
-the stock module's.
+Loggers are named "paramiko_insecure.*", so their output can be told apart
+from the stock module's.
 
-Source and apt repository: https://github.com/mithro/paramiko-legacy
+Source and apt repository: https://github.com/mithro/paramiko-insecure

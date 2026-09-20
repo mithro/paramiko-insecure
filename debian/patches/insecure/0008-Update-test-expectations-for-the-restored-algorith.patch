@@ -1,0 +1,50 @@
+From: Tim 'mithro' Ansell <me@mith.ro>
+Subject: Update test expectations for the restored algorithms
+
+Restore obsolete SSH support removed upstream, so that decades-old
+equipment that cannot be upgraded can still be reached. Shipped only
+in the separate paramiko_insecure module; python3-paramiko is left
+untouched.
+
+Origin: vendor
+Forwarded: not-needed
+---
+diff --git a/tests/pkey.py b/tests/pkey.py
+index 56488f5a..f0e81de4 100644
+--- a/tests/pkey.py
++++ b/tests/pkey.py
+@@ -220,15 +220,15 @@ class PKey_:
+             assert MyKey.identifiers() == ["it me"]
+ 
+         def rsa_is_all_combos_of_cert_and_sha_type(self):
++            # ssh-rsa (SHA-1) is restored here, and comes first again, as it
++            # did before upstream removed SHA-1 RSA signing.
+             assert RSAKey.identifiers() == [
++                "ssh-rsa",
++                "ssh-rsa-cert-v01@openssh.com",
+                 "rsa-sha2-256",
+                 "rsa-sha2-256-cert-v01@openssh.com",
+                 "rsa-sha2-512",
+                 "rsa-sha2-512-cert-v01@openssh.com",
+-                # Still required for identifying keys-not-algorithms! But now
+-                # they come last.
+-                "ssh-rsa",
+-                "ssh-rsa-cert-v01@openssh.com",
+             ]
+ 
+         def dss_is_protocol_name(self):
+diff --git a/tests/test_transport.py b/tests/test_transport.py
+index 28fe6436..4297fbbd 100644
+--- a/tests/test_transport.py
++++ b/tests/test_transport.py
+@@ -1246,7 +1246,9 @@ class TestExtInfo(unittest.TestCase):
+             # data stored on Transport after hearing back from a compatible
+             # server (such as ourselves in server mode)
+             assert tc.server_extensions == {
+-                "server-sig-algs": b"ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,rsa-sha2-512,rsa-sha2-256"  # noqa
++                # ssh-rsa and ssh-dss are advertised again, since they are
++                # restored in _preferred_pubkeys.
++                "server-sig-algs": b"ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,rsa-sha2-512,rsa-sha2-256,ssh-rsa,ssh-dss"  # noqa
+             }
+ 
+     def test_client_uses_server_sig_algs_for_pubkey_auth(self):

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Build python3-paramiko-legacy for one Debian suite.
+# Build python3-paramiko-insecure for one Debian suite.
 #
 # Run inside a debian:<suite> container with the repository at /w:
 #   docker run --rm -v "$PWD:/w" -w /w debian:trixie sh packaging/build.sh
@@ -53,5 +53,5 @@ fi
 dpkg-buildpackage -us -uc -b
 
 mkdir -p "$OUT"
-cp ../python3-paramiko-legacy_*.deb "$OUT/"
+cp ../python3-paramiko-insecure_*.deb "$OUT/"
 ls -lh "$OUT"

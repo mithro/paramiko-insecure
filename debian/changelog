@@ -1,3 +1,17 @@
+paramiko-insecure (5.0.0-1+insecure1) unstable; urgency=medium
+
+  * Rename everything from paramiko-legacy to paramiko-insecure: source and
+    binary packages, the module (now paramiko_insecure) and the apt
+    repository. "legacy" undersold it -- a session using these algorithms is
+    about as private as telnet. python3-paramiko-legacy is not upgraded to
+    this package, it is replaced by it; remove the old one and its apt source.
+  * Do not restore GSSAPI/Kerberos: scope is core SSH, SFTP and SCP only, so
+    there is less obsolete code to keep working.
+  * State plainly, here and in README.Debian, that this is for 20+ year old
+    equipment on isolated networks and for nothing else.
+
+ -- Tim 'mithro' Ansell <me@mith.ro>  Sun, 20 Sep 2026 17:01:07 +0930
+
 paramiko-legacy (5.0.0-1+legacy1) unstable; urgency=medium
 
   * Fork of Debian's paramiko 5.0.0-1 as paramiko-legacy, installed as the

@@ -1,9 +1,9 @@
 name: Debian package + apt repo
 
-# Builds python3-paramiko-legacy -- Debian's paramiko 5 with the legacy SSH
+# Builds python3-paramiko-insecure -- Debian's paramiko 5 with the obsolete SSH
 # algorithms upstream removed restored, installed as the separate module
-# paramiko_legacy -- for bookworm, trixie, forky and sid, tests each build against a
-# real legacy-only OpenSSH server, and publishes a signed apt repository to
+# paramiko_insecure -- for bookworm, trixie, forky and sid, tests each build against a
+# real obsolete-only OpenSSH server, and publishes a signed apt repository to
 # GitHub Pages.
 #
 # The weekly schedule rebuilds against each suite's current dependencies and
@@ -49,7 +49,7 @@ jobs:
             debian:${{ matrix.suite }} sh packaging/build.sh
 
       # Install next to stock python3-paramiko and connect to an sshd that
-      # only speaks legacy algorithms. Gates publishing.
+      # only speaks obsolete algorithms. Gates publishing.
       - name: End-to-end test in a clean debian:${{ matrix.suite }}
         run: |
           set -eux
@@ -79,9 +79,9 @@ jobs:
     with:
       suites: "bookworm trixie forky sid"
       architectures: "all"
-      origin: paramiko-legacy
-      description: "paramiko with legacy (insecure) SSH algorithms, as paramiko_legacy"
-      keyring-name: paramiko-legacy.gpg
+      origin: paramiko-insecure
+      description: "paramiko with obsolete, insecure SSH algorithms, as paramiko_insecure"
+      keyring-name: paramiko-insecure.gpg
     secrets:
       gpg-private-key: ${{ secrets.APT_GPG_PRIVATE_KEY }}
 

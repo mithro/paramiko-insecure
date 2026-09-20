@@ -1,9 +1,10 @@
 From: Tim 'mithro' Ansell <me@mith.ro>
 Subject: Revert "Fixes #973: remove DSA/DSS support"
 
-Restore legacy SSH support removed upstream, for talking to old
-devices that cannot be upgraded. Shipped only in the separate
-paramiko_legacy module; python3-paramiko is untouched.
+Restore obsolete SSH support removed upstream, so that decades-old
+equipment that cannot be upgraded can still be reached. Shipped only
+in the separate paramiko_insecure module; python3-paramiko is left
+untouched.
 
 Forward-ported by hand onto 5.0.0: DSSKey exposes a `private_key`
 property instead of its own write_private_key* methods, so it uses
@@ -15,10 +16,10 @@ Origin: vendor, reverts https://github.com/paramiko/paramiko/commit/e534b1abcfe5
 Forwarded: not-needed
 ---
 diff --git a/paramiko/__init__.py b/paramiko/__init__.py
-index 92ff86f8..6ee21556 100644
+index ada9dc1f..4cb4134b 100644
 --- a/paramiko/__init__.py
 +++ b/paramiko/__init__.py
-@@ -68,6 +68,7 @@ from paramiko.ssh_exception import (
+@@ -67,6 +67,7 @@ from paramiko.ssh_exception import (
  )
  from paramiko.server import ServerInterface, SubsystemHandler, InteractiveQuery
  from paramiko.rsakey import RSAKey
@@ -26,7 +27,7 @@ index 92ff86f8..6ee21556 100644
  from paramiko.ecdsakey import ECDSAKey
  from paramiko.ed25519key import Ed25519Key
  from paramiko.sftp import SFTPError, BaseSFTP
-@@ -113,7 +114,7 @@ from paramiko.common import io_sleep
+@@ -112,7 +113,7 @@ from paramiko.common import io_sleep
  
  
  # TODO: I guess a real plugin system might be nice for future expansion...
@@ -36,7 +37,7 @@ index 92ff86f8..6ee21556 100644
  
  __author__ = "Jeff Forcier <jeff@bitprophet.org>"
 diff --git a/paramiko/client.py b/paramiko/client.py
-index 1a5a7630..fb4c3d33 100644
+index 48ca2dfb..1160d3d7 100644
 --- a/paramiko/client.py
 +++ b/paramiko/client.py
 @@ -31,6 +31,7 @@ from errno import ECONNREFUSED, EHOSTUNREACH
@@ -47,7 +48,7 @@ index 1a5a7630..fb4c3d33 100644
  from paramiko.ecdsakey import ECDSAKey
  from paramiko.ed25519key import Ed25519Key
  from paramiko.hostkeys import HostKeys
-@@ -259,7 +260,8 @@ class SSHClient(ClosingContextManager):
+@@ -254,7 +255,8 @@ class SSHClient(ClosingContextManager):
                  this to occur - *just* the certificate.)
  
              - Any key we can find through an SSH agent
@@ -57,7 +58,7 @@ index 1a5a7630..fb4c3d33 100644
  
                - When OpenSSH-style public certificates exist that match an
                  existing such private key (so e.g. one has ``id_rsa`` and
-@@ -666,7 +668,8 @@ class SSHClient(ClosingContextManager):
+@@ -629,7 +631,8 @@ class SSHClient(ClosingContextManager):
  
              - The key(s) passed in, if one was passed in.
              - Any key we can find through an SSH agent (if allowed).
@@ -67,7 +68,7 @@ index 1a5a7630..fb4c3d33 100644
              - Plain username/password auth, if a password was given.
  
          (The password might be needed to unlock a private key [if 'passphrase'
-@@ -722,7 +725,7 @@ class SSHClient(ClosingContextManager):
+@@ -664,7 +667,7 @@ class SSHClient(ClosingContextManager):
              for key_filename in key_filenames:
                  # TODO (backwards incompat): leverage PKey.from_path() if we
                  # don't end up just killing SSHClient entirely
@@ -76,7 +77,7 @@ index 1a5a7630..fb4c3d33 100644
                      try:
                          key = self._key_from_filepath(
                              key_filename, pkey_class, passphrase
-@@ -762,6 +765,7 @@ class SSHClient(ClosingContextManager):
+@@ -704,6 +707,7 @@ class SSHClient(ClosingContextManager):
  
              for keytype, name in [
                  (RSAKey, "rsa"),
@@ -448,7 +449,7 @@ index 4600cb9d..8d2971ed 100644
  class PublicBlob:
      """
 diff --git a/paramiko/transport.py b/paramiko/transport.py
-index 2e06afa4..c3fa3ae0 100644
+index 8c551c4c..a472d1d5 100644
 --- a/paramiko/transport.py
 +++ b/paramiko/transport.py
 @@ -94,6 +94,7 @@ from paramiko.common import (
@@ -459,7 +460,7 @@ index 2e06afa4..c3fa3ae0 100644
  from paramiko.ecdsakey import ECDSAKey
  from paramiko.ed25519key import Ed25519Key
  from paramiko.kex_curve25519 import KexCurve25519
-@@ -205,6 +206,7 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -203,6 +204,7 @@ class Transport(threading.Thread, ClosingContextManager):
          "rsa-sha2-512",
          "rsa-sha2-256",
          "ssh-rsa",
@@ -467,7 +468,7 @@ index 2e06afa4..c3fa3ae0 100644
      )
      # ~= PubkeyAcceptedAlgorithms
      _preferred_pubkeys = (
-@@ -215,6 +217,7 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -213,6 +215,7 @@ class Transport(threading.Thread, ClosingContextManager):
          "rsa-sha2-512",
          "rsa-sha2-256",
          "ssh-rsa",
@@ -475,7 +476,7 @@ index 2e06afa4..c3fa3ae0 100644
      )
      _preferred_kex = (
          "ecdh-sha2-nistp256",
-@@ -317,6 +320,8 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -310,6 +313,8 @@ class Transport(threading.Thread, ClosingContextManager):
          "rsa-sha2-256-cert-v01@openssh.com": RSAKey,
          "rsa-sha2-512": RSAKey,
          "rsa-sha2-512-cert-v01@openssh.com": RSAKey,
@@ -484,7 +485,7 @@ index 2e06afa4..c3fa3ae0 100644
          "ecdsa-sha2-nistp256": ECDSAKey,
          "ecdsa-sha2-nistp256-cert-v01@openssh.com": ECDSAKey,
          "ecdsa-sha2-nistp384": ECDSAKey,
-@@ -844,10 +849,11 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -780,10 +785,11 @@ class Transport(threading.Thread, ClosingContextManager):
          as a server, the host key is used to sign certain packets during the
          SSH2 negotiation, so that the client can trust that we are who we say
          we are.  Because this is used for signing, the key must contain private
@@ -498,7 +499,7 @@ index 2e06afa4..c3fa3ae0 100644
          """
          self.server_key_dict[key.get_name()] = key
          # Handle SHA-2 extensions for RSA by ensuring that lookups into
-@@ -863,10 +869,10 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -799,10 +805,10 @@ class Transport(threading.Thread, ClosingContextManager):
          client, this method will return the negotiated host key.  If only one
          type of host key was set with `add_server_key`, that's the only key
          that will ever be returned.  But in cases where you have set more than
@@ -569,10 +570,10 @@ index 00000000..07fd5578
 @@ -0,0 +1 @@
 +ssh-dss-cert-v01@openssh.com AAAAHHNzaC1kc3MtY2VydC12MDFAb3BlbnNzaC5jb20AAAAgJA3GjLmg6JbIWxokW/c827lmPOSvSfPDIY586yICFqIAAACBAOeBpgNnfRzr/twmAQRu2XwWAp3CFtrVnug6s6fgwj/oLjYbVtjAy6pl/h0EKCWx2rf1IetyNsTxWrniA9I6HeDj65X1FyDkg6g8tvCnaNB8Xp/UUhuzHuGsMIipRxBxw9LF608EqZcj1E3ytktoW5B5OcjrkEoz3xG7C+rpIjYvAAAAFQDwz4UnmsGiSNu5iqjn3uTzwUpshwAAAIEAkxfFeY8P2wZpDjX0MimZl5wkoFQDL25cPzGBuB4OnB8NoUk/yjAHIIpEShw8V+LzouMK5CTJQo5+Ngw3qIch/WgRmMHy4kBq1SsXMjQCte1So6HBMvBPIW5SiMTmjCfZZiw4AYHK+B/JaOwaG9yRg2Ejg4Ok10+XFDxlqZo8Y+wAAACARmR7CCPjodxASvRbIyzaVpZoJ/Z6x7dAumV+ysrV1BVYd0lYukmnjO1kKBWApqpH1ve9XDQYN8zgxM4b16L21kpoWQnZtXrY3GZ4/it9kUgyB7+NwacIBlXa8cMDL7Q/69o0d54U0X/NeX5QxuYR6OMJlrkQB7oiW/P/1mwjQgEAAAAAAAAAAAAAAAEAAAAJdXNlcl90ZXN0AAAACAAAAAR0ZXN0AAAAAAAAAAD//////////wAAAAAAAACCAAAAFXBlcm1pdC1YMTEtZm9yd2FyZGluZwAAAAAAAAAXcGVybWl0LWFnZW50LWZvcndhcmRpbmcAAAAAAAAAFnBlcm1pdC1wb3J0LWZvcndhcmRpbmcAAAAAAAAACnBlcm1pdC1wdHkAAAAAAAAADnBlcm1pdC11c2VyLXJjAAAAAAAAAAAAAAEXAAAAB3NzaC1yc2EAAAADAQABAAABAQDskr46Umjxh3wo7PoPQsSVS3xt6+5PhwmXrnVtBBnkOo+zHRwQo8G8sY+Lc6oOOzA5GCSawKOwqE305GIDfB8/L9EKOkAjdN18imDjw/YuJFA4bl9yFhsXrCb1GZPJw0pJ0H0Eid9EldyMQAhGE49MWvnFMQl1TgO6YWq/g71xAFimge0LvVWijlbMy7O+nsGxSpinIprV5S9Viv8XC/ku89tadZfca1uxq751aGfAWGeYrVytpUl8UO0ggqH6BaUvkDU7rWh2n5RHUTvgzceKWnz5wqd8BngK37WmJjAgCtHCJS5ZRf6oJGj2QVcqc6cjvEFWsCuOKB4KAjktauWxAAABDwAAAAdzc2gtcnNhAAABAK6jweL231fRhFoybEGTOXJfj0lx55KpDsw9Q1rBvZhrSgwUr2dFr9HVcKe44mTC7CMtdW5VcyB67l1fnMil/D/e4zYxI0PvbW6RxLFNqvvtxBu5sGt5B7uzV4aAV31TpWR0l5RwwpZqc0NUlTx7oMutN1BDrPqW70QZ/iTEwalkn5fo1JWej0cf4BdC9VgYDLnprx0KN3IToukbszRQySnuR6MQUfj0m7lUloJfF3rq8G0kNxWqDGoJilMhO5Lqu9wAhlZWdouypI6bViO6+ToCVixLNUYs3EfS1zCxvXpiyMvh6rZofJ6WqzUuSd4Mzb2Ka4ocTKi7kynF+OG0Ivo= tests/test_dss.key.pub
 diff --git a/tests/_util.py b/tests/_util.py
-index 33a7c920..4a4bf522 100644
+index ee91deca..3079e22e 100644
 --- a/tests/_util.py
 +++ b/tests/_util.py
-@@ -20,6 +20,7 @@ from paramiko import (
+@@ -19,6 +19,7 @@ from paramiko import (
      AUTH_FAILED,
      AUTH_PARTIALLY_SUCCESSFUL,
      AUTH_SUCCESSFUL,
@@ -580,7 +581,7 @@ index 33a7c920..4a4bf522 100644
      OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED,
      OPEN_SUCCEEDED,
      Ed25519Key,
-@@ -210,7 +211,8 @@ unicodey = "\u2022"
+@@ -126,7 +127,8 @@ unicodey = "\u2022"
  class TestServer(ServerInterface):
      paranoid_did_password = False
      paranoid_did_public_key = False
@@ -591,7 +592,7 @@ index 33a7c920..4a4bf522 100644
      def __init__(self, allowed_keys=None):
          self.allowed_keys = allowed_keys if allowed_keys is not None else []
 diff --git a/tests/auth.py b/tests/auth.py
-index 18d83867..b96fbadb 100644
+index fa29f5cb..209926f4 100644
 --- a/tests/auth.py
 +++ b/tests/auth.py
 @@ -17,6 +17,7 @@ from paramiko import (
@@ -638,7 +639,7 @@ index f5873b54..20556b8d 100644
          "rsa",
          "ssh-rsa",
 diff --git a/tests/pkey.py b/tests/pkey.py
-index 0f534965..ec5966ce 100644
+index 58491fde..56488f5a 100644
 --- a/tests/pkey.py
 +++ b/tests/pkey.py
 @@ -10,6 +10,7 @@ from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
@@ -658,8 +659,8 @@ index 0f534965..ec5966ce 100644
          elif isinstance(key, ECDSAKey):
              assert key.algorithm_name == "ECDSA"
          elif isinstance(key, Ed25519Key):
-@@ -226,6 +229,9 @@ class PKey_:
-                 "rsa-sha2-512-cert-v01@openssh.com",
+@@ -228,6 +231,9 @@ class PKey_:
+                 "ssh-rsa-cert-v01@openssh.com",
              ]
  
 +        def dss_is_protocol_name(self):
@@ -669,18 +670,18 @@ index 0f534965..ec5966ce 100644
              assert Ed25519Key.identifiers() == [
                  "ssh-ed25519",
 diff --git a/tests/test_client.py b/tests/test_client.py
-index 79bae29f..c647e1c1 100644
+index 3d6e1763..6029da98 100644
 --- a/tests/test_client.py
 +++ b/tests/test_client.py
-@@ -47,6 +47,7 @@ requires_gss_auth = unittest.skipUnless(
- )
+@@ -43,6 +43,7 @@ from paramiko.ssh_exception import AuthenticationException, SSHException
+ from ._util import _support, requires_sha1_signing, slow
  
  FINGERPRINTS = {
 +    "ssh-dss": b"\x44\x78\xf0\xb9\xa2\x3c\xc5\x18\x20\x09\xff\x75\x5b\xc1\xd2\x6c",  # noqa
      "ssh-rsa": b"\x60\x73\x38\x44\xcb\x51\x86\x65\x7f\xde\xda\xa2\x2b\x5a\x57\xd5",  # noqa
      "ecdsa-sha2-nistp256": b"\x25\x19\xeb\x55\xe6\xa1\x47\xff\x4f\x38\xd2\x75\x6f\xa5\xd5\x60",  # noqa
      "ssh-ed25519": b'\xb3\xd5"\xaa\xf9u^\xe8\xcd\x0e\xea\x02\xb9)\xa2\x80',
-@@ -247,6 +248,13 @@ class SSHClientTest(ClientTest):
+@@ -248,6 +249,13 @@ class SSHClientTest(ClientTest):
          """
          self._test_connection(password="pygmalion")
  
@@ -694,7 +695,7 @@ index 79bae29f..c647e1c1 100644
      @requires_sha1_signing
      def test_client_rsa(self):
          """
-@@ -273,25 +281,16 @@ class SSHClientTest(ClientTest):
+@@ -274,25 +282,16 @@ class SSHClientTest(ClientTest):
          # This is dumb :(
          types_ = {
              "rsa": "ssh-rsa",
@@ -724,7 +725,7 @@ index 79bae29f..c647e1c1 100644
              (["rsa", "ecdsa-256"], ["ecdsa"]),  # ECDSA success
          ):
              try:
-@@ -327,7 +326,7 @@ class SSHClientTest(ClientTest):
+@@ -328,7 +327,7 @@ class SSHClientTest(ClientTest):
          # They're similar except for which path is given; the expected auth and
          # server-side behavior is 100% identical.)
          # NOTE: only bothered whipping up one cert per overall class/family.
@@ -733,7 +734,7 @@ index 79bae29f..c647e1c1 100644
              key_path = _support(f"{type_}.key")
              self._test_connection(
                  key_filename=key_path,
-@@ -342,7 +341,7 @@ class SSHClientTest(ClientTest):
+@@ -343,7 +342,7 @@ class SSHClientTest(ClientTest):
          # about the server-side key object's public blob. Thus, we can prove
          # that a specific cert was found, along with regular authorization
          # succeeding proving that the overall flow works.
@@ -742,19 +743,6 @@ index 79bae29f..c647e1c1 100644
              key_path = _support(f"{type_}.key")
              self._test_connection(
                  key_filename=key_path,
-@@ -747,10 +746,10 @@ class SSHClientTest(ClientTest):
-             "host",
-             sock=Mock(),
-             password="no",
--            disabled_algorithms={"keys": ["ssh-rsa"]},
-+            disabled_algorithms={"keys": ["ssh-dss"]},
-         )
-         call_arg = Transport.call_args[1]["disabled_algorithms"]
--        assert call_arg == {"keys": ["ssh-rsa"]}
-+        assert call_arg == {"keys": ["ssh-dss"]}
- 
-     @patch("paramiko.client.Transport")
-     def test_transport_factory_defaults_to_Transport(self, Transport):
 diff --git a/tests/test_config.py b/tests/test_config.py
 index c3003803..1e623e0a 100644
 --- a/tests/test_config.py
@@ -919,7 +907,7 @@ index 4e5dab04..a028411d 100644
      def test_delitem(self):
          hostdict = paramiko.HostKeys("hostfile.temp")
 diff --git a/tests/test_pkey.py b/tests/test_pkey.py
-index 9389a195..ca9b78e6 100644
+index 414e4e1e..14a3e875 100644
 --- a/tests/test_pkey.py
 +++ b/tests/test_pkey.py
 @@ -34,6 +34,7 @@ from cryptography.exceptions import UnsupportedAlgorithm
@@ -1118,59 +1106,6 @@ index 9389a195..ca9b78e6 100644
      def test_load_openssh_format_EC_key(self):
          key = ECDSAKey.from_private_key_file(
              _support("test_ecdsa_384_openssh.key"), b"television"
-diff --git a/tests/test_transport.py b/tests/test_transport.py
-index 8e45927f..cbe667ae 100644
---- a/tests/test_transport.py
-+++ b/tests/test_transport.py
-@@ -1110,7 +1110,7 @@ class AlgorithmDisablingTests(unittest.TestCase):
-             disabled_algorithms={
-                 "ciphers": ["aes128-cbc"],
-                 "macs": ["hmac-md5"],
--                "keys": ["ssh-rsa"],
-+                "keys": ["ssh-dss"],
-                 "kex": ["diffie-hellman-group14-sha256"],
-             },
-         )
-@@ -1118,9 +1118,9 @@ class AlgorithmDisablingTests(unittest.TestCase):
-         assert "aes128-cbc" not in t.preferred_ciphers
-         assert "hmac-md5" in t._preferred_macs
-         assert "hmac-md5" not in t.preferred_macs
--        assert "ssh-rsa" in t._preferred_keys
--        assert "ssh-rsa" not in t.preferred_keys
--        assert "ssh-rsa-cert-v01@openssh.com" not in t.preferred_keys
-+        assert "ssh-dss" in t._preferred_keys
-+        assert "ssh-dss" not in t.preferred_keys
-+        assert "ssh-dss-cert-v01@openssh.com" not in t.preferred_keys
-         assert "diffie-hellman-group14-sha256" in t._preferred_kex
-         assert "diffie-hellman-group14-sha256" not in t.preferred_kex
- 
-@@ -1130,7 +1130,7 @@ class AlgorithmDisablingTests(unittest.TestCase):
-             disabled_algorithms={
-                 "ciphers": ["aes128-cbc"],
-                 "macs": ["hmac-md5"],
--                "keys": ["ssh-rsa"],
-+                "keys": ["ssh-dss"],
-                 "kex": ["diffie-hellman-group14-sha256"],
-                 "compression": ["zlib"],
-             },
-@@ -1159,7 +1159,7 @@ class AlgorithmDisablingTests(unittest.TestCase):
-         # included (as this message includes the full lists)
-         assert "aes128-cbc" not in ciphers
-         assert "hmac-md5" not in macs
--        assert "ssh-rsa" not in server_keys
-+        assert "ssh-dss" not in server_keys
-         assert "diffie-hellman-group14-sha256" not in kexen
-         assert "zlib" not in compressions
- 
-@@ -1245,7 +1245,7 @@ class TestExtInfo(unittest.TestCase):
-             # data stored on Transport after hearing back from a compatible
-             # server (such as ourselves in server mode)
-             assert tc.server_extensions == {
--                "server-sig-algs": b"ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,rsa-sha2-512,rsa-sha2-256,ssh-rsa"  # noqa
-+                "server-sig-algs": b"ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,rsa-sha2-512,rsa-sha2-256,ssh-rsa,ssh-dss"  # noqa
-             }
- 
-     def test_client_uses_server_sig_algs_for_pubkey_auth(self):
 diff --git a/tests/test_util.py b/tests/test_util.py
 index 16b451a2..336be91f 100644
 --- a/tests/test_util.py

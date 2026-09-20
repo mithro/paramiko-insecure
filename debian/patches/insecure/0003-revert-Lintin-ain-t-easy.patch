@@ -1,15 +1,16 @@
 From: Tim 'mithro' Ansell <me@mith.ro>
 Subject: Revert "Lintin' ain't easy"
 
-Restore legacy SSH support removed upstream, for talking to old
-devices that cannot be upgraded. Shipped only in the separate
-paramiko_legacy module; python3-paramiko is untouched.
+Restore obsolete SSH support removed upstream, so that decades-old
+equipment that cannot be upgraded can still be reached. Shipped only
+in the separate paramiko_insecure module; python3-paramiko is left
+untouched.
 
 Origin: vendor, reverts https://github.com/paramiko/paramiko/commit/b8f75c7cd19d5c26220737c66498e5066af239b7
 Forwarded: not-needed
 ---
 diff --git a/paramiko/auth_handler.py b/paramiko/auth_handler.py
-index 9a4d79c4..0fb94e2d 100644
+index 5d58089a..4734f720 100644
 --- a/paramiko/auth_handler.py
 +++ b/paramiko/auth_handler.py
 @@ -20,6 +20,7 @@
@@ -21,10 +22,10 @@ index 9a4d79c4..0fb94e2d 100644
  import time
  import weakref
 diff --git a/paramiko/client.py b/paramiko/client.py
-index 7b844afb..90da5cc6 100644
+index 2eb9ce24..0380eb4a 100644
 --- a/paramiko/client.py
 +++ b/paramiko/client.py
-@@ -462,9 +462,8 @@ class SSHClient(ClosingContextManager):
+@@ -433,9 +433,8 @@ class SSHClient(ClosingContextManager):
                  elif "rsa-sha2-256" in sec_opts.key_types:
                      keytype = "rsa-sha2-256"
                  else:
@@ -36,10 +37,10 @@ index 7b844afb..90da5cc6 100644
              other_types = [x for x in sec_opts.key_types if x != keytype]
              sec_opts.key_types = [keytype] + other_types
 diff --git a/tests/_util.py b/tests/_util.py
-index 690c3475..bb678007 100644
+index c224937e..699d8708 100644
 --- a/tests/_util.py
 +++ b/tests/_util.py
-@@ -11,6 +11,10 @@ from os.path import dirname, join, realpath
+@@ -9,6 +9,10 @@ from os.path import dirname, join, realpath
  from pathlib import Path
  
  import pytest

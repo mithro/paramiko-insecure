@@ -1,9 +1,10 @@
 From: Tim 'mithro' Ansell <me@mith.ro>
 Subject: Revert "Bump group-exchange kex min_bits to 2048"
 
-Restore legacy SSH support removed upstream, for talking to old
-devices that cannot be upgraded. Shipped only in the separate
-paramiko_legacy module; python3-paramiko is untouched.
+Restore obsolete SSH support removed upstream, so that decades-old
+equipment that cannot be upgraded can still be reached. Shipped only
+in the separate paramiko_insecure module; python3-paramiko is left
+untouched.
 
 The upstream changelog hunk is dropped; 5.0.0's changelog is kept.
 

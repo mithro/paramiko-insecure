@@ -1,4 +1,4 @@
-Source: paramiko-legacy
+Source: paramiko-insecure
 Section: python
 Maintainer: Tim 'mithro' Ansell <me@mith.ro>
 Build-Depends: debhelper-compat (= 13),
@@ -16,32 +16,41 @@ Build-Depends: debhelper-compat (= 13),
                python3-pytest-relaxed <!nocheck>,
                python3-setuptools,
 Standards-Version: 4.7.4
-Homepage: https://github.com/mithro/paramiko-legacy
-Vcs-Git: https://github.com/mithro/paramiko-legacy.git
-Vcs-Browser: https://github.com/mithro/paramiko-legacy
+Homepage: https://github.com/mithro/paramiko-insecure
+Vcs-Git: https://github.com/mithro/paramiko-insecure.git
+Vcs-Browser: https://github.com/mithro/paramiko-insecure
 Testsuite: autopkgtest-pkg-pybuild
 
-Package: python3-paramiko-legacy
+Package: python3-paramiko-insecure
 Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
 Recommends: python3-invoke,
-Suggests: python3-gssapi (>= 0.6.1),
-Description: SSH2 for Python with legacy, INSECURE algorithms (paramiko_legacy)
- Paramiko 5 with the legacy SSH support that upstream removed in 4.0 and 5.0
- restored, for talking to old devices (switches, BMCs, embedded systems)
- whose SSH servers cannot be upgraded:
+Description: SSH2 for Python with BROKEN obsolete algorithms (paramiko_insecure)
+ Treat a connection made with this module as no more private or trustworthy
+ than telnet. Use it only on a physically secure or otherwise isolated
+ network, and never across the public internet.
+ .
+ It is paramiko 5 with the obsolete SSH support that upstream removed in 4.0
+ and 5.0 deliberately put back:
  .
   * DSA ("ssh-dss") host and user keys;
   * SHA-1 RSA signatures ("ssh-rsa");
   * SHA-1 key exchange: diffie-hellman-group1-sha1, diffie-hellman-group14-sha1
     and diffie-hellman-group-exchange-sha1, with 1024-bit group-exchange
-    moduli;
-  * GSSAPI authentication and key exchange.
+    moduli.
  .
- These algorithms are broken or badly weakened. Modern algorithms are still
- preferred whenever the peer offers them.
+ Each of these is broken or so weakened that a capable attacker on the network
+ path can be expected to read or alter the session. They were removed from
+ OpenSSH and paramiko for good reason.
  .
- The module is installed as "paramiko_legacy", so this package can be
- installed alongside python3-paramiko without affecting it: only code that
- explicitly does "import paramiko_legacy" gets the legacy algorithms.
+ This package exists for one reason: hardware that is 20 years old or more,
+ installed where replacing it is impossible, whose SSH server speaks nothing
+ else. Where a device supports anything better, use python3-paramiko instead.
+ .
+ Scope is deliberately small: SSH sessions, SFTP and SCP. GSSAPI/Kerberos is
+ removed entirely rather than restored.
+ .
+ The module is installed as "paramiko_insecure", so this package can be
+ installed alongside python3-paramiko without affecting it. Code must opt in
+ by name, with "import paramiko_insecure" -- never aliased to "paramiko".

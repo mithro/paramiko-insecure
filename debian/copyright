@@ -48,7 +48,7 @@ Copyright: 2019-2022 Sandro Tosi <morph@debian.org>
            2026 Tim 'mithro' Ansell <me@mith.ro>
 License: LGPL-2.1
 
-Files: debian/legacy/* packaging/* .github/* README.md
+Files: debian/insecure/* packaging/* .github/* README.md
 Copyright: 2026 Tim 'mithro' Ansell <me@mith.ro>
 License: Apache-2.0
  Licensed under the Apache License, Version 2.0 (the "License"); you may not

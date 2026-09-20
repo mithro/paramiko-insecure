@@ -1,18 +1,19 @@
 From: Tim 'mithro' Ansell <me@mith.ro>
 Subject: Revert "Streamline RSA pubkey algorithm handling now that SHA1 is gone"
 
-Restore legacy SSH support removed upstream, for talking to old
-devices that cannot be upgraded. Shipped only in the separate
-paramiko_legacy module; python3-paramiko is untouched.
+Restore obsolete SSH support removed upstream, so that decades-old
+equipment that cannot be upgraded can still be reached. Shipped only
+in the separate paramiko_insecure module; python3-paramiko is left
+untouched.
 
 Origin: vendor, reverts https://github.com/paramiko/paramiko/commit/6f02c1e3a4a453fba13d40fc7e2cec9c321cdcfc
 Forwarded: not-needed
 ---
 diff --git a/paramiko/auth_handler.py b/paramiko/auth_handler.py
-index 0fb94e2d..b927a2a2 100644
+index 4734f720..1ffca3d3 100644
 --- a/paramiko/auth_handler.py
 +++ b/paramiko/auth_handler.py
-@@ -293,15 +293,21 @@ class AuthHandler:
+@@ -258,15 +258,21 @@ class AuthHandler:
              return None
          return self.transport._key_info[algorithm](Message(keyblob))
  
@@ -42,7 +43,7 @@ index 0fb94e2d..b927a2a2 100644
          # Short-circuit for non-RSA keys
          if "rsa" not in key_type:
              return key_type
-@@ -311,6 +317,22 @@ class AuthHandler:
+@@ -276,6 +282,22 @@ class AuthHandler:
                  key_type
              ),
          )
@@ -65,7 +66,7 @@ index 0fb94e2d..b927a2a2 100644
          # Normal attempts to handshake follow from here.
          # Only consider RSA algos from our list, lest we agree on another!
          my_algos = [x for x in self.transport.preferred_pubkeys if "rsa" in x]
-@@ -347,14 +369,11 @@ class AuthHandler:
+@@ -312,14 +334,11 @@ class AuthHandler:
                  # technically for initial key exchange, not pubkey auth.
                  err = "Unable to agree on a pubkey algorithm for signing a {!r} key!"  # noqa
                  raise AuthenticationException(err.format(key_type))
@@ -84,7 +85,7 @@ index 0fb94e2d..b927a2a2 100644
          if key_type.endswith("-cert-v01@openssh.com"):
              pubkey_algo += "-cert-v01@openssh.com"
          self.transport._agreed_pubkey_algorithm = pubkey_algo
-@@ -1017,8 +1036,6 @@ class AuthOnlyHandler(AuthHandler):
+@@ -712,8 +731,6 @@ class AuthOnlyHandler(AuthHandler):
          return self.send_auth_request(username, "none")
  
      def auth_publickey(self, username, key):

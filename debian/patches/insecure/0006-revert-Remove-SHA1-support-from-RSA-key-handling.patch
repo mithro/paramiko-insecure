@@ -1,9 +1,10 @@
 From: Tim 'mithro' Ansell <me@mith.ro>
 Subject: Revert "Remove SHA1 support from RSA key handling"
 
-Restore legacy SSH support removed upstream, for talking to old
-devices that cannot be upgraded. Shipped only in the separate
-paramiko_legacy module; python3-paramiko is untouched.
+Restore obsolete SSH support removed upstream, so that decades-old
+equipment that cannot be upgraded can still be reached. Shipped only
+in the separate paramiko_insecure module; python3-paramiko is left
+untouched.
 
 The upstream changelog hunk is dropped; 5.0.0's changelog is kept.
 
@@ -11,10 +12,10 @@ Origin: vendor, reverts https://github.com/paramiko/paramiko/commit/a4489456b6f6
 Forwarded: not-needed
 ---
 diff --git a/paramiko/auth_handler.py b/paramiko/auth_handler.py
-index f088912f..b1120581 100644
+index 686c61b1..41f15edd 100644
 --- a/paramiko/auth_handler.py
 +++ b/paramiko/auth_handler.py
-@@ -614,13 +614,7 @@ Error Message: {}
+@@ -486,13 +486,7 @@ class AuthHandler:
              # NOTE: server never wants to guess a client's algo, they're
              # telling us directly. No need for _finalize_pubkey_algorithm
              # anywhere in this flow.
@@ -29,10 +30,10 @@ index f088912f..b1120581 100644
              try:
                  key = self._generate_key_from_request(algorithm, keyblob)
 diff --git a/paramiko/client.py b/paramiko/client.py
-index 90da5cc6..1a5a7630 100644
+index 0380eb4a..48ca2dfb 100644
 --- a/paramiko/client.py
 +++ b/paramiko/client.py
-@@ -439,32 +439,10 @@ class SSHClient(ClosingContextManager):
+@@ -410,32 +410,10 @@ class SSHClient(ClosingContextManager):
  
          our_server_keys = self._system_host_keys.get(server_hostkey_name)
          if our_server_keys is None:
@@ -65,17 +66,6 @@ index 90da5cc6..1a5a7630 100644
              other_types = [x for x in sec_opts.key_types if x != keytype]
              sec_opts.key_types = [keytype] + other_types
  
-@@ -481,10 +459,6 @@ class SSHClient(ClosingContextManager):
-                     self, server_hostkey_name, server_key
-                 )
-             else:
--                # TODO: this should 'just work' but dblcheck (HostKeys will be
--                # offering an ssh-rsa-via-sha2 key as "ssh-rsa" still, and the
--                # key would be RSAKey whose .get_name would still say
--                # "ssh-rsa")
-                 our_key = our_server_keys.get(server_key.get_name())
-                 if our_key != server_key:
-                     if our_key is None:
 diff --git a/paramiko/config.py b/paramiko/config.py
 index 0fe2b348..af4ccc58 100644
 --- a/paramiko/config.py
@@ -151,10 +141,10 @@ index dff7d908..9575e62b 100644
                  algname = x
                  alg = _hash_class[x]
 diff --git a/paramiko/transport.py b/paramiko/transport.py
-index 9e9acf4e..2e06afa4 100644
+index 4c5d04fe..8c551c4c 100644
 --- a/paramiko/transport.py
 +++ b/paramiko/transport.py
-@@ -204,6 +204,7 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -202,6 +202,7 @@ class Transport(threading.Thread, ClosingContextManager):
          "ecdsa-sha2-nistp521",
          "rsa-sha2-512",
          "rsa-sha2-256",
@@ -162,7 +152,7 @@ index 9e9acf4e..2e06afa4 100644
      )
      # ~= PubkeyAcceptedAlgorithms
      _preferred_pubkeys = (
-@@ -213,6 +214,7 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -211,6 +212,7 @@ class Transport(threading.Thread, ClosingContextManager):
          "ecdsa-sha2-nistp521",
          "rsa-sha2-512",
          "rsa-sha2-256",
@@ -170,7 +160,7 @@ index 9e9acf4e..2e06afa4 100644
      )
      _preferred_kex = (
          "ecdh-sha2-nistp256",
-@@ -305,18 +307,12 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -298,18 +300,12 @@ class Transport(threading.Thread, ClosingContextManager):
      }
  
      _key_info = {
@@ -195,7 +185,7 @@ index 9e9acf4e..2e06afa4 100644
          "rsa-sha2-256": RSAKey,
          "rsa-sha2-256-cert-v01@openssh.com": RSAKey,
          "rsa-sha2-512": RSAKey,
-@@ -1400,13 +1396,11 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -1316,13 +1312,11 @@ class Transport(threading.Thread, ClosingContextManager):
              # TODO: a more robust implementation would be to ask each key class
              # for its nameS plural, and just use that.
              # TODO: that could be used in a bunch of other spots too
@@ -210,7 +200,7 @@ index 9e9acf4e..2e06afa4 100644
                  ]
              else:
                  self._preferred_keys = [hostkey.get_name()]
-@@ -2008,8 +2002,6 @@ class Transport(threading.Thread, ClosingContextManager):
+@@ -1857,8 +1851,6 @@ class Transport(threading.Thread, ClosingContextManager):
          key: PKey = self._key_info[self.host_key_type](Message(host_key))
          if key is None:
              raise SSHException("Unknown host key type")
@@ -219,7 +209,7 @@ index 9e9acf4e..2e06afa4 100644
          if not key.verify_ssh_sig(self.H, Message(sig)):
              raise SSHException(
                  "Signature verification ({}) failed.".format(
-@@ -3240,14 +3232,6 @@ class SecurityOptions:
+@@ -3088,14 +3080,6 @@ class SecurityOptions:
  
      @key_types.setter
      def key_types(self, x):
@@ -235,10 +225,18 @@ index 9e9acf4e..2e06afa4 100644
  
      @property
 diff --git a/tests/_util.py b/tests/_util.py
-index bb678007..33a7c920 100644
+index 699d8708..ee91deca 100644
 --- a/tests/_util.py
 +++ b/tests/_util.py
-@@ -167,9 +167,42 @@ def is_low_entropy():
+@@ -4,6 +4,7 @@ import socket
+ import struct
+ import threading
+ import time
++import unittest
+ from contextlib import contextmanager
+ from os.path import dirname, join, realpath
+ from pathlib import Path
+@@ -82,9 +83,42 @@ def is_low_entropy():
      return is_32bit and os.environ.get("PYTHONHASHSEED", None) == "0"
  
  
@@ -285,7 +283,7 @@ index bb678007..33a7c920 100644
  unicodey = "\u2022"
  
 diff --git a/tests/auth.py b/tests/auth.py
-index 14a57f1f..18d83867 100644
+index 7fc9f88e..fa29f5cb 100644
 --- a/tests/auth.py
 +++ b/tests/auth.py
 @@ -31,7 +31,11 @@ from paramiko import (
@@ -428,19 +426,15 @@ index 14a57f1f..18d83867 100644
          privkey = RSAKey.from_private_key_file(_support("rsa.key"))
          # Server pretending to be an apparently common setup:
 diff --git a/tests/test_client.py b/tests/test_client.py
-index 813a232d..79bae29f 100644
+index df66f7da..3d6e1763 100644
 --- a/tests/test_client.py
 +++ b/tests/test_client.py
-@@ -40,15 +40,13 @@ from paramiko import SSHClient
+@@ -40,11 +40,9 @@ from paramiko import SSHClient
  from paramiko.pkey import PublicBlob
  from paramiko.ssh_exception import AuthenticationException, SSHException
  
 -from ._util import _support, slow
 +from ._util import _support, requires_sha1_signing, slow
- 
- requires_gss_auth = unittest.skipUnless(
-     paramiko.GSS_AUTH_AVAILABLE, "GSS auth not available"
- )
  
  FINGERPRINTS = {
 -    # TODO: this should still be ok as it's specifically re: key
@@ -448,22 +442,7 @@ index 813a232d..79bae29f 100644
      "ssh-rsa": b"\x60\x73\x38\x44\xcb\x51\x86\x65\x7f\xde\xda\xa2\x2b\x5a\x57\xd5",  # noqa
      "ecdsa-sha2-nistp256": b"\x25\x19\xeb\x55\xe6\xa1\x47\xff\x4f\x38\xd2\x75\x6f\xa5\xd5\x60",  # noqa
      "ssh-ed25519": b'\xb3\xd5"\xaa\xf9u^\xe8\xcd\x0e\xea\x02\xb9)\xa2\x80',
-@@ -200,13 +198,7 @@ class ClientTest(unittest.TestCase):
-         self.tc = SSHClient()
-         # Pretend we have a known_hosts file or similar
-         self.tc.get_host_keys().add(
--            f"[{self.addr}]:{self.port}",
--            # TODO: so, this is 'keytype', which is still allowed to be
--            # ssh-rsa, as it "comes from the key itself" per `man sshd`.
--            # TODO: but q is, is part of our pipeline still conflating keytype
--            # with signature algorithm? seems likely?
--            "ssh-rsa",
--            public_host_key,
-+            f"[{self.addr}]:{self.port}", "ssh-rsa", public_host_key
-         )
- 
-         # Actual connection
-@@ -248,34 +240,38 @@ class ClientTest(unittest.TestCase):
+@@ -243,34 +241,38 @@ class ClientTest(unittest.TestCase):
  
  
  class SSHClientTest(ClientTest):
@@ -503,7 +482,7 @@ index 813a232d..79bae29f 100644
              "rsa": "ssh-rsa",
              "ed25519": "ssh-ed25519",
              "ecdsa": "ecdsa-sha2-nistp256",
-@@ -311,6 +307,7 @@ class SSHClientTest(ClientTest):
+@@ -306,6 +308,7 @@ class SSHClientTest(ClientTest):
                  self.tearDown()
                  self.setUp()
  
@@ -511,7 +490,7 @@ index 813a232d..79bae29f 100644
      def test_multiple_key_files_failure(self):
          """
          Expect failure when multiple keys in play and none are accepted
-@@ -324,6 +321,7 @@ class SSHClientTest(ClientTest):
+@@ -319,6 +322,7 @@ class SSHClientTest(ClientTest):
              allowed_keys=["ecdsa-sha2-nistp256"],
          )
  
@@ -519,7 +498,7 @@ index 813a232d..79bae29f 100644
      def test_certs_allowed_as_key_filename_values(self):
          # NOTE: giving cert path here, not key path. (Key path test is below.
          # They're similar except for which path is given; the expected auth and
-@@ -336,6 +334,7 @@ class SSHClientTest(ClientTest):
+@@ -331,6 +335,7 @@ class SSHClientTest(ClientTest):
                  public_blob=PublicBlob.from_file(f"{key_path}-cert.pub"),
              )
  
@@ -527,7 +506,7 @@ index 813a232d..79bae29f 100644
      def test_certs_implicitly_loaded_alongside_key_filename_keys(self):
          # NOTE: a regular test_connection() w/ rsa.key would incidentally
          # test this (because test_xxx.key-cert.pub exists) but incidental tests
-@@ -350,6 +349,29 @@ class SSHClientTest(ClientTest):
+@@ -345,6 +350,29 @@ class SSHClientTest(ClientTest):
                  public_blob=PublicBlob.from_file(f"{key_path}-cert.pub"),
              )
  
@@ -557,7 +536,7 @@ index 813a232d..79bae29f 100644
      def test_default_key_locations_trigger_cert_loads_if_found(self):
          # TODO: what it says on the tin: ~/.ssh/id_rsa tries to load
          # ~/.ssh/id_rsa-cert.pub. Right now no other tests actually test that
-@@ -395,8 +417,6 @@ class SSHClientTest(ClientTest):
+@@ -390,8 +418,6 @@ class SSHClientTest(ClientTest):
  
          host_id = f"[{self.addr}]:{self.port}"
  
@@ -566,7 +545,7 @@ index 813a232d..79bae29f 100644
          client.get_host_keys().add(host_id, "ssh-rsa", public_host_key)
          assert len(client.get_host_keys()) == 1
          assert public_host_key == client.get_host_keys()[host_id]["ssh-rsa"]
-@@ -493,15 +513,13 @@ class SSHClientTest(ClientTest):
+@@ -488,15 +514,13 @@ class SSHClientTest(ClientTest):
  
          self.tc = SSHClient()
          self.tc.get_host_keys().add(
@@ -584,7 +563,7 @@ index 813a232d..79bae29f 100644
      def test_auth_trickledown(self):
          """
          Failed key auth doesn't prevent subsequent pw auth from succeeding
-@@ -522,6 +540,7 @@ class SSHClientTest(ClientTest):
+@@ -517,6 +541,7 @@ class SSHClientTest(ClientTest):
          )
          self._test_connection(**kwargs)
  
@@ -592,7 +571,7 @@ index 813a232d..79bae29f 100644
      @slow
      def test_auth_timeout(self):
          """
-@@ -648,14 +667,15 @@ class SSHClientTest(ClientTest):
+@@ -606,14 +631,15 @@ class SSHClientTest(ClientTest):
          host_key = paramiko.ECDSAKey.generate()
          self._client_host_key_bad(host_key)
  
@@ -609,20 +588,7 @@ index 813a232d..79bae29f 100644
      def test_host_key_negotiation_4(self):
          self._client_host_key_good(paramiko.RSAKey, "rsa.key")
  
-@@ -727,10 +747,10 @@ class SSHClientTest(ClientTest):
-             "host",
-             sock=Mock(),
-             password="no",
--            disabled_algorithms={"keys": ["ed25519"]},
-+            disabled_algorithms={"keys": ["ssh-rsa"]},
-         )
-         call_arg = Transport.call_args[1]["disabled_algorithms"]
--        assert call_arg == {"keys": ["ed25519"]}
-+        assert call_arg == {"keys": ["ssh-rsa"]}
- 
-     @patch("paramiko.client.Transport")
-     def test_transport_factory_defaults_to_Transport(self, Transport):
-@@ -773,6 +793,7 @@ class PasswordPassphraseTests(ClientTest):
+@@ -704,6 +730,7 @@ class PasswordPassphraseTests(ClientTest):
      # instead of suffering a real connection cycle.
      # TODO: in that case, move the below to be part of an integration suite?
  
@@ -630,7 +596,7 @@ index 813a232d..79bae29f 100644
      def test_password_kwarg_works_for_password_auth(self):
          # Straightforward / duplicate of earlier basic password test.
          self._test_connection(password="pygmalion")
-@@ -780,10 +801,12 @@ class PasswordPassphraseTests(ClientTest):
+@@ -711,10 +738,12 @@ class PasswordPassphraseTests(ClientTest):
      # TODO: more granular exception pending #387; should be signaling "no auth
      # methods available" because no key and no password
      @raises(SSHException)
@@ -643,7 +609,7 @@ index 813a232d..79bae29f 100644
      def test_passphrase_kwarg_used_for_key_passphrase(self):
          # Straightforward again, with new passphrase kwarg.
          self._test_connection(
-@@ -791,6 +814,7 @@ class PasswordPassphraseTests(ClientTest):
+@@ -722,6 +751,7 @@ class PasswordPassphraseTests(ClientTest):
              passphrase="television",
          )
  
@@ -651,7 +617,7 @@ index 813a232d..79bae29f 100644
      def test_password_kwarg_used_for_passphrase_when_no_passphrase_kwarg_given(
          self,
      ):  # noqa
-@@ -801,6 +825,7 @@ class PasswordPassphraseTests(ClientTest):
+@@ -732,6 +762,7 @@ class PasswordPassphraseTests(ClientTest):
          )
  
      @raises(AuthenticationException)  # TODO: more granular
@@ -660,7 +626,7 @@ index 813a232d..79bae29f 100644
          self,
      ):
 diff --git a/tests/test_pkey.py b/tests/test_pkey.py
-index aad514bd..9389a195 100644
+index 0b009d27..414e4e1e 100644
 --- a/tests/test_pkey.py
 +++ b/tests/test_pkey.py
 @@ -44,7 +44,7 @@ from paramiko import (
@@ -690,10 +656,10 @@ index aad514bd..9389a195 100644
      def test_generate_rsa(self):
 -        # TODO: this probs needs to be larger number now
          key = RSAKey.generate(1024)
-         msg = key.sign_ssh_data(b"jerri blank")
+         msg = key.sign_ssh_data(b"jerri blank", algorithm="rsa-sha2-256")
          msg.rewind()
 diff --git a/tests/test_transport.py b/tests/test_transport.py
-index 7db2aaa6..8e45927f 100644
+index 9b56bc0e..28fe6436 100644
 --- a/tests/test_transport.py
 +++ b/tests/test_transport.py
 @@ -69,8 +69,11 @@ from ._util import (
@@ -708,7 +674,7 @@ index 7db2aaa6..8e45927f 100644
      server,
      slow,
  )
-@@ -1169,6 +1172,14 @@ class TestSHA2SignatureKeyExchange(unittest.TestCase):
+@@ -1170,6 +1173,14 @@ class TestSHA2SignatureKeyExchange(unittest.TestCase):
      # are new tests in test_pkey.py which use known signature blobs to prove
      # the SHA2 family was in fact used!
  
@@ -723,28 +689,20 @@ index 7db2aaa6..8e45927f 100644
      def test_kex_with_sha2_512(self):
          # It's the default!
          with server() as (tc, _):
-@@ -1200,16 +1211,15 @@ class TestSHA2SignatureKeyExchange(unittest.TestCase):
+@@ -1201,6 +1212,16 @@ class TestSHA2SignatureKeyExchange(unittest.TestCase):
              else:
                  raise err
  
--    # TODO: update these couple the same way we did under test_client...
--    # def test_client_sha2_disabled_server_sha1_disabled_no_match(self):
--    #    self._incompatible_peers(
--    #        client_init=_disable_sha2, server_init=_disable_sha1
--    #    )
 +    def test_client_sha2_disabled_server_sha1_disabled_no_match(self):
 +        self._incompatible_peers(
 +            client_init=_disable_sha2, server_init=_disable_sha1
 +        )
- 
--    # def test_client_sha1_disabled_server_sha2_disabled_no_match(self):
--    #    self._incompatible_peers(
--    #        client_init=_disable_sha1, server_init=_disable_sha2
--    #    )
++
 +    def test_client_sha1_disabled_server_sha2_disabled_no_match(self):
 +        self._incompatible_peers(
 +            client_init=_disable_sha1, server_init=_disable_sha2
 +        )
- 
++
      def test_explicit_client_hostkey_not_limited(self):
          # Be very explicit about the hostkey on BOTH ends,
+         # and ensure it still ends up choosing sha2-512.

@@ -1,14 +1,14 @@
 #!/usr/bin/python3
-"""End-to-end test of the installed python3-paramiko-legacy package.
+"""End-to-end test of the installed python3-paramiko-insecure package.
 
 Runs as root inside a clean debian:<suite> container that has installed
-python3-paramiko-legacy, python3-paramiko and openssh-server. It checks:
+python3-paramiko-insecure, python3-paramiko and openssh-server. It checks:
 
-1. Side by side: both modules import, importing paramiko_legacy loads nothing
+1. Side by side: both modules import, importing paramiko_insecure loads nothing
    from the stock paramiko, and the two packages share no files.
-2. Interop: a real OpenSSH sshd restricted to ONLY legacy algorithms. Each
+2. Interop: a real OpenSSH sshd restricted to ONLY obsolete algorithms. Each
    scenario must be refused by stock paramiko (proving the server really is
-   legacy-only, so a pass is not vacuous) and accepted by paramiko_legacy,
+   obsolete-only, so a pass is not vacuous) and accepted by paramiko_insecure,
    which then runs a command over the connection.
 """
 
@@ -29,29 +29,29 @@ def run(*cmd, **kw):
 
 def check_side_by_side():
     out = run(sys.executable, "-c", (
-        "import sys, paramiko_legacy;"
+        "import sys, paramiko_insecure;"
         "bad = [m for m in sys.modules"
         " if m == 'paramiko' or m.startswith('paramiko.')];"
         "assert not bad, bad;"
-        "print(paramiko_legacy.__file__, paramiko_legacy.__version__)"
+        "print(paramiko_insecure.__file__, paramiko_insecure.__version__)"
     )).stdout.strip()
-    print(f"paramiko_legacy alone: {out}")
+    print(f"paramiko_insecure alone: {out}")
 
     import paramiko
-    import paramiko_legacy
+    import paramiko_insecure
     assert Path(paramiko.__file__).parent.name == "paramiko"
-    assert Path(paramiko_legacy.__file__).parent.name == "paramiko_legacy"
-    assert hasattr(paramiko_legacy, "DSSKey")
-    print(f"stock paramiko {paramiko.__version__} and paramiko_legacy "
-          f"{paramiko_legacy.__version__} import together")
+    assert Path(paramiko_insecure.__file__).parent.name == "paramiko_insecure"
+    assert hasattr(paramiko_insecure, "DSSKey")
+    print(f"stock paramiko {paramiko.__version__} and paramiko_insecure "
+          f"{paramiko_insecure.__version__} import together")
 
     def files(pkg):
         listed = run("dpkg", "-L", pkg).stdout.splitlines()
         return {f for f in listed if not os.path.isdir(f)}
 
-    shared = files("python3-paramiko") & files("python3-paramiko-legacy")
+    shared = files("python3-paramiko") & files("python3-paramiko-insecure")
     assert not shared, f"packages share files: {sorted(shared)}"
-    print("python3-paramiko and python3-paramiko-legacy share no files")
+    print("python3-paramiko and python3-paramiko-insecure share no files")
 
 
 def sshd_supports(kind, name):
@@ -136,7 +136,7 @@ def attempt(module_name, sshd, user_key, key_class, disabled=None):
     # cannot even represent a DSA key, and that counts as refusing.
     try:
         pkey = getattr(mod, key_class).from_private_key_file(str(user_key))
-        # Pin the host key exactly: this checks the legacy host-key algorithm
+        # Pin the host key exactly: this checks the obsolete host-key algorithm
         # really verified, rather than trusting whatever was offered.
         host_pub = sshd.host_key.with_suffix(".pub").read_text().split()
         host_class = {"ssh-rsa": "RSAKey", "ssh-dss": "DSSKey"}[host_pub[0]]
@@ -152,7 +152,7 @@ def attempt(module_name, sshd, user_key, key_class, disabled=None):
             disabled_algorithms=disabled,
         )
         t = client.get_transport()
-        _, out, _ = client.exec_command("echo legacy-ok")
+        _, out, _ = client.exec_command("echo insecure-ok")
         result = out.read().decode().strip()
         kex = [m.split(": ", 1)[1] for m in seen if m.startswith("Kex: ")]
         auth = [m.split("'")[1] for m in seen
@@ -163,7 +163,7 @@ def attempt(module_name, sshd, user_key, key_class, disabled=None):
                   # for any other key the algorithm is the key's own type.
                   f"userauth={auth[-1] if auth else pkey.get_name()} "
                   f"cipher={t.local_cipher} mac={t.local_mac} -> {result!r}")
-        return result == "legacy-ok", detail
+        return result == "insecure-ok", detail
     except Exception as e:  # stock paramiko is *expected* to fail here
         return False, f"{type(e).__name__}: {e}"
     finally:
@@ -178,8 +178,8 @@ def _b64(s):
 
 SCENARIOS = [
     # name, host key type, user key type, key class, sshd options.
-    # The sshd options allow exactly one legacy algorithm of each kind; the
-    # negative control disables that same algorithm in paramiko_legacy.
+    # The sshd options allow exactly one obsolete algorithm of each kind; the
+    # negative control disables that same algorithm in paramiko_insecure.
     ("group1-sha1 kex + ssh-rsa (SHA-1) host key and user auth",
      "rsa", "rsa", "RSAKey", [
          "KexAlgorithms diffie-hellman-group1-sha1",
@@ -218,7 +218,7 @@ DISABLE_KEYS = {
 }
 
 
-def legacy_only(options):
+def obsolete_only(options):
     """disabled_algorithms turning off exactly what the sshd requires."""
     disabled = {}
     for opt in options:
@@ -230,7 +230,7 @@ def legacy_only(options):
 # OpenSSH 7.2-9.x advertises rsa-sha2-* in server-sig-algs even when
 # PubkeyAcceptedAlgorithms refuses them, and paramiko (like upstream 3.x)
 # trusts the advertisement. Servers too old to know rsa-sha2 send no
-# server-sig-algs, and then paramiko_legacy picks ssh-rsa by itself. So, as a
+# server-sig-algs, and then paramiko_insecure picks ssh-rsa by itself. So, as a
 # user must for such a server, turn rsa-sha2 off for RSA user auth.
 RSA_SHA1_ONLY = {"pubkeys": ["rsa-sha2-512", "rsa-sha2-256"]}
 
@@ -266,32 +266,32 @@ def check_interop():
             sshd.authorize(user_key.with_suffix(".pub"))
             with sshd:
                 control_ok, control = attempt(
-                    "paramiko_legacy", sshd, user_key, key_class,
-                    disabled=legacy_only(options))
+                    "paramiko_insecure", sshd, user_key, key_class,
+                    disabled=obsolete_only(options))
                 stock_ok, stock = attempt("paramiko", sshd, user_key,
                                           key_class,
                                           client_options(key_class))
-                legacy_ok, legacy = attempt("paramiko_legacy", sshd,
+                insecure_ok, insecure = attempt("paramiko_insecure", sshd,
                                             user_key, key_class,
                                             client_options(key_class))
             print(f"\n== {name}")
-            print(f"   paramiko_legacy, legacy algorithms disabled: {control}")
+            print(f"   paramiko_insecure, obsolete algorithms disabled: {control}")
             print(f"   stock paramiko: {stock}")
-            print(f"   paramiko_legacy: {legacy}")
-            # Negative control: without its legacy algorithms paramiko_legacy
-            # must be refused, else the server is not legacy-only and the
+            print(f"   paramiko_insecure: {insecure}")
+            # Negative control: without its obsolete algorithms paramiko_insecure
+            # must be refused, else the server is not obsolete-only and the
             # positive result below would prove nothing.
             if control_ok:
-                failures.append(f"{name}: connected with the legacy "
+                failures.append(f"{name}: connected with the obsolete "
                                 "algorithms disabled; test is vacuous")
-            # Paramiko 5 removed every legacy algorithm used here (4.0 already
+            # Paramiko 5 removed every obsolete algorithm used here (4.0 already
             # removed DSA). Older stock versions (bookworm 2.12, trixie 3.5)
             # still have them, so for those this is informational only.
             if stock_ok and stock_major() >= 5:
                 failures.append(f"{name}: stock paramiko "
                                 f"{stock_major()}.x connected?!")
-            if not legacy_ok:
-                failures.append(f"{name}: paramiko_legacy failed: {legacy}")
+            if not insecure_ok:
+                failures.append(f"{name}: paramiko_insecure failed: {insecure}")
                 print((sshd.dir / "sshd.log").read_text())
     if ran == 0:
         failures.append("no scenario could run on this sshd")

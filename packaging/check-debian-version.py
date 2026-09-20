@@ -3,11 +3,11 @@
 
 The fork's base is the newest `paramiko (<version>)` entry in
 debian/changelog (entries above it are this fork's own, under the
-paramiko-legacy source name). Debian's current version comes from
+paramiko-insecure source name). Debian's current version comes from
 sources.debian.org for the given suite (default: sid).
 
 Exit status 1 means "rebase the fork": merge Debian's new packaging and
-refresh debian/patches/legacy/ (see README.md).
+refresh debian/patches/insecure/ (see README.md).
 """
 
 import json
