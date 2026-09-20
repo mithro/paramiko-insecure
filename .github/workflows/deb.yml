@@ -57,6 +57,13 @@ jobs:
             -v "$GITHUB_WORKSPACE:/w" -w /w \
             debian:${{ matrix.suite }} sh packaging/e2e.sh
 
+      # Against SSH servers of the era this package exists for: OpenSSH
+      # 4.3p2 and Dropbear 0.48 from Debian etch (2007), and an OpenSSH
+      # 9.8p1 built like the insecure-ssh-keyscan tool. Also gates
+      # publishing.
+      - name: Interop with 2007-era SSH servers
+        run: python3 packaging/interop/run.py --suite ${{ matrix.suite }}
+
       # The package is Architecture: all; the artifact name still carries
       # "all" because the shared publish workflow regroups on
       # debs-<suite>-<arch>.

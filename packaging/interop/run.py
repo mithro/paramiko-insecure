@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+"""Run paramiko_insecure against real SSH servers of the era it exists for.
+
+Modern sshd cannot be configured back to what twenty-year-old equipment
+speaks, so this starts genuinely old servers in containers and drives them
+from a client container that has the built .deb installed next to the stock
+python3-paramiko:
+
+  etch-openssh    OpenSSH 4.3p2 (Debian 4.0 "etch", 2007, OpenSSL 0.9.8c)
+  etch-dropbear   Dropbear 0.48 (2007) -- what embedded hardware ships
+  openssh98       OpenSSH 9.8p1 built with --enable-dsa-keys and SHA-1 kex
+                  in the default proposal, i.e. the configuration of the
+                  insecure-ssh-keyscan binary on mithro's workstation
+
+Usage:
+    packaging/interop/run.py --suite trixie
+
+The client image is built from built-debs/, so build the package first.
+
+Servers and client share a private docker network and are addressed by
+fixed address, so nothing is exposed on the host's interfaces. Fixed
+addresses rather than container names: docker's embedded DNS needs iptables
+rules that are absent on some hosts. All packages
+are installed while the images are built (with --network host, since a docker
+bridge has no outbound route on some hosts), so the containers themselves
+need no internet access.
+"""
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parent.parent
+# The etch image is amd64/i386 only. i386 is used because it runs natively on
+# x86-64 CI and, unlike amd64-under-qemu-aarch64, is stable under emulation
+# on an arm64 workstation (apt's http method segfaults there).
+ETCH_PLATFORM = "linux/386"
+# Private /24 for the test network; servers get .11, .12, ...
+SUBNET = "172.31.77.0/24"
+FIRST_HOST = 11
+
+SERVERS = [
+    {
+        "name": "etch-openssh",
+        "image": "paramiko-insecure-etch",
+        "platform": ETCH_PLATFORM,
+        "env": {"KIND": "openssh"},
+        "build": "packaging/interop/servers/etch",
+        "cmd": [],
+        "auths": ["rsa", "dss", "password"],
+        "sftp": True,
+        "why": "OpenSSH 4.3p2 (2007), the real thing against OpenSSL 0.9.8c",
+    },
+    {
+        "name": "etch-dropbear",
+        "image": "paramiko-insecure-etch",
+        "platform": ETCH_PLATFORM,
+        "env": {"KIND": "dropbear"},
+        "build": "packaging/interop/servers/etch",
+        "cmd": [],
+        "auths": ["rsa", "dss", "password"],
+        "sftp": False,
+        "why": "Dropbear 0.48 (2007), as found on embedded hardware",
+    },
+    {
+        "name": "openssh98",
+        "image": "paramiko-insecure-openssh98",
+        "build": "packaging/interop/servers/openssh98",
+        "platform": None,
+        "env": {},
+        "cmd": [],
+        "auths": ["rsa", "dss", "password"],
+        "sftp": True,
+        "keyscan": True,
+        "why": "matches the insecure-ssh-keyscan build (DSA + SHA-1 kex)",
+    },
+]
+
+
+def run(*cmd, **kw):
+    print("+", " ".join(str(c) for c in cmd), flush=True)
+    return subprocess.run([str(c) for c in cmd], check=True, **kw)
+
+
+def _docker_argv(*args):
+    return (["sudo", "-n"] if SUDO else []) + ["docker", *(str(a) for a in args)]
+
+
+def docker(*args, **kw):
+    return run(*_docker_argv(*args), **kw)
+
+
+def build(tag, context, platform=None, buildargs=()):
+    """docker build, on the host network: a bridge may have no outbound route."""
+    cmd = ["build", "--network", "host", "-t", tag]
+    if platform:
+        cmd += ["--platform", platform]
+    for arg in buildargs:
+        cmd += ["--build-arg", arg]
+    docker(*cmd, "-f", Path(context) / "Dockerfile", REPO)
+
+
+def client_container(image, share, network, script, *script_args):
+    """Run one of the client scripts in the prepared client image."""
+    docker("run", "--rm", "--network", network,
+           "-v", f"{share}:/share", image,
+           "python3", f"/interop/{script}", *script_args)
+
+
+def main():
+    global SUDO
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--suite", required=True, help="client Debian suite")
+    ap.add_argument("--work", default=Path("tmp/interop"), type=Path)
+    ap.add_argument("--only", nargs="*", help="server names to run")
+    ap.add_argument("--sudo", action="store_true", help="call docker via sudo")
+    args = ap.parse_args()
+    SUDO = args.sudo
+
+    servers = [s for s in SERVERS if not args.only or s["name"] in args.only]
+    share = (REPO / args.work).resolve()
+    if share.exists():
+        shutil.rmtree(share)
+    share.mkdir(parents=True)
+    share.chmod(0o777)
+    # 1. Images: the client with the .deb installed, and each server.
+    client_image = f"paramiko-insecure-client-{args.suite}"
+    build(client_image, "packaging/interop/client",
+          buildargs=[f"SUITE={args.suite}"])
+    for s in servers:
+        if s.get("build"):
+            build(s["image"], s["build"], platform=s["platform"])
+
+    # 2. Keys the servers will accept, generated by paramiko_insecure itself
+    #    (nothing modern can still generate a DSA key).
+    network = f"paramiko-interop-{os.getpid()}"
+    docker("network", "create", "--subnet", SUBNET, network,
+           stdout=subprocess.DEVNULL)
+    client_container(client_image, share, network, "prepare.py")
+
+    names = []
+    try:
+        for index, s in enumerate(servers):
+            # One fixed port each: they are only reachable on the private
+            # network, at a fixed address.
+            s["port"] = 2222
+            s["host"] = SUBNET.rsplit(".", 1)[0] + f".{FIRST_HOST + index}"
+            name = f"interop-{s['name']}"
+            names.append(name)
+            cmd = ["run", "-d", "--name", name, "--network", network,
+                   "--ip", s["host"]]
+            if s["platform"]:
+                cmd += ["--platform", s["platform"]]
+            for k, v in {**s["env"], "PORT": s["port"],
+                         "HOST": s["host"], "SHARE": "/share",
+                         "NAME": s["name"]}.items():
+                cmd += ["-e", f"{k}={v}"]
+            cmd += ["-v", f"{share}:/share", s["image"], *s["cmd"]]
+            docker(*cmd, stdout=subprocess.DEVNULL)
+
+        # 3. Wait for each to say it is listening.
+        for s in servers:
+            ready = share / f"{s['name']}.ready"
+            deadline = time.time() + 600
+            while time.time() < deadline and not ready.exists():
+                time.sleep(2)
+            if not ready.exists():
+                print(f"::error::{s['name']} never became ready")
+                docker("logs", f"interop-{s['name']}", check=False)
+                return 1
+            version = share / f"{s['name']}.version"
+            print(f"{s['name']}: ready at {s['host']}:{s['port']}"
+                  + (f" -- {version.read_text().strip()}" if version.exists() else ""))
+
+        (share / "servers.json").write_text(json.dumps([
+            {k: v for k, v in s.items() if k != "cmd"}
+            for s in servers
+        ], indent=2))
+
+        # 4. Drive them all from the client container.
+        client_container(client_image, share, network, "client.py")
+    finally:
+        # Keep each server's log next to the results, then remove it.
+        for name in names:
+            log = subprocess.run(
+                _docker_argv("logs", name), capture_output=True, text=True,
+            )
+            (share / f"{name}.log").write_text(log.stdout + log.stderr)
+            subprocess.run(_docker_argv("rm", "-f", name),
+                           capture_output=True)
+        subprocess.run(_docker_argv("network", "rm", network),
+                       capture_output=True)
+    return 0
+
+
+SUDO = False
+
+if __name__ == "__main__":
+    sys.exit(main())
