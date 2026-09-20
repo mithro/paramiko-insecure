@@ -25,7 +25,7 @@ permissions:
 
 jobs:
   build-deb:
-    name: deb (${{ matrix.suite }})
+    name: deb (${{ matrix.suite }}, ${{ matrix.arch }})
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +33,16 @@ jobs:
         # in /etc/os-release, so publishing forky keeps the README's
         # one-line sources.list entry correct on sid too.
         suite: [bookworm, trixie, forky, sid]
-    runs-on: ubuntu-latest
+        # python3-cryptography-insecure is compiled, so it needs a real
+        # build per architecture -- arm64 above all, since the machines
+        # this package is used from are frequently Raspberry Pis.
+        arch: [amd64, arm64]
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
 
@@ -76,15 +85,20 @@ jobs:
       # 4.3p2 and Dropbear 0.48 from Debian etch (2007), and an OpenSSH
       # 9.8p1 built like the insecure-ssh-keyscan tool. Also gates
       # publishing.
+      # The etch images (OpenSSH 4.3p2, Dropbear 0.48) exist only for i386
+      # and amd64, so on arm64 only the OpenSSH 9.8p1 server, which is built
+      # from source, can run. The old servers are covered by the amd64 jobs.
       - name: Interop with 2007-era SSH servers
-        run: python3 packaging/interop/run.py --suite ${{ matrix.suite }}
+        run: |
+          python3 packaging/interop/run.py --suite ${{ matrix.suite }} \
+            ${{ matrix.arch == 'arm64' && '--only openssh98' || '' }}
 
       # The package is Architecture: all; the artifact name still carries
       # "all" because the shared publish workflow regroups on
       # debs-<suite>-<arch>.
       - uses: actions/upload-artifact@v4
         with:
-          name: debs-${{ matrix.suite }}-all
+          name: debs-${{ matrix.suite }}-${{ matrix.arch }}
           path: built-debs/*.deb
           if-no-files-found: error
 
@@ -102,7 +116,7 @@ jobs:
       suites: "bookworm trixie forky sid"
       # python3-cryptography-insecure has a compiled extension, so the
       # repository carries real architectures as well as "all".
-      architectures: "all amd64"
+      architectures: "all amd64 arm64"
       origin: paramiko-insecure
       description: "paramiko with obsolete, insecure SSH algorithms, as paramiko_insecure"
       keyring-name: paramiko-insecure.gpg

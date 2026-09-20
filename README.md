@@ -119,9 +119,14 @@ $ sudo apt update
 $ sudo apt install python3-paramiko-insecure
 ```
 
-Suites: `bookworm`, `trixie`, `forky` (testing) and `sid`. The package is
-`Architecture: all`. sid reports `forky` as its codename, so the line above
-gives sid systems the `forky` suite; write `sid` in it instead if you prefer.
+Suites: `bookworm`, `trixie`, `forky` (testing) and `sid`. sid reports `forky`
+as its codename, so the line above gives sid systems the `forky` suite; write
+`sid` in it instead if you prefer.
+
+Architectures: `python3-paramiko-insecure` is `Architecture: all`, but
+`python3-cryptography-insecure` is compiled, and is built for **amd64 and
+arm64**. Other architectures (armhf, riscv64) would need a build of their own;
+nothing prevents it, there is just no runner for them here.
 
 A Debian package that needs this should declare
 `Depends: python3-paramiko-insecure` and `import paramiko_insecure`.
