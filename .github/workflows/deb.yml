@@ -40,6 +40,11 @@ jobs:
       # Build-dependencies resolve from the suite's own archive. bookworm
       # builds with the nocheck profile (no python3-pytest-relaxed there);
       # the other suites run the full upstream test suite during the build.
+      # Examples must never alias paramiko_insecure: an alias hides which
+      # connections are unprotected.
+      - name: Check the docs keep the module's name
+        run: python3 packaging/check-docs.py
+
       # The private copy of cryptography, from the same suite's source.
       # paramiko_insecure imports it instead of the system one, so it has to
       # exist before the package below is built or tested.
