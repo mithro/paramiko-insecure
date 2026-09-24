@@ -117,9 +117,7 @@ jobs:
       # python3-cryptography-insecure has a compiled extension, so the
       # repository carries real architectures as well as "all".
       architectures: "all amd64 arm64"
-      origin: paramiko-insecure
       description: "paramiko with obsolete, insecure SSH algorithms, as paramiko_insecure"
-      keyring-name: paramiko-insecure.gpg
     secrets:
       gpg-private-key: ${{ secrets.APT_GPG_PRIVATE_KEY }}
 
