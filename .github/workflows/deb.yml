@@ -65,8 +65,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: mithro/apt-repo-action
-          # TODO: main once mithro/apt-repo-action#38 (bundle) merges.
-          ref: depends/include
+          ref: main
           path: .apt-repo-action
       - name: Dependency repositories
         env:
