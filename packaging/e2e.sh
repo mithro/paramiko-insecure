@@ -22,6 +22,11 @@ set -eux
 export DEBIAN_FRONTEND=noninteractive
 sh ./apt-sources-unbundled/install.sh
 apt-get update
+# The suite as it is now: a debian:<suite> image can lag its archive
+# (debian:sid shipped libsystemd0 262~rc3-1 against the archive's 262-1), and
+# the tools below would otherwise upgrade such packages, which isn't what the
+# check after step 2 is looking for. From the suite alone: no staging yet.
+apt-get -y dist-upgrade
 
 # 1. Ours, from the suite alone.
 apt-get install -y --no-install-recommends \
