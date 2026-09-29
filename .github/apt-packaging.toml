@@ -1,0 +1,17 @@
+# What kind of packaging repository this is, and why it differs from the
+# defaults: mithro/apt-repo-action's docs/packaging.md ("The declaration").
+kind = "A"
+upstream = "https://github.com/paramiko/paramiko"
+architectures = "all"
+suites = ["bookworm", "trixie", "forky", "sid"]
+
+[exceptions]
+PKG-SUITES = "Tim, 2026-09-29: \"it must keep bookworm\""
+
+# python3-cryptography-insecure (the module cryptography_insecure, which
+# paramiko_insecure imports) is built and published by its own repository.
+# Bundled: our apt site serves it too, so users add only this repository.
+[[depends]]
+repo = "mithro/cryptography-insecure"
+bundle = true
+reason = "python3-cryptography-insecure, the private cryptography paramiko_insecure imports, is built by its own repository"

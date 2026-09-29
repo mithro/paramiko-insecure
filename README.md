@@ -51,6 +51,8 @@ working.
 `paramiko_insecure` does not use the system `cryptography`. It uses
 **`cryptography_insecure`**, shipped by `python3-cryptography-insecure` and
 pulled in automatically, which is the same Debian source renamed the same way.
+It is built by its own repository,
+[cryptography-insecure](https://github.com/mithro/cryptography-insecure).
 
 That is not paranoia about the system copy: upstream cryptography is retiring
 exactly what this package needs. Version 49 warns that "SSH DSA key support is
@@ -107,26 +109,31 @@ a connection is compromised, and never reuse it elsewhere.
 key can be forged by a capable attacker) but it does catch the ordinary case of
 talking to the wrong box.
 
-## Using the APT repository
+## Install
 
-```console
-$ sudo install -d -m0755 /etc/apt/keyrings
-$ curl -fsSL https://mith.ro/paramiko-insecure/paramiko-insecure.gpg \
-    | sudo tee /etc/apt/keyrings/paramiko-insecure.gpg > /dev/null
-$ echo "deb [signed-by=/etc/apt/keyrings/paramiko-insecure.gpg] https://mith.ro/paramiko-insecure/$(. /etc/os-release; echo $VERSION_CODENAME)/ ./" \
-    | sudo tee /etc/apt/sources.list.d/paramiko-insecure.list
-$ sudo apt update
-$ sudo apt install python3-paramiko-insecure
+The packages are published as a signed apt repository per suite: put your
+suite's name in place of `trixie` below. The suites are bookworm, trixie,
+forky and sid.
+
+```sh
+sudo install -d -m0755 /etc/apt/keyrings
+curl -fsSL https://mith.ro/paramiko-insecure/paramiko-insecure.gpg \
+  | sudo tee /etc/apt/keyrings/paramiko-insecure.gpg >/dev/null
+echo "deb [signed-by=/etc/apt/keyrings/paramiko-insecure.gpg] https://mith.ro/paramiko-insecure/trixie/ ./" \
+  | sudo tee /etc/apt/sources.list.d/paramiko-insecure.list
+sudo apt update
+sudo apt install python3-paramiko-insecure
 ```
 
-Suites: `bookworm`, `trixie`, `forky` (testing) and `sid`. sid reports `forky`
-as its codename, so the line above gives sid systems the `forky` suite; write
-`sid` in it instead if you prefer.
+The repository's signing key is
+`684E 7F7A 0078 61A1 04E7  16AE FC09 0E66 E9BB 3D0B`
+(`gpg --show-keys /etc/apt/keyrings/paramiko-insecure.gpg` shows it).
 
-Architectures: `python3-paramiko-insecure` is `Architecture: all`, but
-`python3-cryptography-insecure` is compiled, and is built for **amd64 and
-arm64**. Other architectures (armhf, riscv64) would need a build of their own;
-nothing prevents it, there is just no runner for them here.
+This one repository is all you add. `python3-paramiko-insecure` is
+`Architecture: all`; the compiled `python3-cryptography-insecure` it needs is
+built by [cryptography-insecure](https://github.com/mithro/cryptography-insecure)
+for amd64, i386, arm64, armhf and riscv64, and this repository serves it too
+(bundled, re-signed with this repository's key).
 
 A Debian package that needs this should declare
 `Depends: python3-paramiko-insecure` and `import paramiko_insecure`.
@@ -148,9 +155,13 @@ branches and `debian/*`/`upstream/*` tags are kept, so it works with `gbp`.
    package's references to itself using Python's tokenizer, so only imports,
    attribute chains and module-path strings are touched. It is an exact
    bijection: `debian/rules clean` reverts it byte for byte.
-3. **`packaging/cryptography-insecure/`**: fetches that suite's
-   `python-cryptography` source, renames it (Python, Rust module paths and
-   Debian packaging) and builds `python3-cryptography-insecure`.
+3. **`python3-cryptography-insecure`** comes from its own repository,
+   [cryptography-insecure](https://github.com/mithro/cryptography-insecure),
+   which renames each suite's pinned `python-cryptography` source (Python,
+   Rust module paths and Debian packaging) and builds it. This repository
+   declares it in `.github/apt-packaging.toml` (`[[depends]]`, bundled): the
+   build installs it from there, and the published repository serves it too,
+   so users add only this one.
 4. **`packaging/build.sh`**: `dpkg-buildpackage` inside `debian:<suite>`, with
    build-dependencies from that suite only. trixie, forky and sid run the full
    upstream test suite during the build; bookworm lacks
