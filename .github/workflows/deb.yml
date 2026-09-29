@@ -149,8 +149,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: mithro/apt-repo-action
-          # TODO: main once mithro/apt-repo-action#46 (build-deb/raspbian/staging.sh) merges.
-          ref: raspbian/staging-helper
+          ref: main
           path: .apt-repo-action
       - uses: actions/download-artifact@v4
         with:

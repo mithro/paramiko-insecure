@@ -27,6 +27,10 @@ apt-get update
 apt-get install -y --no-install-recommends \
   ./bundled-debs/*.deb \
   ./built-debs/python3-paramiko-insecure_*.deb
+# Everything installed now: ours and their whole run-time closure, as a user
+# gets them. The test's tools may add packages, but not change these.
+mkdir -p ./e2e-notes
+dpkg-query -W -f '${Package} ${Version}\n' | sort > ./e2e-notes/ours-installed
 
 # 2. The test's own tools.
 harness="python3-paramiko openssh-server openssh-client"
@@ -41,13 +45,19 @@ if ! apt-get install -y --no-install-recommends $harness; then
   # shellcheck disable=SC2086
   apt-get install -y --no-install-recommends $harness
   sh ./.apt-repo-action/build-deb/raspbian/staging.sh report ./e2e-notes
-  # Ours must still be the suite's: staging only ever supplies the tools.
-  for p in python3-paramiko-insecure python3-cryptography-insecure; do
-    if grep -q "^$p " ./e2e-notes/from-staging; then
-      echo "$p was replaced from staging: the test would no longer be of what users get"
-      exit 1
-    fi
-  done
+fi
+
+# Ours and everything they run with must be exactly as step 1 left them: if
+# the tools upgraded one of our run-time dependencies (python3, libssl,
+# python3-cffi-backend, ...) from staging, the test would exercise ours
+# against libraries a user of the suite doesn't have.
+dpkg-query -W -f '${Package} ${Version}\n' | sort > ./e2e-notes/after-tools
+changed=$(join ./e2e-notes/ours-installed ./e2e-notes/after-tools | awk '$2 != $3 {print $1 ": " $2 " -> " $3}')
+gone=$(join -v 1 ./e2e-notes/ours-installed ./e2e-notes/after-tools | awk '{print $1 " " $2 " (removed)"}')
+if [ -n "$changed$gone" ]; then
+  echo "installing the test's tools changed what ours run with:"
+  printf '%s\n' "$changed" "$gone" | grep .
+  exit 1
 fi
 
 mkdir -p /run/sshd
