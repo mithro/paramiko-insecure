@@ -11,13 +11,12 @@
 #
 # Ours are installed first and on their own, from the suite alone: that is
 # what a user gets, and it must work. The test's own tools (stock paramiko,
-# an SSH server and client) come after. In build-deb's Raspbian root, and
-# only when E2E_RASPBIAN_CODENAME names its codename, those tools may fall
-# back to Raspbian's <codename>-staging (mithro/apt-repo-action
-# build-deb/raspbian/staging.sh: the same pinned archive key), for a testing
-# codename Raspbian has only half copied (raspbian forky's perl 5.40 can't
-# install openssh-server's ucf chain, which needs perl-base 5.42). What came
-# from staging is listed in e2e-notes/from-staging, for the step summary.
+# an SSH server and client) come after, also from the suite alone, and must
+# not change anything ours run with. In build-deb's Raspbian root, when
+# E2E_RASPBIAN_CODENAME names its codename and the suite is a testing
+# codename Raspbian has only half copied, openssh-server's own files are
+# unpacked without its maintainer scripts (see below); that is listed in
+# e2e-notes/unpacked, for the step summary.
 set -eux
 export DEBIAN_FRONTEND=noninteractive
 sh ./apt-sources-unbundled/install.sh
@@ -37,7 +36,7 @@ apt-get install -y --no-install-recommends \
 mkdir -p ./e2e-notes
 dpkg-query -W -f '${Package} ${Version}\n' | sort > ./e2e-notes/ours-installed
 
-# 2. The test's own tools.
+# 2. The test's own tools, from the suite alone too.
 harness="python3-paramiko openssh-server openssh-client"
 # shellcheck disable=SC2086 # a list of packages
 if ! apt-get install -y --no-install-recommends $harness; then
@@ -45,16 +44,39 @@ if ! apt-get install -y --no-install-recommends $harness; then
     echo "the test's own tools don't install from this suite (see apt's message above)"
     exit 1
   fi
-  echo "the test's tools don't install from raspbian $E2E_RASPBIAN_CODENAME alone; trying $E2E_RASPBIAN_CODENAME-staging"
-  sh ./.apt-repo-action/build-deb/raspbian/staging.sh add "$E2E_RASPBIAN_CODENAME" ./e2e-notes
+  # A half-copied Raspbian testing codename: openssh-server's ucf ->
+  # libtext-wrapi18n-perl -> libtext-charwidth-perl needs perl-base 5.42,
+  # which only <codename>-staging has, and taking it from there would change
+  # the perl-base ours run with (python3 -> tzdata -> debconf -> perl-base).
+  # The test only needs the suite's own sshd binary: install what it runs
+  # with (its libraries, openssh-common, openssh-sftp-server) from the suite,
+  # and unpack openssh-server itself without its maintainer scripts
+  # (dpkg --unpack checks no Depends), so ucf is never needed.
+  echo "openssh-server doesn't install from raspbian $E2E_RASPBIAN_CODENAME alone; unpacking the suite's sshd without its maintainer scripts"
+  deps=$(apt-cache show --no-all-versions openssh-server | sed -n 's/^Depends: //p' | tr ',' '\n' \
+         | sed 's/|.*//; s/(.*)//; s/[[:space:]]//g' \
+         | grep -E '^(lib|openssh-)' )
   # shellcheck disable=SC2086
-  apt-get install -y --no-install-recommends $harness
-  sh ./.apt-repo-action/build-deb/raspbian/staging.sh report ./e2e-notes
+  apt-get install -y --no-install-recommends python3-paramiko openssh-client $deps
+  (cd /tmp && apt-get download openssh-server)
+  dpkg --unpack /tmp/openssh-server_*.deb
+  # What its postinst would have made: the privilege separation user.
+  id sshd > /dev/null 2>&1 || useradd --system --home-dir /run/sshd --shell /usr/sbin/nologin sshd
+  missing=$(ldd /usr/sbin/sshd /usr/lib/openssh/sshd-* | grep 'not found' || true)
+  if [ -n "$missing" ]; then
+    echo "the unpacked sshd lacks libraries: $missing"
+    exit 1
+  fi
+  mkdir -p ./e2e-notes
+  {
+    echo "openssh-server $(dpkg-deb -f /tmp/openssh-server_*.deb Version): unpacked without its maintainer scripts (ucf needs perl 5.42, which raspbian $E2E_RASPBIAN_CODENAME doesn't have yet)"
+  } > ./e2e-notes/unpacked
+  cat ./e2e-notes/unpacked
 fi
 
 # Ours and everything they run with must be exactly as step 1 left them: if
 # the tools upgraded one of our run-time dependencies (python3, libssl,
-# python3-cffi-backend, ...) from staging, the test would exercise ours
+# python3-cffi-backend, ...) from outside the suite, the test would exercise ours
 # against libraries a user of the suite doesn't have.
 dpkg-query -W -f '${Package} ${Version}\n' | sort > ./e2e-notes/after-tools
 changed=$(join ./e2e-notes/ours-installed ./e2e-notes/after-tools | awk '$2 != $3 {print $1 ": " $2 " -> " $3}')
