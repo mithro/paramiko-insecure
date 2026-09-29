@@ -149,7 +149,8 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: mithro/apt-repo-action
-          ref: main
+          # TODO: main once mithro/apt-repo-action#46 (build-deb/raspbian/staging.sh) merges.
+          ref: raspbian/staging-helper
           path: .apt-repo-action
       - uses: actions/download-artifact@v4
         with:
@@ -174,15 +175,41 @@ jobs:
           suite: raspbian-${{ matrix.codename }}
           arch: armhf
           build: "false"
+      # Ours install from the suite alone; the test's own tools (an SSH
+      # server, stock paramiko) may fall back to Raspbian's staging, which a
+      # half-copied testing codename needs (packaging/e2e.sh).
       - name: End-to-end test in a clean raspbian-${{ matrix.codename }}
         env:
           IMAGE: ${{ steps.root.outputs.image }}
           PLATFORM: ${{ steps.root.outputs.platform }}
+          E2E_RASPBIAN_CODENAME: ${{ matrix.codename }}
         run: |
           set -eux
-          docker run --rm --platform "$PLATFORM" \
+          docker run --rm --platform "$PLATFORM" -e E2E_RASPBIAN_CODENAME \
             -v "$GITHUB_WORKSPACE:/w" -w /w \
             "$IMAGE" sh packaging/e2e.sh
+      - name: Test tools taken from Raspbian staging
+        if: always()
+        env:
+          CODENAME: ${{ matrix.codename }}
+        run: |
+          set -eu
+          f=e2e-notes/from-staging
+          if [ ! -f "$f" ]; then
+            echo "raspbian-$CODENAME: the test's tools all installed from the suite alone"
+            exit 0
+          fi
+          n=$(grep -c . "$f" || true)
+          echo "::warning title=Raspbian staging::raspbian-$CODENAME: $n of the end-to-end test's own packages came from $CODENAME-staging (ours came from the suite alone)"
+          {
+            echo "### raspbian-$CODENAME: test tools from $CODENAME-staging"
+            echo
+            echo "Our packages installed from the suite alone; these test-only packages needed staging:"
+            echo
+            echo '```'
+            cat "$f"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
           name: debs-raspbian-${{ matrix.codename }}-all
