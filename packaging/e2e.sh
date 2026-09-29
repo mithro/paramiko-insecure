@@ -18,6 +18,14 @@
 # unpacked without its maintainer scripts (see below); that is listed in
 # e2e-notes/unpacked, for the step summary.
 set -eux
+# Fully installed packages ("ii") and their versions. dpkg-query -W also
+# lists removed but not purged packages ("rc") with their old version, so a
+# package of ours' closure the tools made apt remove would look unchanged; an
+# unpacked-only one ("iU", the Raspbian sshd below) is an addition, allowed.
+# The same check as mithro/apt-repo-action's scripts/install-guard.sh.
+installed() {
+  dpkg-query -W -f '${db:Status-Abbrev} ${Package} ${Version}\n' | awk '$1 == "ii" {print $2, $3}' | sort
+}
 export DEBIAN_FRONTEND=noninteractive
 sh ./apt-sources-unbundled/install.sh
 apt-get update
@@ -34,7 +42,7 @@ apt-get install -y --no-install-recommends \
 # Everything installed now: ours and their whole run-time closure, as a user
 # gets them. The test's tools may add packages, but not change these.
 mkdir -p ./e2e-notes
-dpkg-query -W -f '${Package} ${Version}\n' | sort > ./e2e-notes/ours-installed
+installed > ./e2e-notes/ours-installed
 
 # 2. The test's own tools, from the suite alone too.
 harness="python3-paramiko openssh-server openssh-client"
@@ -78,7 +86,7 @@ fi
 # the tools upgraded one of our run-time dependencies (python3, libssl,
 # python3-cffi-backend, ...) from outside the suite, the test would exercise ours
 # against libraries a user of the suite doesn't have.
-dpkg-query -W -f '${Package} ${Version}\n' | sort > ./e2e-notes/after-tools
+installed > ./e2e-notes/after-tools
 changed=$(join ./e2e-notes/ours-installed ./e2e-notes/after-tools | awk '$2 != $3 {print $1 ": " $2 " -> " $3}')
 gone=$(join -v 1 ./e2e-notes/ours-installed ./e2e-notes/after-tools | awk '{print $1 " " $2 " (removed)"}')
 if [ -n "$changed$gone" ]; then
