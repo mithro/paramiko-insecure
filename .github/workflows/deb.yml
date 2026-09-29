@@ -33,9 +33,11 @@ jobs:
         # in /etc/os-release, so publishing forky keeps the README's
         # one-line sources.list entry correct on sid too.
         suite: [bookworm, trixie, forky, sid]
-        # python3-cryptography-insecure is compiled, so it needs a real
-        # build per architecture -- arm64 above all, since the machines
-        # this package is used from are frequently Raspberry Pis.
+        # python3-paramiko-insecure is Architecture: all, but its tests run
+        # it with python3-cryptography-insecure, which is compiled: test on
+        # amd64 and arm64 (the machines this is used from are frequently
+        # Raspberry Pis). python3-cryptography-insecure itself is built by
+        # mithro/cryptography-insecure, for every architecture.
         arch: [amd64, arm64]
         include:
           - arch: amd64
@@ -54,16 +56,27 @@ jobs:
       - name: Check the docs keep the module's name
         run: python3 packaging/check-docs.py
 
-      # The private copy of cryptography, from the same suite's source.
-      # paramiko_insecure imports it instead of the system one, so it has to
-      # exist before the package below is built or tested.
-      - name: Build python3-cryptography-insecure in debian:${{ matrix.suite }}
+      # The private copy of cryptography comes from its own repository,
+      # mithro/cryptography-insecure, declared in .github/apt-packaging.toml
+      # ([[depends]], bundled). apt-sources/ adds it for the build (verified
+      # with its key); apt-sources-unbundled/ adds only the dependency
+      # repositories we don't bundle (none), for the tests below.
+      - name: Check out apt-repo-action's scripts
+        uses: actions/checkout@v5
+        with:
+          repository: mithro/apt-repo-action
+          # TODO: main once mithro/apt-repo-action#38 (bundle) merges.
+          ref: depends/include
+          path: .apt-repo-action
+      - name: Dependency repositories
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUITE: ${{ matrix.suite }}
         run: |
           set -eux
-          mkdir -p built-debs
-          docker run --rm \
-            -v "$GITHUB_WORKSPACE:/w" -w /w \
-            debian:${{ matrix.suite }} sh packaging/cryptography-insecure/build.sh
+          python3 .apt-repo-action/scripts/apt-sources.py write --suite "$SUITE" --dest apt-sources
+          python3 .apt-repo-action/scripts/apt-sources.py write --unbundled --suite "$SUITE" \
+            --dest apt-sources-unbundled
 
       - name: Build python3-paramiko-insecure in debian:${{ matrix.suite }}
         run: |
@@ -71,6 +84,20 @@ jobs:
           docker run --rm \
             -v "$GITHUB_WORKSPACE:/w" -w /w \
             debian:${{ matrix.suite }} sh packaging/build.sh
+
+      # What our apt site will bundle from mithro/cryptography-insecure for
+      # this suite and architecture (verified against its signed index): the
+      # tests below install from it and from nothing else of ours, so they
+      # prove our repository alone is enough.
+      - name: Bundled packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUITE: ${{ matrix.suite }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          python3 .apt-repo-action/scripts/bundle-depends.py fetch --suite "$SUITE" \
+            --arch "$ARCH" --debs built-debs --dest bundled-debs
+          ls -l bundled-debs
 
       # Install next to stock python3-paramiko and connect to an sshd that
       # only speaks obsolete algorithms. Gates publishing.
@@ -93,9 +120,9 @@ jobs:
           python3 packaging/interop/run.py --suite ${{ matrix.suite }} \
             ${{ matrix.arch == 'arm64' && '--only openssh98' || '' }}
 
-      # The package is Architecture: all; the artifact name still carries
-      # "all" because the shared publish workflow regroups on
-      # debs-<suite>-<arch>.
+      # Only our own package: publish-apt bundles python3-cryptography-insecure
+      # from its repository itself. The artifact name carries the arch
+      # because the shared publish workflow regroups on debs-<suite>-<arch>.
       - uses: actions/upload-artifact@v4
         with:
           name: debs-${{ matrix.suite }}-${{ matrix.arch }}
@@ -114,9 +141,6 @@ jobs:
     uses: mithro/apt-repo-action/.github/workflows/publish-apt.yml@main
     with:
       suites: "bookworm trixie forky sid"
-      # python3-cryptography-insecure has a compiled extension, so the
-      # repository carries real architectures as well as "all".
-      architectures: "all amd64 arm64"
       description: "paramiko with obsolete, insecure SSH algorithms, as paramiko_insecure"
     secrets:
       gpg-private-key: ${{ secrets.APT_GPG_PRIVATE_KEY }}
