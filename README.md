@@ -113,7 +113,11 @@ talking to the wrong box.
 
 The packages are published as a signed apt repository per suite: put your
 suite's name in place of `trixie` below. The suites are bookworm, trixie,
-forky and sid.
+forky and sid, and raspbian-bookworm, raspbian-trixie and raspbian-forky.
+On a 32-bit Raspberry Pi OS (Raspbian) host, use `raspbian-<codename>`
+(e.g. `raspbian-trixie`): it carries the ARMv6 build of
+`python3-cryptography-insecure`, which Pi Zero and Pi 1 need. 64-bit
+Raspberry Pi OS uses the Debian suite of its codename.
 
 ```sh
 sudo install -d -m0755 /etc/apt/keyrings
@@ -132,8 +136,8 @@ The repository's signing key is
 This one repository is all you add. `python3-paramiko-insecure` is
 `Architecture: all`; the compiled `python3-cryptography-insecure` it needs is
 built by [cryptography-insecure](https://github.com/mithro/cryptography-insecure)
-for amd64, i386, arm64, armhf and riscv64, and this repository serves it too
-(bundled, re-signed with this repository's key).
+for amd64, i386, arm64, armhf and riscv64 (and ARMv6 for Raspbian), and this
+repository serves it too (bundled, re-signed with this repository's key).
 
 A Debian package that needs this should declare
 `Depends: python3-paramiko-insecure` and `import paramiko_insecure`.

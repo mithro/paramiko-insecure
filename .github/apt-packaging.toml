@@ -3,7 +3,9 @@
 kind = "A"
 upstream = "https://github.com/paramiko/paramiko"
 architectures = "all"
-suites = ["bookworm", "trixie", "forky", "sid"]
+# The Raspbian suites carry python3-cryptography-insecure's ARMv6 build for
+# Pi Zero / Pi 1 (bundled; Tim, 2026-09-29: "Add raspbian-* suites").
+suites = ["bookworm", "trixie", "forky", "sid", "raspbian-bookworm", "raspbian-trixie", "raspbian-forky"]
 
 [exceptions]
 PKG-SUITES = "Tim, 2026-09-29: \"it must keep bookworm\""
