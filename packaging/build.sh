@@ -33,10 +33,13 @@ cd /tmp/src
 rm -rf built-debs tmp
 
 # paramiko_insecure imports cryptography_insecure, so the private copy has
-# to be installed before the build (its tests import the module). Build it
-# first with packaging/cryptography-insecure/build.sh.
-crypto_deb=$(ls /w/built-debs/python3-cryptography-insecure_*.deb | head -1)
-apt-get install -y --no-install-recommends "$crypto_deb"
+# to be installed before the build (its tests import the module). It comes
+# from its own repository, mithro/cryptography-insecure, declared in
+# .github/apt-packaging.toml: the workflow writes /w/apt-sources/install.sh
+# (mithro/apt-repo-action's scripts/apt-sources.py), which adds it, verified.
+sh /w/apt-sources/install.sh
+apt-get update
+apt-get install -y --no-install-recommends python3-cryptography-insecure
 
 mk-build-deps --install --remove \
   --tool 'apt-get -y --no-install-recommends' debian/control

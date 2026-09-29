@@ -2,16 +2,18 @@
 # python3-paramiko-insecure installed next to the stock python3-paramiko, so
 # the two are exercised together in one process.
 #
-# Build context is the repository root; the .deb comes from built-debs/.
+# Build context is the repository root; the .deb comes from built-debs/, and
+# python3-cryptography-insecure from bundled-debs/ (what our apt site
+# bundles from mithro/cryptography-insecure).
 ARG SUITE=trixie
 FROM debian:${SUITE}
 
 COPY built-debs/python3-paramiko-insecure_*.deb /debs/
-COPY built-debs/python3-cryptography-insecure_*.deb /debs/
+COPY bundled-debs/ /bundled/
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        /debs/python3-cryptography-insecure_*.deb \
+        /bundled/*.deb \
         /debs/python3-paramiko-insecure_*.deb python3-paramiko \
     && rm -rf /var/lib/apt/lists/*
 

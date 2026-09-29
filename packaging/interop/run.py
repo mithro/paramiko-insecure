@@ -15,7 +15,9 @@ python3-paramiko:
 Usage:
     packaging/interop/run.py --suite trixie
 
-The client image is built from built-debs/, so build the package first.
+The client image is built from built-debs/ and bundled-debs/ (the
+python3-cryptography-insecure our apt site bundles), so build the package and
+fetch the bundled packages first.
 
 Servers and client share a private docker network and are addressed by
 fixed address, so nothing is exposed on the host's interfaces. Fixed

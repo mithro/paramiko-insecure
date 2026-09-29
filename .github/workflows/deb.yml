@@ -33,9 +33,11 @@ jobs:
         # in /etc/os-release, so publishing forky keeps the README's
         # one-line sources.list entry correct on sid too.
         suite: [bookworm, trixie, forky, sid]
-        # python3-cryptography-insecure is compiled, so it needs a real
-        # build per architecture -- arm64 above all, since the machines
-        # this package is used from are frequently Raspberry Pis.
+        # python3-paramiko-insecure is Architecture: all, but its tests run
+        # it with python3-cryptography-insecure, which is compiled: test on
+        # amd64 and arm64 (the machines this is used from are frequently
+        # Raspberry Pis). python3-cryptography-insecure itself is built by
+        # mithro/cryptography-insecure, for every architecture.
         arch: [amd64, arm64]
         include:
           - arch: amd64
@@ -54,16 +56,26 @@ jobs:
       - name: Check the docs keep the module's name
         run: python3 packaging/check-docs.py
 
-      # The private copy of cryptography, from the same suite's source.
-      # paramiko_insecure imports it instead of the system one, so it has to
-      # exist before the package below is built or tested.
-      - name: Build python3-cryptography-insecure in debian:${{ matrix.suite }}
+      # The private copy of cryptography comes from its own repository,
+      # mithro/cryptography-insecure, declared in .github/apt-packaging.toml
+      # ([[depends]], bundled). apt-sources/ adds it for the build (verified
+      # with its key); apt-sources-unbundled/ adds only the dependency
+      # repositories we don't bundle (none), for the tests below.
+      - name: Check out apt-repo-action's scripts
+        uses: actions/checkout@v5
+        with:
+          repository: mithro/apt-repo-action
+          ref: main
+          path: .apt-repo-action
+      - name: Dependency repositories
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUITE: ${{ matrix.suite }}
         run: |
           set -eux
-          mkdir -p built-debs
-          docker run --rm \
-            -v "$GITHUB_WORKSPACE:/w" -w /w \
-            debian:${{ matrix.suite }} sh packaging/cryptography-insecure/build.sh
+          python3 .apt-repo-action/scripts/apt-sources.py write --suite "$SUITE" --dest apt-sources
+          python3 .apt-repo-action/scripts/apt-sources.py write --unbundled --suite "$SUITE" \
+            --dest apt-sources-unbundled
 
       - name: Build python3-paramiko-insecure in debian:${{ matrix.suite }}
         run: |
@@ -71,6 +83,20 @@ jobs:
           docker run --rm \
             -v "$GITHUB_WORKSPACE:/w" -w /w \
             debian:${{ matrix.suite }} sh packaging/build.sh
+
+      # What our apt site will bundle from mithro/cryptography-insecure for
+      # this suite and architecture (verified against its signed index): the
+      # tests below install from it and from nothing else of ours, so they
+      # prove our repository alone is enough.
+      - name: Bundled packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUITE: ${{ matrix.suite }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          python3 .apt-repo-action/scripts/bundle-depends.py fetch --suite "$SUITE" \
+            --arch "$ARCH" --debs built-debs --dest bundled-debs
+          ls -l bundled-debs
 
       # Install next to stock python3-paramiko and connect to an sshd that
       # only speaks obsolete algorithms. Gates publishing.
@@ -93,19 +119,101 @@ jobs:
           python3 packaging/interop/run.py --suite ${{ matrix.suite }} \
             ${{ matrix.arch == 'arm64' && '--only openssh98' || '' }}
 
-      # The package is Architecture: all; the artifact name still carries
-      # "all" because the shared publish workflow regroups on
-      # debs-<suite>-<arch>.
+      # Only our own package: publish-apt bundles python3-cryptography-insecure
+      # from its repository itself. The artifact name carries the arch
+      # because the shared publish workflow regroups on debs-<suite>-<arch>.
       - uses: actions/upload-artifact@v4
         with:
           name: debs-${{ matrix.suite }}-${{ matrix.arch }}
           path: built-debs/*.deb
           if-no-files-found: error
 
+  # ARMv6 Raspberry Pis (Zero, Pi 1) can't run Debian's armhf (ARMv7)
+  # python3-cryptography-insecure, so the Raspbian suites carry
+  # cryptography-insecure's Raspbian build, bundled (mithro/apt-repo-action
+  # docs/packaging.md, "Suites"). python3-paramiko-insecure is Architecture:
+  # all with the same version in every suite, so raspbian-<codename> gets the
+  # very file built for <codename>; this job tests it in the Raspbian root
+  # with the bundled ARMv6 build, then uploads it for the Raspbian suite.
+  raspbian:
+    name: raspbian-${{ matrix.codename }}
+    needs: build-deb
+    strategy:
+      fail-fast: false
+      matrix:
+        codename: [bookworm, trixie, forky]
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check out apt-repo-action's scripts
+        uses: actions/checkout@v5
+        with:
+          repository: mithro/apt-repo-action
+          ref: main
+          path: .apt-repo-action
+      - uses: actions/download-artifact@v4
+        with:
+          name: debs-${{ matrix.codename }}-amd64
+          path: built-debs
+      - name: Dependency repositories, and the bundled Raspbian packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SUITE: raspbian-${{ matrix.codename }}
+        run: |
+          set -eux
+          python3 .apt-repo-action/scripts/apt-sources.py write --unbundled --suite "$SUITE" \
+            --dest apt-sources-unbundled
+          python3 .apt-repo-action/scripts/bundle-depends.py fetch --suite "$SUITE" \
+            --arch armhf --debs built-debs --dest bundled-debs
+          ls -l built-debs bundled-debs
+      # The Raspbian (ARMv6) root build-deb builds in; nothing is built here.
+      - name: Prepare the Raspbian root
+        id: root
+        uses: ./.apt-repo-action/build-deb
+        with:
+          suite: raspbian-${{ matrix.codename }}
+          arch: armhf
+          build: "false"
+      # Ours and the test's own tools both from the suite alone; on a
+      # half-copied testing codename the suite's sshd is unpacked without its
+      # maintainer scripts (packaging/e2e.sh).
+      - name: End-to-end test in a clean raspbian-${{ matrix.codename }}
+        env:
+          IMAGE: ${{ steps.root.outputs.image }}
+          PLATFORM: ${{ steps.root.outputs.platform }}
+          E2E_RASPBIAN_CODENAME: ${{ matrix.codename }}
+        run: |
+          set -eux
+          docker run --rm --platform "$PLATFORM" -e E2E_RASPBIAN_CODENAME \
+            -v "$GITHUB_WORKSPACE:/w" -w /w \
+            "$IMAGE" sh packaging/e2e.sh
+      - name: Test tools that needed special handling
+        if: always()
+        env:
+          CODENAME: ${{ matrix.codename }}
+        run: |
+          set -eu
+          f=e2e-notes/unpacked
+          if [ ! -f "$f" ]; then
+            echo "raspbian-$CODENAME: the test's tools all installed normally from the suite"
+            exit 0
+          fi
+          echo "::warning title=Raspbian $CODENAME::$(cat "$f")"
+          {
+            echo "### raspbian-$CODENAME: test tools"
+            echo
+            cat "$f"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: debs-raspbian-${{ matrix.codename }}-all
+          path: built-debs/python3-paramiko-insecure_*.deb
+          if-no-files-found: error
+
   publish-apt:
     # Build on pull requests to validate, but never publish from one.
     if: github.event_name != 'pull_request'
-    needs: build-deb
+    needs: [build-deb, raspbian]
     # Scoped to this job alone, not the workflow.
     permissions:
       contents: read
@@ -113,10 +221,7 @@ jobs:
       id-token: write
     uses: mithro/apt-repo-action/.github/workflows/publish-apt.yml@main
     with:
-      suites: "bookworm trixie forky sid"
-      # python3-cryptography-insecure has a compiled extension, so the
-      # repository carries real architectures as well as "all".
-      architectures: "all amd64 arm64"
+      suites: "bookworm trixie forky sid raspbian-bookworm raspbian-trixie raspbian-forky"
       description: "paramiko with obsolete, insecure SSH algorithms, as paramiko_insecure"
     secrets:
       gpg-private-key: ${{ secrets.APT_GPG_PRIVATE_KEY }}

@@ -17,3 +17,4 @@ built-debs/
 *.buildinfo
 *.changes
 .pc/
+e2e-notes/
